@@ -45,6 +45,9 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       setOptionWidths(widths)
     }
   }, [options])
+  useEffect(() => {
+    setSelected(defaultSelected || options[0])
+  }, [defaultSelected, options])
   const handleSelect = (option: string) => {
     if (!disabled && selected !== option) {
       setSelected(option)

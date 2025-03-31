@@ -26,6 +26,8 @@ $gray-820: rgba(190, 200, 201, 1);
 $gray-830: rgba(243, 255, 255, 1);
 $gray-900 : rgba(239, 245, 245, 1);
 $gray-910: rgba(227, 244, 245, 1);
+$gray-920: rgba(9, 27, 28, 0.3);
+
 $white: rgba(255, 255, 255, 1);
 
 $error: rgba(186, 26, 26, 1);
@@ -41,6 +43,7 @@ $bgFooter      : $black-400;
 $bgLinePage: $gray-820;
 $bgCardsSentense: $gray-830;
 $bgFeedback: $gray-910;
+$bgModalRootPortal: $gray-920;
 
 //border-color
 $borderDisabled      : $gray-500;

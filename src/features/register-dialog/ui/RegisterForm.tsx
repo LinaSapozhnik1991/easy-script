@@ -1,16 +1,15 @@
-/* eslint-disable import/named */
 'use client'
 import React, { FC, useState } from 'react'
 import {
   FieldError,
   SubmitHandler,
   useForm,
-  // eslint-disable-next-line import/named
   UseFormRegister
 } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { z } from 'zod'
+import axios from 'axios'
 
 import { InputSizes, InputTypes } from '@/shared/ui/Input/input.types'
 import Input from '@/shared/ui/Input/Input'
@@ -20,6 +19,7 @@ import { Check, Eye, EyeClosed } from '@/shared/assets/icons'
 
 import { registrationSchema } from '../model/validation'
 import { formatPhoneNumber } from '../model/formatted/formatedPhone'
+import { registerUser } from '../api'
 
 import styles from './Register.module.scss'
 
@@ -32,6 +32,7 @@ const InputField: FC<{
   type: InputTypes
   register: UseFormRegister<FormData>
   error?: FieldError
+  serverError?: string | null
   inputCompleted: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   showPasswordToggle?: () => void
@@ -45,6 +46,7 @@ const InputField: FC<{
   type,
   register,
   error,
+  serverError,
   inputCompleted,
   onChange,
   trigger,
@@ -78,16 +80,22 @@ const InputField: FC<{
           {showPassword ? <Eye /> : <EyeClosed />}
         </div>
       )}
-      {error ? (
-        <span className={styles.error}>{error.message}</span>
-      ) : inputCompleted ? (
-        <Check className={styles.checkIcon} />
-      ) : null}
+      <div className={styles.errorWrapper}>
+        {error ? (
+          <span className={styles.error}>{error.message}</span>
+        ) : serverError ? (
+          <span className={styles.error}>{serverError}</span>
+        ) : inputCompleted ? (
+          <Check className={styles.checkIcon} />
+        ) : null}
+      </div>
     </div>
   </div>
 )
-
-const RegisterForm: FC = () => {
+type RegisterFormProps = {
+  onRegisterSuccess: (email: string) => void
+}
+const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
   const {
     register,
     handleSubmit,
@@ -100,15 +108,45 @@ const RegisterForm: FC = () => {
     resolver: zodResolver(registrationSchema),
     mode: 'onChange'
   })
+  const [serverErrorEmail, setServerErrorEmail] = useState<string | null>(null)
+  const onSubmit: SubmitHandler<FormData> = async data => {
+    try {
+      const response = await registerUser({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+        password_confirmation: data.confirmPassword
+      })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit: SubmitHandler<FormData> = data => {}
+      if (response.status === 201) {
+        onRegisterSuccess(data.email)
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 422) {
+          const errors = error.response.data.data
+
+          setServerErrorEmail(null)
+
+          if (errors.email) {
+            setServerErrorEmail(errors.email.join(', '))
+          }
+        } else {
+          setServerErrorEmail(
+            'Произошла ошибка. Пожалуйста, попробуйте еще раз.'
+          )
+        }
+      } else {
+        setServerErrorEmail('Не удалось подключиться к серверу')
+      }
+    }
+  }
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [agreementError, setAgreementError] = useState(false)
-
   const password = watch('password')
 
   const handleCheckboxChange = () => {
@@ -131,7 +169,9 @@ const RegisterForm: FC = () => {
       clearErrors(field)
       await trigger(field)
     }
-
+  /*useEffect(() => {
+    setValue('company', 'Моя компания')
+  }, [setValue])*/
   return (
     <div className={styles.registration}>
       <div className={styles.modalForm}>
@@ -148,6 +188,7 @@ const RegisterForm: FC = () => {
               onChange={handleChange('name')}
               trigger={trigger}
             />
+
             <InputField
               id="company"
               label="Компания"
@@ -177,10 +218,12 @@ const RegisterForm: FC = () => {
               type={InputTypes.Email}
               register={register}
               error={errors.email}
+              serverError={serverErrorEmail}
               inputCompleted={!!watch('email')}
               onChange={handleChange('email')}
               trigger={trigger}
             />
+
             <InputField
               id="password"
               label="Пароль"

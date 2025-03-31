@@ -3,11 +3,12 @@
 import React, { useState } from 'react'
 import Slider from 'react-slick'
 
-import { Checked, NextArrow, Play, Prev } from '../../../shared/assets/icons'
+import { Checked, NextArrow, Prev } from '../../../shared/assets/icons'
 
 import styles from './Feedback.module.scss'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import VideoPlayer from './VideoPlayer'
 
 interface ReviewProps {
   director: string
@@ -60,7 +61,9 @@ const reviews: ReviewProps[] = [
   }
 ]
 
-const SampleNextArrow = (props: any) => {
+const SampleNextArrow: React.FC<
+  React.ComponentPropsWithoutRef<'div'>
+> = props => {
   const { onClick } = props
   return (
     <div className={styles.nextArrow} onClick={onClick}>
@@ -69,7 +72,9 @@ const SampleNextArrow = (props: any) => {
   )
 }
 
-const SamplePrevArrow = (props: any) => {
+const SamplePrevArrow: React.FC<
+  React.ComponentPropsWithoutRef<'div'>
+> = props => {
   const { onClick } = props
   return (
     <div className={styles.prevArrow} onClick={onClick}>
@@ -78,43 +83,28 @@ const SamplePrevArrow = (props: any) => {
   )
 }
 
-const VideoPlayer: React.FC<{
-  videoSrc: string
-  imageSrc: string
-  isPlaying: boolean
-  onPlay: () => void
-  onPause: () => void
-}> = ({ videoSrc, imageSrc, isPlaying, onPlay, onPause }) => {
-  return (
-    <div
-      className={styles.videoContainer}
-      style={{ backgroundImage: `url(${imageSrc})`, position: 'relative' }}>
-      {!isPlaying ? (
-        <div
-          className={styles.videoOverlay}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0
-          }}>
-          <button className={styles.playButton} onClick={onPlay}>
-            <Play />
-          </button>
-        </div>
-      ) : (
-        <video width="830" height="506" controls autoPlay onPause={onPause}>
-          <source src={videoSrc} type="video/webm" />
-          Ваш браузер не поддерживает видео.
-        </video>
-      )}
-    </div>
-  )
-}
-
 const FeedbackSection: React.FC = () => {
   const [playingIndex, setPlayingIndex] = useState<number | null>(null)
+  const [currentTimes, setCurrentTimes] = useState<number[]>(
+    Array(reviews.length).fill(0)
+  )
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const handlePlay = (index: number) => {
+    setPlayingIndex(index)
+    setIsPlaying(true)
+  }
+
+  const handlePause = () => {
+    setIsPlaying(false)
+  }
+
+  const handleCurrentTimeChange = (index: number, time: number) => {
+    const newTimes = [...currentTimes]
+    newTimes[index] = time
+    setCurrentTimes(newTimes)
+  }
+
   const settings = {
     dots: false,
     infinite: true,
@@ -158,8 +148,10 @@ const FeedbackSection: React.FC = () => {
                   videoSrc={review.videoSrc}
                   imageSrc={review.imageSrc}
                   isPlaying={playingIndex === index}
-                  onPlay={() => setPlayingIndex(index)}
-                  onPause={() => setPlayingIndex(null)}
+                  onPlay={() => handlePlay(index)}
+                  onPause={handlePause}
+                  currentTime={currentTimes[index]}
+                  setCurrentTime={time => handleCurrentTimeChange(index, time)}
                 />
               </div>
             </div>

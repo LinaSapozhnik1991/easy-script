@@ -1,10 +1,21 @@
-import React from 'react'
-
-import OpenSurvey from '../../../features/open-survey'
+import React, { useState } from 'react'
 
 import styles from './SentenseFeature.module.scss'
+import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'
+import useModalStore from '@/shared/Modal/model/useModalStore'
+import AuthSegmentedControl from '@/widgets/auth-segment-control/ui/AuthSegmentedControl'
 
 const SentenseFeatureSection = () => {
+  const { openModal } = useModalStore()
+  const [selectedOption, setSelectedOption] = useState('Регистрация')
+  const handleOpenModal = () => {
+    openModal(
+      <AuthSegmentedControl
+        selectedOption={selectedOption}
+        onSelect={setSelectedOption}
+      />
+    )
+  }
   return (
     <div className={styles.sentense}>
       <div className={styles.sentenseHead}>
@@ -34,9 +45,9 @@ const SentenseFeatureSection = () => {
           </h5>
         </div>
       </div>
-      <OpenSurvey primary size="smallXL">
+      <OpenModalLogin openModal={handleOpenModal} primary size="smallXL">
         Отправить заявку
-      </OpenSurvey>
+      </OpenModalLogin>
     </div>
   )
 }

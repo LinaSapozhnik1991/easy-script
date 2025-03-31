@@ -8,7 +8,7 @@ import styles from './Modal.module.scss'
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {

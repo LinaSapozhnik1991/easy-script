@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import OpenSurvey from '@/features/open-survey'
+import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'
+import AuthSegmentedControl from '@/widgets/auth-segment-control/ui/AuthSegmentedControl'
+import useModalStore from '@/shared/Modal/model/useModalStore'
 
 import styles from './AnalystFeature.module.scss'
 
 const AnalystFeatureSection = () => {
+  const { openModal } = useModalStore()
+  const [selectedOption, setSelectedOption] = useState('Регистрация')
+  const handleOpenModal = () => {
+    openModal(
+      <AuthSegmentedControl
+        selectedOption={selectedOption}
+        onSelect={setSelectedOption}
+      />
+    )
+  }
   return (
     <div className={styles.analyst}>
       <div className={styles.image}></div>
@@ -29,9 +41,9 @@ const AnalystFeatureSection = () => {
         </div>
 
         <div className={styles.btn}>
-          <OpenSurvey primary size="mediumXL">
+          <OpenModalLogin openModal={handleOpenModal} primary size="mediumXL">
             Попробовать бесплатно{' '}
-          </OpenSurvey>
+          </OpenModalLogin>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import SegmentedControl from '@/shared/ui/SegmentedControl/SegmentedControl'
 import { LoginForm } from '@/features/login-dialog'
@@ -16,6 +16,13 @@ const AuthSegmentedControl: FC<AuthSegmentedControlProps> = ({
   onSelect
 }) => {
   const options = ['Регистрация', 'Вход']
+  const [registrationSuccess, setRegistrationSuccess] = useState(false)
+  const [email, setEmail] = useState('')
+  const handleRegisterSuccess = (registeredEmail: string) => {
+    setRegistrationSuccess(true)
+    setEmail(registeredEmail)
+    onSelect('Вход')
+  }
 
   return (
     <div className={styles.Auth}>
@@ -23,12 +30,16 @@ const AuthSegmentedControl: FC<AuthSegmentedControlProps> = ({
         <SegmentedControl
           variant="line"
           options={options}
-          selected={selectedOption}
+          defaultSelected={selectedOption}
           onSelect={onSelect}
         />
       </div>
       <div className={styles.horizontalLine}></div>
-      {selectedOption === 'Регистрация' ? <RegisterForm /> : <LoginForm />}
+      {selectedOption === 'Вход' ? (
+        <LoginForm registrationSuccess={registrationSuccess} email={email} />
+      ) : (
+        <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
+      )}
     </div>
   )
 }

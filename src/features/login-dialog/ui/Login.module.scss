@@ -15,6 +15,9 @@
 
     color: $textPrimary;
   }
+  .alarmSecond {
+    color: $textGeneralInput;
+  }
 
   .modalForm {
     display       : flex;
@@ -30,11 +33,13 @@
       align-items   : flex-start;
       gap           : $spacingTitle;
       margin-bottom : $spacingBetweenButton;
-      height        : 84px;
+      height: 84px;
+   
 
       .inputWrapper {
         display    : flex;
         align-items: center;
+        height: 84px;
 
         .error {
           display     : flex;

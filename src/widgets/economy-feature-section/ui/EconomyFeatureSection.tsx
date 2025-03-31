@@ -1,10 +1,21 @@
-import React from 'react'
-
-import OpenSurvey from '../../../features/open-survey'
+import React, { useState } from 'react'
 
 import styles from './EconomyFeature.module.scss'
+import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'
+import AuthSegmentedControl from '@/widgets/auth-segment-control/ui/AuthSegmentedControl'
+import useModalStore from '@/shared/Modal/model/useModalStore'
 
 const EconomyFeatureSection = () => {
+  const { openModal } = useModalStore()
+  const [selectedOption, setSelectedOption] = useState('Регистрация')
+  const handleOpenModal = () => {
+    openModal(
+      <AuthSegmentedControl
+        selectedOption={selectedOption}
+        onSelect={setSelectedOption}
+      />
+    )
+  }
   return (
     <div className={styles.economy}>
       <div className={styles.economyText}>
@@ -27,7 +38,9 @@ const EconomyFeatureSection = () => {
         </div>
       </div>
       <div className={styles.btn}>
-        <OpenSurvey size="mediumXL">Попробовать бесплатно</OpenSurvey>
+        <OpenModalLogin size="mediumXL" openModal={handleOpenModal}>
+          Попробовать бесплатно
+        </OpenModalLogin>
       </div>
     </div>
   )

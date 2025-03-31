@@ -1,8 +1,6 @@
 .registration {
   @include flex-container(column, center, center);
 
-
-
   border-radius        : $RadiusSm;
   -webkit-border-radius: $RadiusSm;
   -moz-border-radius   : $RadiusSm;
@@ -40,15 +38,15 @@
         .inputWrapper {
           display    : flex;
           align-items: center;
-
+.errorWrapper{     margin-left : 12px;
           .error {
             display     : flex;
             border-color: $borderError;
             color       : $textError;
-            margin-left : 12px;
+       
             font        : $fontSmall;
           }
-
+        }
           &:active {
             outline: none;
           }
@@ -56,7 +54,12 @@
       }
     }
   }
-
+  .error {
+    display     : flex;
+    border-color: $borderError;
+    color       : $textError;
+    font        : $fontSmall;
+  }
   .checkIcon {
     margin-left: $spacingBetweenButton;
   }
