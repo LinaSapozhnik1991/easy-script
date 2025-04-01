@@ -25,8 +25,13 @@ type FormData = {
 type LoginFormProps = {
   registrationSuccess: boolean
   email?: string
+  isLoginWindow: boolean
 }
-const LoginForm: FC<LoginFormProps> = ({ registrationSuccess, email }) => {
+const LoginForm: FC<LoginFormProps> = ({
+  registrationSuccess,
+  email,
+  isLoginWindow
+}) => {
   const router = useRouter()
   const {
     register,
@@ -83,16 +88,16 @@ const LoginForm: FC<LoginFormProps> = ({ registrationSuccess, email }) => {
   const password = watch('password')
   const isFormFilled =
     watchedEmail && password && !errors.email && !errors.password
-  const isFormStarted = watchedEmail || password
+  //const isFormStarted = watchedEmail || password
   return (
     <div className={styles.login}>
       <div className={styles.modalForm}>
-        {registrationSuccess && !isFormFilled && (
+        {registrationSuccess && (
           <span className={styles.alarm}>
             Почта подтверждена! Войдите в систему
           </span>
         )}
-        {!registrationSuccess && isFormStarted && (
+        {isLoginWindow && !registrationSuccess && !isFormFilled && (
           <span className={`${styles.alarm} ${styles.alarmSecond}`}>
             Войдите в систему, чтобы продолжить работу
           </span>

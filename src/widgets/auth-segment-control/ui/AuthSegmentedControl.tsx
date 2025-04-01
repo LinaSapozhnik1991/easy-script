@@ -36,7 +36,11 @@ const AuthSegmentedControl: FC<AuthSegmentedControlProps> = ({
       </div>
       <div className={styles.horizontalLine}></div>
       {selectedOption === 'Вход' ? (
-        <LoginForm registrationSuccess={registrationSuccess} email={email} />
+        <LoginForm
+          registrationSuccess={registrationSuccess}
+          email={email}
+          isLoginWindow={true}
+        />
       ) : (
         <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
       )}
