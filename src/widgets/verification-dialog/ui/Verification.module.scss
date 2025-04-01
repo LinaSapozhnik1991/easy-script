@@ -1,0 +1,47 @@
+.verificationWrapper {
+    width: 650px;
+    height: 488px; 
+    padding: $spacingFreeSmall;
+    text-align: center;
+
+  }
+  
+  .head {
+    font: $fontP1;
+    color: $textGeneralInput;
+    margin-bottom: 10px; 
+  }
+  
+  .horizontalLine {
+    height: 1px; 
+    background-color: $bgLine; 
+    margin: 10px 0; 
+  }
+  
+  .content {
+    @include flex-container(column, center);
+ margin-top: 150px;
+    font: $fontBody;
+    color: $textGeneralInput;
+    text-align: left;
+  }
+  
+  .link {
+    color: $textLink; 
+    text-decoration: none; 
+   
+  }
+ 
+  
+  .resent {
+    margin-top: 16px; 
+    padding: 12px 16px;
+    font: $fontMain;
+    text-align: center;
+    color: $textPassword;
+    .linkResent{
+        color: $textPassword;
+        text-decoration: none;
+      }
+  }
+  

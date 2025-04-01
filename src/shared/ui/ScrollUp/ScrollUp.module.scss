@@ -1,6 +1,18 @@
-.caretUp{
-  
-    width: 60px;
-    height: 60px;
+.CaretUp {
+    bottom: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
     cursor: pointer;
-}
+    transition: transform 0.3s ease;
+  
+    &:hover {
+      transform: scale(1.1);
+    }
+  
+    svg {
+      width: 60px; 
+      height: 60px; 
+    }
+  }
+  

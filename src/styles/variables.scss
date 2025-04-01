@@ -5,6 +5,7 @@ $emerald-200: rgba(0, 79, 83, 1);
 $emerald-300: rgba(52, 130, 135, 1);
 $emerald-800: rgba(82, 97, 98, 1);
 $emerald-400: rgba(28, 112, 117, 1);
+$emerald-500: rgba(15, 105, 110, 1);
 
 $black    : rgba(0, 0, 0, 1);
 $black-100: rgba(15, 30, 31, 1);
@@ -22,27 +23,27 @@ $gray-600 : rgba(235, 235, 235, 1);
 $gray-700 : rgba(217, 217, 217, 1);
 $gray-800 : rgba(185, 202, 203, 1);
 $gray-810 : rgba(213, 230, 231, 1);
-$gray-820: rgba(190, 200, 201, 1);
-$gray-830: rgba(243, 255, 255, 1);
+$gray-820 : rgba(190, 200, 201, 1);
+$gray-830 : rgba(243, 255, 255, 1);
 $gray-900 : rgba(239, 245, 245, 1);
-$gray-910: rgba(227, 244, 245, 1);
-$gray-920: rgba(9, 27, 28, 0.3);
+$gray-910 : rgba(227, 244, 245, 1);
+$gray-920 : rgba(9, 27, 28, 0.3);
 
 $white: rgba(255, 255, 255, 1);
 
 $error: rgba(186, 26, 26, 1);
 
 //bacground-color
-$bgPrimary     : $emerald;
-$bgPrimaryHover: $emerald-200;
-$bgDisabled    : $gray-300;
-$bgInputHover  : $gray-900;
-$bgLine        : $gray-800;
-$bgLineLK      : $gray-810;
-$bgFooter      : $black-400;
-$bgLinePage: $gray-820;
-$bgCardsSentense: $gray-830;
-$bgFeedback: $gray-910;
+$bgPrimary        : $emerald;
+$bgPrimaryHover   : $emerald-200;
+$bgDisabled       : $gray-300;
+$bgInputHover     : $gray-900;
+$bgLine           : $gray-800;
+$bgLineLK         : $gray-810;
+$bgFooter         : $black-400;
+$bgLinePage       : $gray-820;
+$bgCardsSentense  : $gray-830;
+$bgFeedback       : $gray-910;
 $bgModalRootPortal: $gray-920;
 
 //border-color
@@ -52,7 +53,7 @@ $borderInputActive   : $emerald-800;
 $borderInputCompleted: $emerald-300;
 $borderPrimary       : $emerald-100;
 $borderError         : $error;
-$borderCards: $gray-820;
+$borderCards         : $gray-820;
 
 //shadow
 $defaultShadow: 0px 1px 2px 0px rgba(92, 111, 113, 0.15);
@@ -64,21 +65,20 @@ $defaultShadowSecondVariant     : 0px 1px 24px 0px rgba(92, 111, 113, 0.12);
 $defaultShadowSecondVariantHover: 0px 4px 24px 0px rgba(92, 111, 113, 0.16);
 
 //text-color
-$textGeneral     : $black;
-$textGeneralInput: $black-200;
-$textLabelCheck  : $black-300;
+$textGeneral      : $black;
+$textGeneralInput : $black-200;
+$textLabelCheck   : $black-300;
 $textCardArguments: $black-500;
-$textActiveButton: $white;
+$textActiveButton : $white;
 
+$textDisabled   : $gray-500;
+$textPlaceholder: $gray;
+$textError      : $error;
 
-$textDisabled    : $gray-500;
-$textPlaceholder : $gray;
-$textError       : $error;
-
-$textPrimary     : $emerald;
-$textPassword    : $emerald-800;
-$textLink        : $emerald-400;
-
+$textPrimary        : $emerald;
+$textPassword       : $emerald-800;
+$textLink           : $emerald-400;
+$textLinkVerificatin: $emerald-500;
 
 //font
 $fontFamily: "JostFont",

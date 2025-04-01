@@ -61,28 +61,35 @@ const reviews: ReviewProps[] = [
   }
 ]
 
-const SampleNextArrow: React.FC<
-  React.ComponentPropsWithoutRef<'div'>
-> = props => {
-  const { onClick } = props
+interface ArrowProps {
+  onClick: () => void
+}
+
+const SampleNextArrow: React.FC<ArrowProps> = ({ onClick }) => {
   return (
-    <div className={styles.nextArrow} onClick={onClick}>
+    <button
+      className={styles.nextArrow}
+      onClick={onClick}
+      aria-label="Next"
+      role="button"
+      type="button">
       <NextArrow />
-    </div>
+    </button>
   )
 }
 
-const SamplePrevArrow: React.FC<
-  React.ComponentPropsWithoutRef<'div'>
-> = props => {
-  const { onClick } = props
+const SamplePrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
   return (
-    <div className={styles.prevArrow} onClick={onClick}>
+    <button
+      className={styles.prevArrow}
+      onClick={onClick}
+      aria-label="Previous"
+      role="button"
+      type="button">
       <Prev />
-    </div>
+    </button>
   )
 }
-
 const FeedbackSection: React.FC = () => {
   const [playingIndex, setPlayingIndex] = useState<number | null>(null)
   const [currentTimes, setCurrentTimes] = useState<number[]>(
@@ -112,8 +119,8 @@ const FeedbackSection: React.FC = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     fade: false,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <SampleNextArrow onClick={() => {}} />,
+    prevArrow: <SamplePrevArrow onClick={() => {}} />,
     beforeChange: (current: number, next: number) => {
       setPlayingIndex(null)
     }
