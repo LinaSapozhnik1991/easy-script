@@ -6,7 +6,39 @@
   justify-content: space-between;
   border-top-left-radius: $RadiusXXL;
   border-top-right-radius: $RadiusXXL;
+  color: $textActiveButton;
+  .footerInfo {
+    display: flex;
+  gap: 89px;
 
+  
+  
+  
+  .links {
+   
+    display: flex;
+   justify-content: space-between;
+    width: 100%;
+    width: 656px; 
+    height: 100px;
+  
+  
+  .linkColumn {
+    list-style: none;
+    padding: 0;
+    gap:  16px; 
+    display: flex;
+    flex-direction: column;
+  
+  
+  li a {
+    font: $fontSmall ;
+    gap: 24px; 
+    text-decoration: none;
+    color: $textActiveButton;
+  }}
+  }
+}
   .contacts {
     display: flex;
     flex-direction: column;
@@ -15,18 +47,20 @@
     .messengers {
       display: flex;
       gap: 20px;
+      list-style: none;
     }
-    .mail {
-      margin-top: 40px;
+    .contactInfo{
+      margin-top: 20px;
       text-align: right;
       color: $textActiveButton;
+      list-style: none;
       a {
         color: $textActiveButton;
         text-decoration: none;
         font: $fontBody;
         font-weight: 400;
       }
-      p {
+      li {
         padding-top: 12px;
         font-size: 12px;
       }

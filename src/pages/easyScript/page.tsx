@@ -30,7 +30,7 @@ const EasyScript = () => {
           <ScrollUp />
         </div>
       </div>
-      <FooterMain />
+      <FooterMain showLinks={false} />
     </div>
   )
 }
