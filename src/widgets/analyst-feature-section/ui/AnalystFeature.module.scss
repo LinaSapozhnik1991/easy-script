@@ -46,6 +46,7 @@
       font: $fontBody;
       width: 452px;
     }
+    .bottom{
     .dopInfoBigText {
       font: $fontH3;
       width: 461px;
@@ -53,6 +54,49 @@
     }
   }
   .btn {
+    display: flex;
+    justify-content: end;
+  }}
+}
+
+@media (max-width:1024px){
+  .analyst{
+    flex-direction: column;
+    gap: 32px;
+    margin: 0;
+  
+    .image{
+      width: 864px;
+      height: 506px;
+      background: url('../assets/woomanBig.png');
+      border-radius: $RadiusXXL;
+      -webkit-border-radius: $RadiusXXL;
+      -moz-border-radius: $RadiusXXL;
+      -ms-border-radius: $RadiusXXL;
+      -o-border-radius: $RadiusXXL;
+}
+.analystText{
+  padding: 0;
+  gap: 28px;
+  .subtitle{
+    display: none;
+  }
+  .dopIntoSmallText{
+    width: 700px;
+    margin:0;
+  }
+  .bottom{display: flex;
+    justify-content: space-between;
+  .dopInfoBigText{
+    font: $fontP1;
+    width: 261px;
+    height: 64px;
+  }
+}
+  }
+  
+  .btn {
     margin-left: auto;
   }
+}
 }

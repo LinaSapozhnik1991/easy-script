@@ -20,6 +20,7 @@ const meta: Meta<typeof SegmentedControl> = {
         option: ['on', 'line']
       }
     },
+
     size: {
       control: {
         type: 'select',

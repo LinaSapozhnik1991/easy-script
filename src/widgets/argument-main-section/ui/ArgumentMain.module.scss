@@ -43,7 +43,9 @@
   .cardEnd {
     font: $fontH3;
     margin-bottom: 60px;
-  }}
+  }
+
+}
   .cardAlt {
     background:
       linear-gradient(356.28deg, rgba(249, 249, 249, 0) 53.32%, #f9f9f9 67.53%),
@@ -57,6 +59,53 @@
       height: 96px;
     }
   }
+
+}
+}
+
+@media ( max-width: 1024px){
+.argumentsSection{
+  h2{
+font: $fontH3;
+  }
+.cards{
+  flex-direction: column;
+  justify-content: center;
+  gap:60px;
+  .card{
+    width: 864px;
+    height: 518px;
+    padding: 40px 40px 60px 40px;
+    .cardTitle{
+      font: $fontH3;
+      width: 574px;
+      height: 80px;
+      font-weight: 400;
+      margin: 0;
+    }
+    .cardSubtitle{
+      font: $fontBody;
+      margin-top: $spacingGeneral;
+      width: 438px;
+      height:48px ;
+    }
+    .description{
+      display: none;
+    }
+    .cardEnd{
+      font:$fontP1;
+      margin: 0;
+    }
+    background: url('../assets/graf-small.svg') no-repeat right;
+    background-position: calc(50% + 125px);
+  }
+
+  .cardAlt{
+    background:linear-gradient(187.91deg, rgba(249, 249, 249, 0) 58.28%, #F9F9F9 83.88%),
+    url('../assets/mountain.svg') no-repeat bottom;
+    background-position: right;
+  }
+}
 
 }
 }

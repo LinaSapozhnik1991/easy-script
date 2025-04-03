@@ -9,8 +9,23 @@
     flex-direction: column;
     gap:160px;
     padding:168px 120px 20px 120px;
+ 
+}
+.CaretUp{
+    padding: 120px 120px 40px 0;
+    margin-left: auto;
+cursor:pointer;}
+}
+
+
+@media(max-width: 1024px){
+    .scripts{width: 100%;
+    .easy{
+        gap: 120px;
+        padding: 120px 80px;
+    }
     .CaretUp{
-        margin-left: auto;
-    cursor:pointer;}
+      padding: 0px 80px 40px 0 ;
+    }
 }
 }

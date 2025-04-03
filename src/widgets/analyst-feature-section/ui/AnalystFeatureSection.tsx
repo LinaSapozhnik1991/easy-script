@@ -35,15 +35,16 @@ const AnalystFeatureSection = () => {
           какие фразы приводят к успеху, а какие нужно улучшить, и сможете
           постоянно оптимизировать свои продажи
         </div>
+        <div className={styles.bottom}>
+          <div className={styles.dopInfoBigText}>
+            Начните анализировать и улучшать!
+          </div>
 
-        <div className={styles.dopInfoBigText}>
-          Начните анализировать и улучшать!
-        </div>
-
-        <div className={styles.btn}>
-          <OpenModalLogin openModal={handleOpenModal} primary size="mediumXL">
-            Попробовать бесплатно{' '}
-          </OpenModalLogin>
+          <div className={styles.btn}>
+            <OpenModalLogin openModal={handleOpenModal} primary size="mediumXL">
+              Попробовать бесплатно{' '}
+            </OpenModalLogin>
+          </div>
         </div>
       </div>
     </div>

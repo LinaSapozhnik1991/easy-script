@@ -16,9 +16,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border: 1px solid  $bgLinePage;
     padding: 40px 40px 60px 40px;
-    max-width: 830px;
-    min-height: 873px;
+    width: 830px;
+    height: 873px;
     background:
       linear-gradient(180deg, rgba(249, 249, 249, 0) 83.79%, #f9f9f9 95.65%),
       linear-gradient(356.28deg, rgba(249, 249, 249, 0) 53.32%, #f9f9f9 67.53%),
@@ -53,9 +54,65 @@
 
   .cardAlt {
     background: url('../assets/abstract.svg') no-repeat;
+   
 
     .description {
       height: 96px;
     }
   }
 }
+
+@media ( max-width: 1024px){
+  .argumentActions{
+    h2{
+  font: $fontH3;
+    }
+  .cards{
+    flex-direction: column;
+    justify-content: center;
+    gap:60px;
+    .card{
+      width: 864px;
+      height: 518px;
+      padding: 40px 40px 60px 40px;
+
+      background: 
+      linear-gradient(180deg, rgba(249, 249, 249, 0) 66.6%, #F9F9F9 85.52%),
+      linear-gradient(277.66deg, rgba(249, 249, 249, 0) 36.11%, #F9F9F9 65.58%),
+      url('../assets/avtoSmall.svg') no-repeat right top;
+      .cardTitle{
+        font: $fontH3;
+        width: 581px;
+        height: 80px;
+        font-weight: 400;
+        margin: 0;
+      }
+      .cardSubtitle{
+        font: $fontBody;
+        margin-top: $spacingGeneral;
+        width: 438px;
+        height:48px ;
+      }
+      .description{
+        display: none;
+      }
+      .cardEnd{
+        font:$fontP1;
+        margin: 0;
+        width: 415px;
+      }
+
+
+    }
+  .cardAlt{
+    background: url('../assets/abstract.svg') no-repeat;
+    background-size: cover;
+    .cardEnd{
+      width: 484px;
+    }
+  }
+ 
+  }
+  
+  }
+  }

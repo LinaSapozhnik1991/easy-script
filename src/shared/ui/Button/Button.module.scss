@@ -74,3 +74,17 @@
     height: 72px;
   }
 }
+@media(max-width:1024px){
+  .button{
+    &.mediumXXL{
+      width: 308px;
+      height: 64px;
+      font:$fontP1;
+    }
+&.smallXL{
+  width: 237px;
+  height: 64px;
+  font: $fontP1;
+}
+  }
+}

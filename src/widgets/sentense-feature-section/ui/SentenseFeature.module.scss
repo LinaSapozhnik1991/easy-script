@@ -12,7 +12,6 @@
     .dopInfo {
       font: $fontP1;
       line-height: 32px;
-
       width: 770px;
     }
   }
@@ -62,5 +61,40 @@
   }
   .cardConsult {
     background: url('../assets/consultancy.svg') no-repeat bottom;
+  }
+}
+
+
+@media(max-width:1024px){
+  .sentense{
+    gap:24px;
+    .sentenseHead{
+      flex-direction: column;
+      gap:28px;
+      border-bottom: 1px solid $bgLinePage;
+      .sentenseTitle{
+        font: $fontH3;
+
+      }
+      .dopInfo{
+        font-size: 22px;
+      }
+    }
+    .line{
+   display:none;
+    }
+
+    .cards{
+      margin-top: 30px;
+      .card{
+        padding: 40px 0 0 28px;
+        width: 275px;
+        height: 276px;
+        .cardTitle{
+          font:$fontBody;
+          font-weight: 500;
+        }
+      }
+    }
   }
 }

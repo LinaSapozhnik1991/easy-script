@@ -19,16 +19,21 @@ const EasyScript = () => {
       <MainSection />
       <div className={styles.easy}>
         <ArgumentMain />
+      </div>
+      <div className={styles.economy}>
         <EconomyFeatureSection />
+      </div>
+      <div className={styles.easy}>
         <ArgumentActions />
         <AnalystFeatureSection />
       </div>
+
       <FeedbackSection />
       <div className={styles.easy}>
         <SentenseFeatureSection />
-        <div className={styles.CaretUp}>
-          <ScrollUp />
-        </div>
+      </div>
+      <div className={styles.CaretUp}>
+        <ScrollUp />
       </div>
       <FooterMain showLinks={false} />
     </div>

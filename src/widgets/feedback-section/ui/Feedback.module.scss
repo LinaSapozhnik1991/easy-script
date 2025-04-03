@@ -5,56 +5,110 @@
   background:
     url('../assets/abstract-bg.svg') no-repeat,
     $bgFeedback;
+  background-size: cover;
   border-radius: $RadiusXXL;
-
   -webkit-border-radius: $RadiusXXL;
   -moz-border-radius: $RadiusXXL;
   -ms-border-radius: $RadiusXXL;
   -o-border-radius: $RadiusXXL;
-  .feedbackTitle {
-    font: $fontH2;
-  }
-  .review {
-    margin-top: 24px;
-    .feedback {
-      display: flex;
-      justify-content: space-between;
-      gap: 60px;
-      margin-top: 107px;
+  
+    .feedbackTitle {
+      font: $fontH2;
     }
-    .feedbackContent {
-      display: flex;
-      flex-direction: column;
-      width: 790px;
-      gap: 12px;
-      .director {
-        font: $fontH3;
-        font-weight: 400;
-      }
-      .name,
-      .issues {
-        font: $fontBody;
-      }
-      .issues {
-        margin-top: 20px;
-      }
-      .success {
-        margin: 12px;
-      }
+    .review {
+      margin-top: 24px;
 
-      font: $fontP1;
-      .successList {
-        list-style: none;
-        .successLink {
-          margin-bottom: 20px;
+      .feedback {
+        display: grid;
+        grid-template-areas:
+          'u v'
+          's v';
+        justify-content: space-between;
+        margin-top: 107px;
+        .videoContainers {
+          grid-area: v;
+          width: 830px;
+          height: 506px;
+          border-radius: $RadiusXXL;
+          -webkit-border-radius: $RadiusXXL;
+          -moz-border-radius: $RadiusXXL;
+          -ms-border-radius: $RadiusXXL;
+          -o-border-radius: $RadiusXXL;
+          background-color: $bgFooter;
         }
-      }
+
+        .videoContainer {
+          position: relative;
+          width: 830px;
+          height: 506px;
+          background-size: auto;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+        .videoContainer video {
+          width: 100%;
+          height: 100%;
+        }
+        .videoOverlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .playButton {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          outline: none;
+        }
+
+        .feedbackUser {
+          display: flex;
+          flex-direction: column;
+          width: 790px;
+          height: 180px;
+          gap: 12px;
+          grid-area: u;
+          .director {
+            font: $fontH3;
+            font-weight: 400;
+          }
+          .name,
+          .issues {
+            font: $fontBody;
+          }
+          .issues {
+            margin-top: 20px;
+            height: 72px;
+          }
+        }
+        .succed {
+          margin: 12px 0;
+          grid-area: s;
+          font: $fontP1;
+h3{margin: 48px 0  24px 0;
+  font: $fontP1;
+        
+}
+          .successList {
+            list-style: none;
+            .successLink {
+              margin-bottom: 20px;
+            }
+          }
+        }
+      
     }
-  }
-  .resultTitle {
-    font: $fontH3;
-    text-align: left;
-    width: 368px;
+    .resultTitle {
+      font: $fontH3;
+      text-align: left;
+      width: 368px;
+    }
   }
   .results {
     display: flex;
@@ -78,6 +132,7 @@
       -o-border-radius: $RadiusL;
     }
   }
+
   .nextArrow,
   .prevArrow {
     background: transparent;
@@ -94,58 +149,150 @@
     }
 
     &.prevArrow {
-      right: 60px;
+      right: 100px;
       top: 2px;
     }
   }
-  .nextArrow:hover, .prevArrow:hover {
- opacity: 0.6;
- transform:scale(1.1) ;
- -webkit-transform:scale(1.1) ;
- -moz-transform:scale(1.1) ;
- -ms-transform:scale(1.1) ;
- -o-transform:scale(1.1) ;
-}
-  .videoContainers {
-    width: 830px;
-    height: 506px;
-    border-radius: $RadiusXXL;
-    -webkit-border-radius: $RadiusXXL;
-    -moz-border-radius: $RadiusXXL;
-    -ms-border-radius: $RadiusXXL;
-    -o-border-radius: $RadiusXXL;
-    background-color: $bgFooter;
- 
+  .nextArrow:hover,
+  .prevArrow:hover {
+    opacity: 0.6;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
   }
 }
 
-.videoContainer {
-  position: relative;
-  width: 830px;
-  height: 506px;
-  background-size: auto;
-  background-repeat: no-repeat;
-  background-position: center;
 
-}
-.videoContainer video {
-  width: 100%;
-  height: 100%;
-}
-.videoOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.playButton {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
+
+@media (max-width: 1024px) {
+  .sliderContainer {
+    height: 1475px;
+    padding: 70px 80px;
+    .feedbackTitle {
+      font: $fontH3;
+    }
+    .review {
+      margin-top: 60px;
+      .feedback {
+        margin: 0;
+        grid-template-areas:
+          'u u'
+          'v v'
+          's s';
+        gap: 16px;
+.feedbackUser{
+        .director {
+          font: $fontP1;
+          height: 32px;
+        }
+        .name{
+          margin-top: 0;
+        }
+        .issues{
+          margin-top: 16px;
+          height: 72px;
+          width: 864px;
+        }
+}
+.succed{
+  margin: 0;
+  height: 152px;
+  h3{
+    font: $fontP1;
+    margin: 20px 0;
+  }
+  .successList{
+    margin-top:20px;
+    .successLink{
+      margin-bottom: 16px;
+    }
+  }
+  
+}
+          .videoContainers {
+            margin-top: 16px;
+            width: 864px;
+            height: 487px;
+    
+            .videoContainer {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              background-repeat: no-repeat;
+              background-position: center;
+    
+              video {
+                width: 100%;
+                height: 100%;
+              }
+            }
+    
+            .videoOverlay {
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+    
+            .playButton {
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              outline: none;
+            }
+          
+        }
+
+      }
+
+      .resultTitle {
+        font: $fontP1;
+        text-align: left;
+        width: 442px;
+        margin-top: 72px;
+   
+      }
+
+      .results {
+        display: flex;
+        justify-content: space-around;
+        width: 864px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        gap: 20px;
+        font: $fontBody;
+
+        .result {
+         justify-content: flex-start;
+          text-align: left;
+          padding: 18px;
+          width: 405px;
+          height: 96px;
+          border: 1px solid $borderCards;
+          background-color: $white;
+          border-radius: $RadiusL;
+        }
+      }
+    }
+
+    .nextArrow {
+      left: 15%;
+      bottom: -105%;
+    }
+
+    .prevArrow {
+      left: -4%;
+      bottom: -105%;
+    }
+
+
+  }
 }

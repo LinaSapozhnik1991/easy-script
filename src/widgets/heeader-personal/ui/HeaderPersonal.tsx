@@ -1,16 +1,20 @@
 import React from 'react'
 
-import { Logo } from '@/shared/assets/icons'
+import { Down, Logo, UserPhoto } from '@/shared/assets/icons'
 
 import styles from './HeaderPersonal.module.scss'
 
 const HeaderPersonal = () => {
   return (
-    <header className={styles.heder}>
+    <header className={styles.header}>
       <div className={styles.logo}>
         <Logo />
       </div>
-      <div className={styles.user}>юзер</div>
+      <div className={styles.user}>
+        <span> юзер</span>
+        <UserPhoto />
+        <Down />
+      </div>
     </header>
   )
 }

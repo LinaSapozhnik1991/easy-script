@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react'
+
 import { Play } from '../../../shared/assets/icons'
+
 import styles from './Feedback.module.scss'
 
 interface VideoPlayerProps {
@@ -47,15 +49,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       className={styles.videoContainer}
       style={{ backgroundImage: `url(${imageSrc})`, position: 'relative' }}>
       {!isPlaying ? (
-        <div
-          className={styles.videoOverlay}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0
-          }}>
+        <div className={styles.videoOverlay}>
           <button className={styles.playButton} onClick={onPlay}>
             <Play />
           </button>

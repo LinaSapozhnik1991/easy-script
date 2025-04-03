@@ -1,6 +1,7 @@
 .economy{
     height: 572px;
     width: 1680px;
+    margin: 160px auto 0 ;
     text-align: left;
     color: $textActiveButton;
     border-radius: $RadiusXXL;
@@ -35,8 +36,10 @@
     .dopInfo{
         display: flex;
         gap: 20px;
+      
         .dopIntoSmallText{
             font: $fontBody;
+           
             width: 365px;
         }
         .dopInfoBigText{
@@ -48,4 +51,47 @@
     margin-top: 44px;
     padding: 0 40px;
     }
+}
+
+@media (max-width: 1024px){
+    .economy{
+        width: 100%;
+        height: 466px;
+        margin: 0 auto;
+        padding: 40px 80px;
+        background: 
+     
+
+        url('../assets/Subtract.svg')no-repeat left,
+        url('../assets/woman-small.svg')no-repeat right;
+        .economyText{
+            padding: 0;
+            gap: 20px;
+            .economyTitle{
+                font: $fontH3;
+                font-weight: 400;
+                width: 570px;
+                height: 120px;
+            }
+            .line{
+                width: 500px;
+            }
+            .dopInfo{
+                .dopIntoSmallText{
+                    width: 500px;
+                  height: 98px;
+                    line-height: 24px;
+                    font-weight: 400;
+                }
+            .dopInfoBigText{
+                display: none;
+            }
+        }
+        }
+        .btn{
+            margin-top: 44px;
+            padding: 0;
+            }
+    }
+ 
 }

@@ -11,7 +11,7 @@ interface SegmentedControlProps {
   disabled?: boolean
   variant: 'line' | 'on'
   defaultSelected?: string
-
+  orientation?: 'horizontal' | 'vertical'
   [key: string]: unknown
 }
 
@@ -23,12 +23,14 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   disabled = false,
   variant,
   defaultSelected,
+  orientation = 'horizontal',
   ...props
 }) => {
   const [selected, setSelected] = useState(defaultSelected || options[0])
   const [underlinePosition, setUnderlinePosition] = useState(0)
   const segmentedControlRef = useRef<HTMLDivElement | null>(null)
   const [optionWidths, setOptionWidths] = useState<number[]>([])
+  const [optionHeights, setOptionHeights] = useState<number[]>([])
 
   useEffect(() => {
     const selectedIndex = options.indexOf(selected)
@@ -43,8 +45,16 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
         child => (child as HTMLElement).clientWidth
       )
       setOptionWidths(widths)
+
+      // Если вертикальная ориентация, получаем высоты опций
+      if (orientation === 'vertical') {
+        const heights = Array.from(segmentedControlRef.current.children).map(
+          child => (child as HTMLElement).clientHeight
+        )
+        setOptionHeights(heights)
+      }
     }
-  }, [options])
+  }, [options, orientation])
   useEffect(() => {
     setSelected(defaultSelected || options[0])
   }, [defaultSelected, options])
@@ -54,11 +64,13 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       onSelect(option)
     }
   }
-
   const underlineWidth = optionWidths[underlinePosition] || 1
   const underlineLeft = optionWidths
     .slice(0, underlinePosition)
     .reduce((a, b) => a + b, 0)
+  const underlineTop = optionHeights
+    .slice(0, underlinePosition)
+    .reduce((a, b) => a + b, 0) // Для верти
 
   return (
     <div className={styles.segmentedControlWrapper} {...props}>
@@ -68,7 +80,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
         className={classNames(
           styles.segmentedControl,
           styles[size],
-          styles[variant]
+          styles[variant],
+          { [styles.vertical]: orientation === 'vertical' }
         )}>
         {options.map(option => (
           <div
@@ -83,17 +96,18 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
           </div>
         ))}
         {variant === 'line' && (
-          <>
-            <div
-              className={styles.underline}
-              style={{
-                left: `${underlineLeft}px`,
-                width: `${underlineWidth}px`,
-                transition: 'left 0.3s ease, width 0.3s ease'
-              }}
-            />
-          </>
+          <div
+            className={styles.underline}
+            style={{
+              left: orientation === 'horizontal' ? `${underlineLeft}px` : '0',
+              top: orientation === 'vertical' ? `${underlineTop}px` : '100%',
+              width: `${underlineWidth}px`,
+              height: `2px`,
+              transition: 'left 0.3s ease, top 0.3s ease, width 0.3s ease'
+            }}
+          />
         )}
+
         {variant === 'on' && (
           <div
             className={styles.onIndicator}
