@@ -1,7 +1,8 @@
 .overlay {
   position  : fixed;
   inset       : 0;
-  background: $bgModalPortal;
+  background:  rgba(9, 27, 28, 0.3);
+
   z-index   : 1000;
   transition: background-color 0.3s ease;
 }

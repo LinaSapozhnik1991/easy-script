@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-import styles from './SentenseFeature.module.scss'
 import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'
 import useModalStore from '@/shared/Modal/model/useModalStore'
 import AuthSegmentedControl from '@/widgets/auth-segment-control/ui/AuthSegmentedControl'
+
+import styles from './SentenseFeature.module.scss'
 
 const SentenseFeatureSection = () => {
   const { openModal } = useModalStore()
