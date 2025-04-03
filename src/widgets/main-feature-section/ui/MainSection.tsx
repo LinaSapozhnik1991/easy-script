@@ -23,7 +23,9 @@ const MainSection = () => {
   return (
     <section className={styles.main}>
       <div className={styles.mainHead}>
-        <Logo />
+        <div className={styles.logo}>
+          <Logo />
+        </div>
         <div className={styles.mainText}>
           <div className={styles.mainText_name}>
             <p className={styles.easyScript}>EasyScript</p>
