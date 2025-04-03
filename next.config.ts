@@ -1,6 +1,15 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*', // Запросы к /api будут проксироваться
+        destination: 'https://easy-script.koston.duckdns.org/api/:path*' // Ваш API
+      }
+    ]
+  },
+
   sassOptions: {
     includePaths: ['./src'],
     additionalData: `@import './src/styles/variables.scss'; @import './src/styles/mixins.scss';`

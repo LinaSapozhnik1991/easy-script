@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import {
   FieldError,
   SubmitHandler,
@@ -169,6 +169,9 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       clearErrors(field)
       await trigger(field)
     }
+  useEffect(() => {
+    setValue('company', 'Моя компания')
+  }, [setValue])
   return (
     <div className={styles.registration}>
       <div className={styles.modalForm}>
