@@ -88,3 +88,12 @@
 }
   }
 }
+@media (max-width:375px){
+  .button{
+    &.mediumXXL{
+      width: 245px;
+      height: 56px;
+      font:$fontBody;
+    }
+  }
+}

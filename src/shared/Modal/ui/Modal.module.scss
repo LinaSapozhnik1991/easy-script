@@ -1,41 +1,39 @@
 .overlay {
-  position  : fixed;
-  top       : 0;
-  left      : 0;
-  right     : 0;
-  bottom    : 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: $bgModalRootPortal;
-  z-index   : 1000;
-  transition:
-    background-color 3s ease;
-  -webkit-transition: background-color 0.3s ease;
-  -moz-transition   : background-color 0.3s ease;
-  -ms-transition    : background-color 0.3s ease;
-  -o-transition     : background-color 0.3s ease;
+  z-index: 1000;
+  transition:    background-color 5s ease;
+  -webkit-transition:    background-color 5s ease;
+  -moz-transition:    background-color 5s ease;
+  -ms-transition:    background-color 5s ease;
+  -o-transition:    background-color 5s ease;
   -webkit-transition: background-color 0.3s ease;
 }
 
 .modal {
-  display           : flex;
-  flex-direction    : column;
-  justify-content   : center;
-  align-items       : center;
-  position          : fixed;
-  background        : $white;
-  border-radius     : 20px;
-  z-index           : 1001;
-  max-width         : 650px;
-  padding           : 20px 40px 32px 40px;
-  width             : 90%;
-  height            : auto;
-  top               : 50%;
-  left              : 50%;
-  transform         : translate(-50%, -50%);
-  transition        : transform 3s ease, opacity 0.3s ease;
-  -webkit-transition: transform 3s ease, opacity 0.3s ease;
-  -moz-transition   : transform 3s ease, opacity 0.3s ease;
-  -ms-transition    : transform 3s ease, opacity 0.3s ease;
-  -o-transition     : transform 3s ease, opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: $white;
+  border-radius: 20px;
+  z-index: 1001;
+  max-width: 650px;
+  padding: 20px 40px 32px 40px;
+  width: 90%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) с;
+  -webkit-transform: translate(-50%, -50%) с;
+  -moz-transform: translate(-50%, -50%) с;
+  -ms-transform: translate(-50%, -50%) с;
+  -o-transform: translate(-50%, -50%) с;
 }
 
 .modal.open {

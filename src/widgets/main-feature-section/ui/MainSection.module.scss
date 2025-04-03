@@ -56,7 +56,7 @@
 }
 
 
-@media (width:1024px){
+@media (max-width:1024px){
     .main{
         padding: 40px 80px;
         height: 880px;
@@ -95,4 +95,48 @@ height: 38px;}
         
            }
     }
+}
+
+@media (max-width:375px){
+.main{
+    padding:40px;
+    height: 655px;
+    background: 
+    url('../assets/arrow-xxs.png')no-repeat bottom;
+  
+  
+    .mainHead{
+        width: 100%;
+        justify-content: center;
+     
+  
+      background-size: cover;
+
+    
+.logo{
+width: 58px;
+height: 28px;
+}
+.mainText{
+    flex-direction: column;
+  .mainText_name{
+    .easyScript{
+        display: none;
+    }
+     .dopText{
+        text-align: center;
+        font: $fontH3 ;
+        width: 295px;
+        height: 120px;
+    }
+}
+}
+    }
+.btn{
+   display: flex;
+   justify-content: center;
+   margin: 28px;
+}
+}
+
 }

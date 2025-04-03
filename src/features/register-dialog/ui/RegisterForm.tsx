@@ -122,7 +122,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       })
 
       if (response.status === 201) {
-        await sendVerificationEmail(data.email)
+        //await sendVerificationEmail(data.email)
         onRegisterSuccess(data.email)
         //  setIsVerificationModalOpen(true)
       }
