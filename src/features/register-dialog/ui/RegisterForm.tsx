@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import {
   FieldError,
   SubmitHandler,
@@ -19,7 +19,7 @@ import { Check, Eye, EyeClosed } from '@/shared/assets/icons'
 
 import { registrationSchema } from '../model/validation'
 import { formatPhoneNumber } from '../model/formatted/formatedPhone'
-import { registerUser, sendVerificationEmail } from '../api'
+import { registerUser } from '../api'
 
 import styles from './Register.module.scss'
 
@@ -96,8 +96,6 @@ type RegisterFormProps = {
   onRegisterSuccess: (email: string) => void
 }
 const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
-  //const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false)
-
   const {
     register,
     handleSubmit,
@@ -122,9 +120,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       })
 
       if (response.status === 201) {
-        //await sendVerificationEmail(data.email)
         onRegisterSuccess(data.email)
-        //  setIsVerificationModalOpen(true)
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -173,9 +169,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       clearErrors(field)
       await trigger(field)
     }
-  useEffect(() => {
-    setValue('company', 'Моя компания')
-  }, [setValue])
   return (
     <div className={styles.registration}>
       <div className={styles.modalForm}>
