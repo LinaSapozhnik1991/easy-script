@@ -55,24 +55,48 @@
    }
 }
 
-
-@media (max-width:1024px){
+@media (min-width:1440px) and (max-width:1660px) {
     .main{
         padding: 40px 80px;
+        height: 880px ;
+        .mainHead{
+            background-image: none;
+            .mainText{
+                display: flex;
+              gap:40px;
+                margin-top: 100px;
+                .mainText_name{
+                    display: flex;
+                    gap: 32px;
+                    flex-direction: column;
+                }
+                .quoteContainer{
+                   font: $fontP1;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px){
+    .main{
+    padding: 60px;
         height: 880px;
         justify-content: flex-start;
-        background: url('../assets/arrowSmall.png')no-repeat bottom,
-
-        linear-gradient(0deg, rgba(243, 243, 243, 0.5) 0%, #F3F3F3 14.04%);
+        background: 
+        
+        url('../assets/arrowSmall.png')no-repeat bottom,
+         linear-gradient(0deg, rgba(243, 243, 243, 0.5) 0%, #F3F3F3 14.04%);
     background-size: contain;
         .mainHead{
-            background: linear-gradient(0deg, rgba(243, 243, 243, 0.5) 0%, #F3F3F3 14.04%);
-.logo svg{width: 80px;
+            background-image: none;
+.logo svg{
+    width: 80px;
 height: 38px;}
             .mainText{
                 margin-top: 80px;
                 .mainText_name{
-                    display: flex;
+                   
                     gap:114px;
                     justify-content: space-between;
                     .easyScript{
@@ -84,6 +108,7 @@ height: 38px;}
                         font: $fontH2;
                         width: 569px;
                     }
+                
                 }
                 .quoteContainer{
                     display: none;
@@ -97,39 +122,45 @@ height: 38px;}
     }
 }
 
-@media (max-width:375px){
+
+@media (min-width:375px) and (max-width:1023px){
 .main{
+    display: block;
     padding:40px;
     height: 655px;
     background: 
-    url('../assets/arrow-xxs.png')no-repeat bottom;
-  
+    url('../assets/arrow-xxs.png')no-repeat bottom left,
+    linear-gradient(0deg, rgba(243, 243, 243, 0.5) -38.71%, #F3F3F3 8.2%);
+  background-size: auto;
   
     .mainHead{
         width: 100%;
-        justify-content: center;
-     
-  
-      background-size: cover;
-
     
-.logo{
+.logo svg{
 width: 58px;
 height: 28px;
 }
 .mainText{
+    margin-top: 44px;
     flex-direction: column;
+    text-align: center;
   .mainText_name{
+    display: flex;
+    justify-content: center;
     .easyScript{
         display: none;
     }
      .dopText{
+      
         text-align: center;
         font: $fontH3 ;
         width: 295px;
         height: 120px;
     }
 }
+}
+.quoteContainer{
+    display: none;
 }
     }
 .btn{

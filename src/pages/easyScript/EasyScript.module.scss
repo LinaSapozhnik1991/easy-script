@@ -1,7 +1,8 @@
 .scripts{
+    width: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
  
 .easy{
     
@@ -16,11 +17,21 @@
     margin-left: auto;
 cursor:pointer;}
 }
+@media(max-width: 1440){
+    .scripts{
+        .easy{width: 100%;
+            gap:130px;
+            padding: 120px 20px ;
+        }
+        .CaretUp{
+            padding: 0 90px 50px 0;
+        }
+    }
+}
 
-
-@media(max-width: 1024px){
+@media (min-width: 1024px) and (max-width: 1366px){
     .scripts{width: 100%;
-    .easy{
+    .easy{width: 100%;
         gap: 120px;
         padding: 120px 80px;
     }
@@ -32,8 +43,9 @@ cursor:pointer;}
 
 @media (max-width: 375px){
     .scripts{
-        .easy{
-            padding: 40px;
+        .easy{width: 100%;
+            padding:60px 40px;
+            gap:60px;
         }
     }
 }

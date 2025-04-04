@@ -1,14 +1,14 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  async rewrites() {
+  /* async rewrites() {
     return [
       {
-        source: '/api/:path*', // Запросы к /api будут проксироваться
-        destination: 'https://easy-script.koston.duckdns.org/api/:path*' // Ваш API
+        source: '/api/:path*',
+        destination: 'https://easy-script.koston.duckdns.org/api/:path*'
       }
     ]
-  },
+  },*/
 
   sassOptions: {
     includePaths: ['./src'],

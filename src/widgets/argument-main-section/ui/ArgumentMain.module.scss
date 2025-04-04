@@ -109,3 +109,41 @@ font: $fontH3;
 
 }
 }
+
+@media(max-width: 375px){
+  .argumentsSection{
+    h2{
+      font: $fontP1;
+      text-align: center;
+      font-weight: 600;
+    }
+  
+  .cards{
+  gap:32px;
+  .card{
+    width: 295px;
+    height: 472px;
+    padding: 28px;
+ .cardTitle{
+  font:$fontBody;
+ }
+ .cardSubtitle{
+  font: $fontSmall;
+ }
+ .cardEnd{
+  font:$fontBody;
+  font-weight: 500;
+ }
+ background: url('../assets/graph-xs.svg') no-repeat center;
+ background-position: center calc(50% + 30px);
+  }
+  .cardAlt{
+    background: linear-gradient(185.74deg, rgba(249, 249, 249, 0) 57.82%, #F9F9F9 78.32%),
+    linear-gradient(6.77deg, rgba(249, 249, 249, 0) 57.08%, #F9F9F9 79.53%),
+    url('../assets/mountain-xs.svg') no-repeat center;
+    background-position: center calc(50% + 30px);
+ 
+  }
+  }
+}
+}
