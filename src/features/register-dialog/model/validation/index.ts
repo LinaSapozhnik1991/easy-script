@@ -6,9 +6,18 @@ export const registrationSchema = z
       .string()
       .nonempty('Поле не заполнено')
       .min(2, 'Некорректные данные ')
-      .regex(/^[A-Za-zА-Яа-яЁё\s]+$/, 'Некорректные данные'),
+      .max(255, 'Некорректные данные')
+      .regex(/^[A-Za-zА-Яа-яЁё\s\-"'']+$/, 'Некорректные данные'),
 
-    company: z.string().optional(),
+    company: z
+      .string()
+      .max(255, 'Некорректные данные')
+      .optional()
+      .refine(
+        value =>
+          value === undefined || /^[A-Za-zА-Яа-яЁё\s\-"'']+$/.test(value),
+        'Некорректные данные'
+      ),
 
     phone: z
       .string()
@@ -24,12 +33,16 @@ export const registrationSchema = z
 
       .string()
       .nonempty('Поле не заполнено')
-      .email('Некорректные данные'),
+      .email('Некорректные данные')
+      .min(5, 'Некорректные данные')
+      .max(255, 'Некорректные данные'),
 
     password: z
       .string()
       .nonempty('Поле не заполнено')
-      .min(8, 'Пароль должен содержать минимум 8 символов'),
+      .min(8, 'Пароль должен содержать минимум 8 символов')
+      .max(16, 'Некорректные данные')
+      .regex(/^[A-Za-zА-Яа-яЁё0-9\-"\s]*$/, 'Некорректные данные'),
 
     confirmPassword: z.string().nonempty('Поле не заполнено'),
 
