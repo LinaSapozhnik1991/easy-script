@@ -1,6 +1,6 @@
 .economy{
     height: 572px;
-    width: 1680px;
+    width: 100%;
     margin: 160px auto 0 ;
     text-align: left;
     color: $textActiveButton;
@@ -53,7 +53,7 @@
     }
 }
 
-@media (max-width: 1024px){
+@media (min-width: 1024px) and (max-width: 1240px){
     .economy{
         width: 100%;
         height: 466px;
@@ -94,4 +94,46 @@
             }
     }
  
+}
+
+@media (min-width:375px) and (max-width:768px){
+    .economy{
+        margin:0;
+        display: flex;
+        flex-direction: column;
+        height: 811px;
+  
+        background: 
+        
+url('../assets/woman-xs1.png')no-repeat bottom,
+$bgEconomySection;
+background-position: center calc(100% - 135px);
+        .economyText{
+            .economyTitle{
+font: $fontBody;
+width: 294px;
+height: 96px;
+            }
+            .line{
+                width: 295px;
+
+            }
+            .dopInfo{
+                .dopIntoSmallText{
+                    width: 302px;
+                    height: 144px;
+                    font: $fontMain;
+
+                }
+                .dopInfoBigText{
+                    display: none;
+                }
+            }
+        }
+        .btn{
+            display: flex;
+            justify-content: center;
+            margin-top: 370px;
+        }
+    }
 }

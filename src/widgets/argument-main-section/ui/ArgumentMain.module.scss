@@ -62,8 +62,21 @@
 
 }
 }
-
-@media ( max-width: 1024px){
+@media (min-width:1025px) and (max-width:1650px){
+  .argumentsSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .cards{
+      .card{
+        width: 600px;
+        height: 650px;
+        padding: 40px 40px 60px 40px;
+      }
+    }
+  }
+}
+@media (min-width: 769px) and ( max-width: 1024px){
 .argumentsSection{
   h2{
 font: $fontH3;
@@ -75,7 +88,7 @@ font: $fontH3;
   .card{
     width: 864px;
     height: 518px;
-    padding: 40px 40px 60px 40px;
+    padding: 40px;
     .cardTitle{
       font: $fontH3;
       width: 574px;
@@ -110,29 +123,57 @@ font: $fontH3;
 }
 }
 
-@media(max-width: 375px){
+@media(min-width: 375px) and (max-width: 768px){
   .argumentsSection{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap:32px;
     h2{
-      font: $fontP1;
+      font: $fontBody;
       text-align: center;
       font-weight: 600;
+      width: 295px;
+      height: 72px;
+      margin-bottom: 0;
+
+      br{
+        display: none;
+      }
     }
   
   .cards{
+    flex-direction: column;
+  
   gap:32px;
   .card{
+    
     width: 295px;
     height: 472px;
     padding: 28px;
  .cardTitle{
+  text-align: left;
   font:$fontBody;
+  font-weight: 500;
+  width: 235px;
+  height: 72px;
  }
  .cardSubtitle{
   font: $fontSmall;
+  text-align: left;
+  width: 244px;
+  height: 54px;
  }
+ .description{
+  display: none;
+}
  .cardEnd{
   font:$fontBody;
   font-weight: 500;
+  text-align: left;
+  width: 224px;
+  height: 48px;
+  margin: 0;
  }
  background: url('../assets/graph-xs.svg') no-repeat center;
  background-position: center calc(50% + 30px);
@@ -141,7 +182,7 @@ font: $fontH3;
     background: linear-gradient(185.74deg, rgba(249, 249, 249, 0) 57.82%, #F9F9F9 78.32%),
     linear-gradient(6.77deg, rgba(249, 249, 249, 0) 57.08%, #F9F9F9 79.53%),
     url('../assets/mountain-xs.svg') no-repeat center;
-    background-position: center calc(50% + 30px);
+    background-position: center calc(50% + 20px);
  
   }
   }

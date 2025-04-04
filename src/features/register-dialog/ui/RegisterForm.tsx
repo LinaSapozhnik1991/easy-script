@@ -37,6 +37,7 @@ const InputField: FC<{
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   showPasswordToggle?: () => void
   showPassword?: boolean
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   trigger: (field?: keyof FormData) => Promise<boolean>
   validate?: { validate: (value: string) => boolean | string }
 }> = ({
@@ -46,6 +47,7 @@ const InputField: FC<{
   type,
   register,
   error,
+  onKeyDown,
   serverError,
   inputCompleted,
   onChange,
@@ -73,6 +75,7 @@ const InputField: FC<{
         inputSize={InputSizes.Large}
         error={!!error}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         onBlur={() => trigger(id)}
       />
       {showPasswordToggle && (
@@ -102,6 +105,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
     formState: { errors },
     watch,
     trigger,
+
     setValue,
     clearErrors
   } = useForm<FormData>({
@@ -157,7 +161,15 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       return newChecked
     })
   }
-
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/^\d$/.test(event.key) && // Проверка на цифры
+      event.key !== 'Backspace' && // Разрешаем Backspace
+      event.key !== 'Tab' // Разрешаем Tab
+    ) {
+      event.preventDefault() // Предотвращаем ввод
+    }
+  }
   const handleChange =
     (field: keyof FormData) =>
     async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,6 +221,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               error={errors.phone}
               inputCompleted={!!watch('phone')}
               onChange={handleChange('phone')}
+              onKeyDown={handleKeyDown}
               trigger={trigger}
             />
             <InputField

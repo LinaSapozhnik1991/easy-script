@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-import styles from './EconomyFeature.module.scss'
 import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'
 import AuthSegmentedControl from '@/widgets/auth-segment-control/ui/AuthSegmentedControl'
 import useModalStore from '@/shared/Modal/model/useModalStore'
+
+import styles from './EconomyFeature.module.scss'
 
 const EconomyFeatureSection = () => {
   const { openModal } = useModalStore()
