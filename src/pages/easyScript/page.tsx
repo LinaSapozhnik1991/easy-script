@@ -25,8 +25,8 @@ const EasyScript = () => {
       </div>
       <div className={styles.easy}>
         <ArgumentActions />
-        <AnalystFeatureSection />
       </div>
+      <AnalystFeatureSection />
 
       <FeedbackSection />
       <div className={styles.easy}>

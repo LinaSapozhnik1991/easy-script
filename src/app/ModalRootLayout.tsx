@@ -22,8 +22,6 @@ const ModalRootLayout: React.FC<{ children: React.ReactNode }> = ({
   const { isOpen, closeModal } = useModalStore()
   const [selectedOption, setSelectedOption] = useState('Регистрация')
   const handleSelectOption = (option: string) => {
-    // eslint-disable-next-line no-console
-    console.log('Selected option changed to:', option)
     setSelectedOption(option)
   }
   return (

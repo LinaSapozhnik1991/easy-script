@@ -73,3 +73,23 @@
     padding: 40px 80px;
   }
 }
+@media (max-width:375px){
+  .footer{
+    padding: 28px 40px;
+    .logo svg{
+      width: 58px;
+      height: 28px;
+    }
+    .contacts{
+    .messengers li svg{
+      width: 36px;
+      height: 36px;
+    }
+    .contactInfo{
+       a{
+      font: $fontMain;
+      }
+    }
+  }
+  }
+}

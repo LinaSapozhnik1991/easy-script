@@ -30,6 +30,8 @@ $gray-830 : rgba(243, 255, 255, 1);
 $gray-900 : rgba(239, 245, 245, 1);
 $gray-910 : rgba(227, 244, 245, 1);
 $gray-920 : rgba(9, 27, 28, 0.3);
+$gray-930:  rgba(74, 99, 101, 1);
+
 
 $white: rgba(255, 255, 255, 1);
 
@@ -77,6 +79,7 @@ $textActiveButton : $white;
 $textDisabled   : $gray-500;
 $textPlaceholder: $gray;
 $textError      : $error;
+$textSlider: $gray-930;
 
 $textPrimary        : $emerald;
 $textPassword       : $emerald-800;

@@ -46,9 +46,11 @@ const SentenseFeatureSection = () => {
           </h5>
         </div>
       </div>
-      <OpenModalLogin openModal={handleOpenModal} primary size="smallXL">
-        Отправить заявку
-      </OpenModalLogin>
+      <div className={styles.btn}>
+        <OpenModalLogin openModal={handleOpenModal} primary size="smallXL">
+          Отправить заявку
+        </OpenModalLogin>
+      </div>
     </div>
   )
 }

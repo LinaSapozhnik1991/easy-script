@@ -65,8 +65,9 @@
 }
 
 
-@media(max-width:1024px){
+@media(min-width:1024px) and (max-width:1650px){
   .sentense{
+    width: auto;
     gap:24px;
     .sentenseHead{
       flex-direction: column;
@@ -96,5 +97,49 @@
         }
       }
     }
+  }
+}
+@media(min-width:375px) and (max-width:1023px){
+  .sentense{
+    width: 295px;
+    gap: 28px;
+    margin: 0 auto;
+    .sentenseHead{
+      flex-direction: column;
+      .sentenseTitle{
+        font: $fontBody;
+        font-weight: 600;
+      }
+      .dopInfo{font: $fontMain;
+        width: 295px;
+        padding-bottom: 8px;
+      }
+
+    }
+    .cards{
+      margin-top: 0;
+      flex-direction: column;
+      gap:16px;
+      .card{
+        width: 295px;
+        height: 200px;
+        background-color: $bgCardsSentense;
+      }
+    }
+      .cardAudit {
+        background: url('../assets/document-xs.svg') no-repeat right bottom;
+      }
+      .cardGuide {
+        background: url('../assets/book-xs.svg') no-repeat right bottom;
+      }
+      .cardConsult {
+        background: url('../assets/consultancy-xs.svg') no-repeat bottom;
+      }
+    
+  .btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   }
 }

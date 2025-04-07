@@ -77,6 +77,7 @@ const InputField: FC<{
         onChange={onChange}
         onKeyDown={onKeyDown}
         onBlur={() => trigger(id)}
+        maxLength={id === 'password' || 'confirmPassword' ? 16 : undefined}
       />
       {showPasswordToggle && (
         <div className={styles.eyeIcon} onClick={showPasswordToggle}>
@@ -163,11 +164,11 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
   }
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (
-      !/^\d$/.test(event.key) && // Проверка на цифры
-      event.key !== 'Backspace' && // Разрешаем Backspace
-      event.key !== 'Tab' // Разрешаем Tab
+      !/^\d$/.test(event.key) &&
+      event.key !== 'Backspace' &&
+      event.key !== 'Tab'
     ) {
-      event.preventDefault() // Предотвращаем ввод
+      event.preventDefault()
     }
   }
   const handleChange =

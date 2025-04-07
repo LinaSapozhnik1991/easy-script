@@ -1,13 +1,14 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react'
-import Slider from 'react-slick'
+
+import React, { useEffect, useRef, useState } from 'react'
+// eslint-disable-next-line import/order
+import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
+import 'swiper/swiper-bundle.css'
 
 import { Checked, NextArrow, Prev } from '../../../shared/assets/icons'
 
 import styles from './Feedback.module.scss'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 import VideoPlayer from './VideoPlayer'
 
 interface ReviewProps {
@@ -71,7 +72,9 @@ const SampleNextArrow: React.FC<ArrowProps> = ({ onClick }) => {
       className={styles.nextArrow}
       onClick={onClick}
       aria-label="Next"
+      onFocus={handleFocus}
       role="button"
+      tabIndex={0}
       type="button">
       <NextArrow />
     </button>
@@ -83,27 +86,65 @@ const SamplePrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
     <button
       className={styles.prevArrow}
       onClick={onClick}
+      onFocus={handleFocus}
       aria-label="Previous"
       role="button"
-      type="button">
+      type="button"
+      tabIndex={0}>
       <Prev />
     </button>
   )
 }
+const handleFocus = () => {
+  console.log('Next button focused')
+  setTimeout(() => {
+    console.log('Current focused element:', document.activeElement)
+  }, 0)
+}
 const FeedbackSection: React.FC = () => {
+  const swiperRef = useRef<SwiperRef | null>(null)
+  const handleNextSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.slideNext() // Используйте swiper для доступа к методам
+    }
+  }
+
+  const handlePrevSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.slidePrev() // Используйте swiper для доступа к методам
+    }
+  }
+
   const [playingIndex, setPlayingIndex] = useState<number | null>(null)
   const [currentTimes, setCurrentTimes] = useState<number[]>(
     Array(reviews.length).fill(0)
   )
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [imageSrc, setImageSrc] = useState<string[]>(
+    reviews.map(review => review.imageSrc)
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 375
+      setIsMobile(mobile)
+      const updatedImageSrc = reviews.map(review =>
+        mobile ? `/mobile/${review.imageSrc}` : review.imageSrc
+      )
+      setImageSrc(updatedImageSrc)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handlePlay = (index: number) => {
     setPlayingIndex(index)
-    setIsPlaying(true)
   }
 
   const handlePause = () => {
-    setIsPlaying(false)
+    setPlayingIndex(null)
   }
 
   const handleCurrentTimeChange = (index: number, time: number) => {
@@ -112,30 +153,27 @@ const FeedbackSection: React.FC = () => {
     setCurrentTimes(newTimes)
   }
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    fade: false,
-    nextArrow: <SampleNextArrow onClick={() => {}} />,
-    prevArrow: <SamplePrevArrow onClick={() => {}} />,
-    beforeChange: (current: number, next: number) => {
-      setPlayingIndex(null)
-    }
-  }
-
   return (
     <div className={styles.sliderContainer}>
       <h2 className={styles.feedbackTitle}>Отзывы о работе с EasyScript</h2>
-      <Slider {...settings}>
+      <SamplePrevArrow onClick={handlePrevSlide} />
+      <SampleNextArrow onClick={handleNextSlide} />
+      <Swiper
+        ref={swiperRef}
+        loop={true}
+        navigation={{
+          nextEl: '.nextArrow',
+          prevEl: '.prevArrow'
+        }}
+        spaceBetween={50}
+        slidesPerView={1}
+        onSlideChange={swiper => handlePause()}>
         {reviews.map((review, index) => (
-          <div key={index} className={styles.review}>
+          <SwiperSlide key={index} className={styles.review}>
             <div className={styles.feedback}>
               <div className={styles.feedbackUser}>
                 <p className={styles.director}>{review.director}</p>
-                <p className={styles.name}> {review.name} </p>
+                <p className={styles.name}>{review.name}</p>
                 <p className={styles.issues}>{review.issues}</p>
               </div>
               <div className={styles.succed}>
@@ -154,7 +192,7 @@ const FeedbackSection: React.FC = () => {
               <div className={styles.videoContainers}>
                 <VideoPlayer
                   videoSrc={review.videoSrc}
-                  imageSrc={review.imageSrc}
+                  imageSrc={imageSrc[index]}
                   isPlaying={playingIndex === index}
                   onPlay={() => handlePlay(index)}
                   onPause={handlePause}
@@ -164,7 +202,7 @@ const FeedbackSection: React.FC = () => {
               </div>
             </div>
             <h3 className={styles.resultTitle}>
-              Клиент получил следующие результаты:
+              Клиент получил следующие результаты
             </h3>
             <div className={styles.results}>
               {review.results.map((result, i) => (
@@ -173,9 +211,14 @@ const FeedbackSection: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </SwiperSlide>
         ))}
-      </Slider>
+      </Swiper>
+      {isMobile && (
+        <div className={styles.nextSlideContainer}>
+          <div className={styles.nextSlideText}>Следующий отзыв</div>
+        </div>
+      )}
     </div>
   )
 }

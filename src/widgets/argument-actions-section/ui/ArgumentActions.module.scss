@@ -62,16 +62,15 @@
   }
 }
 
-@media ( max-width: 1025px) and (max-width:1650px){
+@media ( min-width: 1024px) and (max-width:1650px){
   .argumentActions{
-    h2{
-  font: $fontH3;
-    }
+
   .cards{
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     gap:60px;
     .card{
+      
       width: 864px;
       height: 518px;
       padding: 40px 40px 60px 40px;
@@ -80,6 +79,7 @@
       linear-gradient(180deg, rgba(249, 249, 249, 0) 66.6%, #F9F9F9 85.52%),
       linear-gradient(277.66deg, rgba(249, 249, 249, 0) 36.11%, #F9F9F9 65.58%),
       url('../assets/avtoSmall.svg') no-repeat right top;
+      .cardHead{
       .cardTitle{
         font: $fontH3;
         width: 581px;
@@ -96,6 +96,7 @@
       .description{
         display: none;
       }
+    }
       .cardEnd{
         font:$fontP1;
         margin: 0;
@@ -105,6 +106,7 @@
 
     }
   .cardAlt{
+
     background: url('../assets/abstract.svg') no-repeat;
     background-size: cover;
     .cardEnd{
@@ -116,3 +118,111 @@
   
   }
   }
+  @media (min-width: 769px) and ( max-width: 1023px){
+    .argumentActions{
+  
+    .cards{
+      flex-direction: column;
+      justify-content: center;
+      gap:60px;
+      .card{
+        width: 864px;
+        height: 518px;
+        padding: 40px;
+        .cardHead{
+        .cardTitle{
+          font: $fontH3;
+          width: 574px;
+          height: 80px;
+          font-weight: 400;
+          margin: 0;
+        }
+        .cardSubtitle{
+          font: $fontBody;
+          margin-top: $spacingGeneral;
+          width: 438px;
+          height:48px ;
+        }
+        .description{
+          display: none;
+        }
+      }
+        .cardEnd{
+          font:$fontP1;
+          margin: 0;
+        }
+        background: url('../assets/avtoSmall.svg') no-repeat right;
+        background-position: calc(50% + 125px);
+      }
+    
+      .cardAlt{
+        background:linear-gradient(187.91deg, rgba(249, 249, 249, 0) 58.28%, #F9F9F9 83.88%),
+        url('../assets/abstract.svg') no-repeat bottom;
+        background-position: right;
+      }
+    }
+    
+    }
+    }
+    
+    @media(min-width: 375px) and (max-width: 768px){
+      .argumentActions{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap:32px;
+      
+      .cards{
+        flex-direction: column;
+      
+      gap:32px;
+      .card{
+        
+        width: 295px;
+        height: 472px;
+        padding: 28px;
+        .cardHead{
+     .cardTitle{
+      text-align: left;
+      font:$fontBody;
+      font-weight: 500;
+      width: 235px;
+      height: 72px;
+     }
+     .cardSubtitle{
+      font: $fontSmall;
+      text-align: left;
+      width: 244px;
+      height: 54px;
+     }
+     .description{
+      display: none;
+    }
+  }
+     .cardEnd{
+      font:$fontBody;
+      font-weight: 500;
+      text-align: left;
+      width: 244px;
+      height: 72px;
+      margin-bottom: 30px;
+      br{
+        display: none;
+      }
+     }
+     background: linear-gradient(185.74deg, rgba(249, 249, 249, 0) 57.82%, #F9F9F9 78.32%),
+     linear-gradient(6.77deg, rgba(249, 249, 249, 0) 58.79%, #F9F9F9 65.89%),
+     
+     url('../assets/avto-xs.svg') no-repeat center;
+     background-position: center calc(50% + 30px);
+      }
+      .cardAlt{
+        background: linear-gradient(185.74deg, rgba(249, 249, 249, 0) 57.82%, #F9F9F9 78.32%),
+        linear-gradient(6.77deg, rgba(249, 249, 249, 0) 57.08%, #F9F9F9 79.53%),
+        url('../assets/abstract-xs.svg') no-repeat center;
+        background-position: center calc(50% + 20px);
+     
+      }
+      }
+    }
+    }
