@@ -12,6 +12,9 @@
     padding:168px 120px 20px 120px;
  
 }
+.economy{
+    padding: 0 120px;
+}
 .CaretUp{
     padding: 120px 120px 40px 0;
     margin-left: auto;
@@ -23,6 +26,9 @@ cursor:pointer;}
             width: 100%;
             gap:130px;
             padding: 120px 20px ;
+        }
+        .economy{
+            padding: 0;
         }
         .CaretUp{
             padding: 0 90px 50px 0;
@@ -38,6 +44,9 @@ cursor:pointer;}
         display: flex;
         flex-direction: column;
     }
+    .economy{
+        padding: 0;
+    }
     .CaretUp{
       padding: 0px 80px 40px 0 ;
     }
@@ -49,6 +58,9 @@ cursor:pointer;}
         .easy{width: 100%;
             padding:60px 40px;
             gap:60px;
+        }
+        .economy{
+            padding: 0;
         }
         .CaretUp{
             padding: 20px 40px 40px 40px ;
