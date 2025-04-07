@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react'
 
 import OpenModalLogin from '@/features/open-modal-login/ui/OpenModalLogin'

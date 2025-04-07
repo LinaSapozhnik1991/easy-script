@@ -166,12 +166,12 @@
 
 
 }
-
-@media (min-width: 1024px) and (max-width:1660px) {
+@media(max-width:1440px){
   .sliderContainer {
     position: relative;
     height: 1475px;
     padding: 70px 80px;
+    justify-content: center;
     .feedbackTitle {
       font: $fontH3;
     }
@@ -293,7 +293,134 @@
   
   }
 }
-@media (min-width: 375px)and (max-width:1023px)   {
+@media (max-width: 1024px) {
+  .sliderContainer {
+    position: relative;
+    height: 1475px;
+    padding: 70px 80px;
+    justify-content: baseline;
+    .feedbackTitle {
+      font: $fontH3;
+    }
+    .review {
+      margin-top: 60px;
+      .feedback {
+        margin: 0;
+        grid-template-areas:
+          'u u'
+          'v v'
+          's s';
+        gap: 16px;
+        .feedbackUser {
+          .director {
+            font: $fontP1;
+            height: 32px;
+          }
+          .name {
+            margin-top: 0;
+          }
+          .issues {
+            margin-top: 16px;
+            height: 72px;
+            width: 864px;
+          }
+        }
+        .succed {
+          margin: 0;
+          height: 152px;
+          h3 {
+            font: $fontP1;
+            margin: 20px 0;
+          }
+          .successList {
+            margin-top: 20px;
+            .successLink {
+              margin-bottom: 16px;
+            }
+          }
+        }
+        .videoContainers {
+          margin-top: 16px;
+          width: 864px;
+          height: 487px;
+
+          .videoContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+
+            video {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .videoOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .playButton {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+          }
+        }
+      
+    }
+      .resultTitle {
+        font: $fontP1;
+        text-align: left;
+        width: 442px;
+        margin-top: 72px;
+      }
+
+      .results {
+        display: flex;
+        justify-content: space-around;
+        width: 864px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        gap: 20px;
+        font: $fontBody;
+
+        .result {
+          justify-content: flex-start;
+          text-align: left;
+          padding: 18px;
+          width: 405px;
+          height: 96px;
+          border: 1px solid $borderCards;
+          background-color: $white;
+          border-radius: $RadiusL;
+        }
+      }
+    }
+    
+    .nextArrow {
+      position: absolute;
+      left: 28%;
+      bottom: 2%;
+    }
+
+    .prevArrow {
+      left: 4%;
+      bottom: 2%;
+    }
+  
+  }
+}
+@media (max-width: 375px)   {
   .sliderContainer {
     height: 1191px;
     padding: 40px;
