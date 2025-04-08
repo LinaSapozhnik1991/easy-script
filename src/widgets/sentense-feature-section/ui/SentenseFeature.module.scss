@@ -124,6 +124,10 @@
         width: 295px;
         height: 200px;
         background-color: $bgCardsSentense;
+        .cardTitle{
+          font: $fontMain;
+          font-weight: 500;
+        }
       }
     }
       .cardAudit {

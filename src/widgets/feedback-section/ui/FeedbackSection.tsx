@@ -105,13 +105,13 @@ const FeedbackSection: React.FC = () => {
   const swiperRef = useRef<SwiperRef | null>(null)
   const handleNextSlide = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slideNext() // Используйте swiper для доступа к методам
+      swiperRef.current.swiper.slideNext()
     }
   }
 
   const handlePrevSlide = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slidePrev() // Используйте swiper для доступа к методам
+      swiperRef.current.swiper.slidePrev()
     }
   }
 
