@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/named */
 'use client'
 import React, { FC, useEffect, useState } from 'react'
@@ -38,6 +39,7 @@ const LoginForm: FC<LoginFormProps> = ({
     handleSubmit,
     formState: { errors },
     watch,
+    trigger,
     setValue
   } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
@@ -55,6 +57,29 @@ const LoginForm: FC<LoginFormProps> = ({
     null
   )
 
+  const handleEmailChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value
+    setValue('email', value)
+
+    if (serverErrorEmail) {
+      setServerErrorEmail(null)
+    }
+    await trigger('email')
+  }
+
+  const handlePasswordChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value
+    setValue('password', value)
+    if (serverErrorPassword) {
+      setServerErrorPassword(null)
+    }
+    await trigger('password')
+  }
+
   const onSubmit: SubmitHandler<FormData> = async data => {
     setServerErrorEmail(null)
     setServerErrorPassword(null)
@@ -65,18 +90,27 @@ const LoginForm: FC<LoginFormProps> = ({
         router.push('/personal')
       }
     } catch (error) {
+      console.error('Ошибка при входе:', error)
+
       if (axios.isAxiosError(error) && error.response) {
+        const serverMessage = error.response.data?.message || 'Произошла ошибка'
+
         if (error.response.status === 422) {
           const errors = error.response.data.data
+
           if (errors.email) {
             setServerErrorEmail(errors.email.join(', '))
+          } else {
+            setServerErrorEmail(null)
           }
+
           if (errors.password) {
             setServerErrorPassword(errors.password.join(', '))
+          } else {
+            setServerErrorPassword(null)
           }
         } else {
-          setServerErrorEmail('Произошла ошибка')
-          setServerErrorPassword('Произошла ошибка')
+          setServerErrorPassword(serverMessage)
         }
       } else {
         setServerErrorEmail('Не удалось подключиться к серверу.')
@@ -84,11 +118,11 @@ const LoginForm: FC<LoginFormProps> = ({
       }
     }
   }
+
   const watchedEmail = watch('email')
   const password = watch('password')
   const isFormFilled =
     watchedEmail && password && !errors.email && !errors.password
-  //const isFormStarted = watchedEmail || password
   return (
     <div className={styles.login}>
       <div className={styles.modalForm}>
@@ -110,11 +144,13 @@ const LoginForm: FC<LoginFormProps> = ({
               <Input
                 id="email"
                 {...register('email')}
+                onChange={handleEmailChange}
                 style={{ width: '400px' }}
                 placeholder="Введите email"
                 type={InputTypes.Email}
                 inputSize={InputSizes.Large}
                 error={!!errors.email || !!serverErrorEmail}
+                maxLength={255}
               />
               {errors.email ? (
                 <span className={styles.error}>{errors.email.message}</span>
@@ -132,8 +168,10 @@ const LoginForm: FC<LoginFormProps> = ({
               <Input
                 id="password"
                 {...register('password')}
+                onChange={handlePasswordChange}
                 inputSize={InputSizes.Large}
                 style={{ width: '400px' }}
+                maxLength={16}
                 placeholder="Введите пароль"
                 type={showPassword ? InputTypes.Text : InputTypes.Password}
                 error={!!errors.password || !!serverErrorPassword}
