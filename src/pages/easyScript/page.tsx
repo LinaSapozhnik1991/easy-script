@@ -29,9 +29,8 @@ const EasyScript = () => {
       <AnalystFeatureSection />
 
       <FeedbackSection />
-      <div className={styles.easy}>
-        <SentenseFeatureSection />
-      </div>
+
+      <SentenseFeatureSection />
       <div className={styles.CaretUp}>
         <ScrollUp />
       </div>

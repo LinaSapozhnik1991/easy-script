@@ -61,7 +61,7 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1650px) {
+@media (max-width: 1024px) {
   .argumentActions {
     .cards {
       flex-direction: column;
@@ -114,57 +114,9 @@
     }
   }
 }
-@media (min-width: 769px) and (max-width: 1023px) {
-  .argumentActions {
-    .cards {
-      flex-direction: column;
-      justify-content: center;
-      gap: 60px;
-      .card {
-        width: 864px;
-        height: 518px;
-        padding: 40px;
-        .cardHead {
-          .cardTitle {
-            font: $fontH3;
-            width: 574px;
-            height: 80px;
-            font-weight: 400;
-            margin: 0;
-          }
-          .cardSubtitle {
-            font: $fontBody;
-            margin-top: $spacingGeneral;
-            width: 438px;
-            height: 48px;
-          }
-          .description {
-            display: none;
-          }
-        }
-        .cardEnd {
-          font: $fontP1;
-          margin: 0;
-        }
-        background: url('../assets/avtoSmall.svg') no-repeat right;
-        background-position: calc(50% + 125px);
-      }
 
-      .cardAlt {
-        background:
-          linear-gradient(
-            187.91deg,
-            rgba(249, 249, 249, 0) 58.28%,
-            #f9f9f9 83.88%
-          ),
-          url('../assets/abstract.svg') no-repeat bottom;
-        background-position: right;
-      }
-    }
-  }
-}
 
-@media (min-width: 375px) and (max-width: 768px) {
+@media (max-width: 375px)  {
   .argumentActions {
     display: flex;
     align-items: center;

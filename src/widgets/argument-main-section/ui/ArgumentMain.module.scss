@@ -63,7 +63,7 @@
 }
 }
 
-@media (min-width: 1024px) and ( max-width: 1650px){
+@media (max-width: 1024px){
 .argumentsSection{
   h2{
 font: $fontH3;
@@ -111,7 +111,7 @@ font: $fontH3;
 }
 }
 
-@media(min-width: 375px) and (max-width: 768px){
+@media(max-width: 375px) {
   .argumentsSection{
     display: flex;
     align-items: center;
