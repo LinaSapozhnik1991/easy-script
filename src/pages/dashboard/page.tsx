@@ -1,7 +1,7 @@
 'use client'
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 import HeaderPersonal from '@/widgets/heeader-personal/ui/HeaderPersonal'
 import FooterMain from '@/widgets/footerMain'
@@ -18,7 +18,7 @@ const Dashboard = () => {
     const getUserData = async () => {
       try {
         const data = await userMe()
-        setUserData(data) // Сохраняем данные пользователя в состоянии
+        setUserData(data)
       } catch (error) {
         if (error instanceof Error) {
           console.error(error.message)
