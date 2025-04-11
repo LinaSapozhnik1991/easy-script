@@ -1,12 +1,12 @@
 .sentense {
   @include flex-container(column, flex-start, stretch);
   gap: 36px;
-  width: 1498px;
+  width: 100%;
+  padding: 160px 302px 0 120px;
   .sentenseHead {
     display: flex;
     justify-content: space-between;
     .sentenseTitle {
-    
       font: $fontH2;
     }
     .dopInfo {
@@ -64,88 +64,82 @@
   }
 }
 
-
-@media(max-width:1024px){
-  .sentense{
+@media (max-width: 1024px) {
+  .sentense {
     width: auto;
-    gap:24px;
+    gap: 24px;
     padding: 60px 70px;
-    .sentenseHead{
+    .sentenseHead {
       flex-direction: column;
-      gap:28px;
+      gap: 28px;
       border-bottom: 1px solid $bgLinePage;
-      .sentenseTitle{
+      .sentenseTitle {
         font: $fontH3;
-
       }
-      .dopInfo{
+      .dopInfo {
         font-size: 22px;
       }
     }
-    .line{
-   display:none;
+    .line {
+      display: none;
     }
 
-    .cards{
+    .cards {
       margin-top: 30px;
-      .card{
+      .card {
         padding: 40px 0 0 28px;
         width: 275px;
         height: 276px;
-        .cardTitle{
-          font:$fontBody;
+        .cardTitle {
+          font: $fontBody;
           font-weight: 500;
         }
       }
     }
   }
 }
-@media(max-width:375px){
-  .sentense{
+@media (max-width: 375px) {
+  .sentense {
     gap: 28px;
     margin: 0 auto;
     padding: 40px;
-    .sentenseHead{
+    .sentenseHead {
       flex-direction: column;
-      .sentenseTitle{
+      .sentenseTitle {
         font: $fontBody;
         font-weight: 600;
       }
-      .dopInfo{font: $fontMain;
+      .dopInfo {
+        font: $fontMain;
         width: 100%;
         padding-bottom: 8px;
       }
-
     }
-    .cards{
+    .cards {
       margin-top: 0;
       flex-direction: column;
-      gap:16px;
-      .card{
+      gap: 16px;
+      .card {
         width: auto;
         height: 200px;
         background-color: $bgCardsSentense;
-        .cardTitle{
-          font: $fontMain;
-          font-weight: 500;
-        }
       }
     }
-      .cardAudit {
-        background: url('../assets/document-xs.svg') no-repeat right bottom;
-      }
-      .cardGuide {
-        background: url('../assets/book-xs.svg') no-repeat right bottom;
-      }
-      .cardConsult {
-        background: url('../assets/consultancy-xs.svg') no-repeat bottom;
-      }
-    
-  .btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-  }
+    .cardAudit {
+      background: url('../assets/document-xs.svg') no-repeat right bottom;
+    }
+    .cardGuide {
+      background: url('../assets/book-xs.svg') no-repeat right bottom;
+    }
+    .cardConsult {
+      background: url('../assets/consultancy-xs.svg') no-repeat bottom;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+    }
   }
 }

@@ -23,12 +23,10 @@ export const registrationSchema = z
       .string()
       .nonempty('Поле не заполнено')
       .transform(value => value.replace(/\D/g, ''))
-      .refine(value => {
-        if (value.length < 10 || value.length > 15) {
-          return false
-        }
-        return /^\d{1}\d{9,14}$/.test(value)
-      }, 'Некорректные данные'),
+      .refine(
+        value => value.length >= 10 && value.length <= 15,
+        'Некорректные данные'
+      ),
     email: z
 
       .string()

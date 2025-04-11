@@ -37,6 +37,7 @@ const InputField: FC<{
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   showPasswordToggle?: () => void
   showPassword?: boolean
+  // maxLength: number
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   trigger: (field?: keyof FormData) => Promise<boolean>
   validate?: { validate: (value: string) => boolean | string }
@@ -52,6 +53,7 @@ const InputField: FC<{
   inputCompleted,
   onChange,
   trigger,
+  // maxLength,
   showPasswordToggle,
   showPassword
 }) => (
@@ -77,7 +79,7 @@ const InputField: FC<{
         onChange={onChange}
         onKeyDown={onKeyDown}
         onBlur={() => trigger(id)}
-        maxLength={id === 'password' || 'confirmPassword' ? 16 : undefined}
+        //maxLength={maxLength}
       />
       {showPasswordToggle && (
         <div className={styles.eyeIcon} onClick={showPasswordToggle}>
@@ -182,6 +184,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       clearErrors(field)
       await trigger(field)
     }
+
   useEffect(() => {
     setValue('company', 'Моя компания')
   }, [setValue])
@@ -200,6 +203,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               inputCompleted={!!watch('name')}
               onChange={handleChange('name')}
               trigger={trigger}
+              // maxLength={255}
             />
 
             <InputField
@@ -212,6 +216,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               inputCompleted={!!watch('company')}
               onChange={handleChange('company')}
               trigger={trigger}
+              // maxLength={255}
             />
             <InputField
               id="phone"
@@ -224,6 +229,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               onChange={handleChange('phone')}
               onKeyDown={handleKeyDown}
               trigger={trigger}
+              // maxLength={15}
             />
             <InputField
               id="email"
@@ -236,6 +242,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               inputCompleted={!!watch('email')}
               onChange={handleChange('email')}
               trigger={trigger}
+              // maxLength={255}
             />
 
             <InputField
@@ -249,6 +256,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               onChange={handleChange('password')}
               showPasswordToggle={() => setShowPassword(!showPassword)}
               showPassword={showPassword}
+              //maxLength={16}
               trigger={trigger}
             />
             <InputField
@@ -261,6 +269,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               error={errors.confirmPassword}
               inputCompleted={!!watch('confirmPassword')}
               onChange={handleChange('confirmPassword')}
+              // maxLength={16}
               showPasswordToggle={() =>
                 setShowConfirmPassword(!showConfirmPassword)
               }

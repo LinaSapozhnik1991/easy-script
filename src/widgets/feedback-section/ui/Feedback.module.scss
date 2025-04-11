@@ -3,7 +3,7 @@
   color: $textCardArguments;
   height: 1005px;
   background:
-    url("../assets/abstract-bg.svg") no-repeat,
+    url('../assets/abstract-bg.svg') no-repeat,
     $bgFeedback;
   background-size: cover;
   border-radius: $RadiusXXL;
@@ -21,8 +21,8 @@
     .feedback {
       display: grid;
       grid-template-areas:
-        "u v"
-        "s v";
+        'u v'
+        's v';
       justify-content: space-between;
       margin-top: 107px;
       .videoContainers {
@@ -175,9 +175,9 @@
       .feedback {
         margin: 0;
         grid-template-areas:
-          "u u"
-          "v v"
-          "s s";
+          'u u'
+          'v v'
+          's s';
         gap: 16px;
         .feedbackUser {
           .director {
@@ -204,10 +204,6 @@
             margin-top: 20px;
             .successLink {
               margin-bottom: 16px;
-              display: inline-block;
-            }
-            .successLink svg{
-              margin-right: 20px;
             }
           }
         }
@@ -304,9 +300,9 @@
       .feedback {
         margin: 0;
         grid-template-areas:
-          "u u"
-          "v v"
-          "s s";
+          'u u'
+          'v v'
+          's s';
         gap: 16px;
         .feedbackUser {
           .director {
@@ -415,12 +411,10 @@
     }
   }
 }
-@media (max-width: 375px) {
+@media (min-width:355px) and (max-width: 376px) {
   .sliderContainer {
     height: 1191px;
-    padding: 40px;
-
-    width: 100%;
+    padding: 30px;
 
     .feedbackTitle {
       font: $fontBody;
@@ -430,12 +424,13 @@
 
     .review {
       margin-top: 24px;
+      width: 100%;
 
       .feedback {
         margin-top: 32px;
-        justify-content: center;
+
         .videoContainers {
-          width: 295px;
+          width: 100%;
           height: 179px;
           margin-top: 32px;
           border-radius: 32px;
@@ -460,7 +455,7 @@
           }
         }
         .feedbackUser {
-          width: 295px;
+          width: 100%;
           gap: 8px;
           .director {
             font: $fontBody;
@@ -482,7 +477,7 @@
           }
           .successList {
             font: $fontSmall;
-            .successLink svg{
+            .successLink svg {
               width: 18px;
               height: 18px;
             }
@@ -499,9 +494,10 @@
         justify-content: center;
         gap: 12px;
         height: 276px;
+        width: 100%;
         margin-top: 16px;
         .result {
-          width: 295px;
+          width: 100%;
           height: 60px;
           font: $fontSmall;
         }
