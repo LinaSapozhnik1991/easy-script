@@ -34,6 +34,7 @@ const EasyScript = () => {
       <div className={styles.CaretUp}>
         <ScrollUp />
       </div>
+
       <FooterMain showLinks={false} />
     </div>
   )

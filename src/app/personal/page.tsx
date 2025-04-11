@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Personal from '@/pages/personal/page'
+import Personal from '@/pages/dashboard/page'
 
 const PersonalPage = () => {
   return (

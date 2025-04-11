@@ -1,0 +1,68 @@
+.radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  &.default {
+    accent-color: $borderInput;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+
+    .circle {
+      border-color: $borderDisabled;
+    }
+
+    .innerCircle {
+      background-color: $bgDisabled;
+    }
+  }
+  .visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  &.active,
+  &:active {
+    border-color: $borderRadioActive;
+  }
+}
+.circle {
+  border-radius: 50%;
+  position: relative;
+  transition: border-color 0.3s;
+  &.medium {
+    width: 18px;
+    height: 18px;
+    border: 1px solid $borderInput;
+  }
+  &.checked {
+    border-color: $borderRadioActive;
+  }
+}
+
+.innerCircle {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+
+  &.medium {
+    width: 6px;
+    height: 6px;
+    background-color: $bgEconomySection;
+  }
+}

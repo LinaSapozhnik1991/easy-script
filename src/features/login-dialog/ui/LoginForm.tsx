@@ -16,7 +16,7 @@ import { Check, Eye, EyeClosed } from '@/shared/assets/icons'
 import { loginSchema } from '../model/validations'
 
 import styles from './Login.module.scss'
-import { loginUser } from './api'
+import { loginUser } from '../api'
 
 type FormData = {
   email: string
