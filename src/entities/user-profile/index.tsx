@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { UserAvatar } from '@/shared/assets/icons'
 
-interface User {
+export interface User {
   name: string
   email: string
   phone: string

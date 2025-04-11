@@ -1,3 +1,4 @@
+'use client'
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -16,15 +17,15 @@ const Dashboard = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const data = await userMe() // Получаем данные о пользователе
-        setUserData(data)
+        const data = await userMe()
+        setUserData(data) // Сохраняем данные пользователя в состоянии
       } catch (error) {
         if (error instanceof Error) {
-          console.error(error.message) // Теперь можно безопасно получить message
+          console.error(error.message)
         } else {
-          console.error('Произошла неизвестная ошибка') // Обработка неизвестной ошибки
+          console.error('Произошла неизвестная ошибка')
         }
-        router.push('/') // Перенаправляем на страницу входа в случае ошибки
+        router.push('/')
       } finally {
         setLoading(false)
       }
