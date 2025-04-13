@@ -1,0 +1,25 @@
+.header{
+    padding: 12px 120px 12px 28px;
+    width:  100%;
+  @include flex-container(row, space-between, center);
+  box-shadow: 0px 1px 24px 0px rgba(92, 111, 113, 0.12);
+ height: 88px;
+
+
+  .user{
+    @include flex-container(row, space-between, center);
+    padding: 10px;
+    border: 1px solid $bgLineLK;
+    width: 280px;
+    height: 64px;
+    border-radius: $RadiusM;
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+}
+.user button{
+  background: transparent;
+  border: none;
+}
+}

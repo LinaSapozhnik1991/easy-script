@@ -1,41 +1,40 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 
 import MainSection from '@/widgets/main-feature-section/ui/MainSection'
-import ArgumentMain from '@/widgets/argument-main-section'
-import EconomyFeatureSection from '@/widgets/economy-feature-section/ui/EconomyFeatureSection'
-import ArgumentActions from '@/widgets/argument-actions-section/ui/ArgumentActions'
-import AnalystFeatureSection from '@/widgets/analyst-feature-section/ui/AnalystFeatureSection'
 import FeedbackSection from '@/widgets/feedback-section/ui'
 import FooterMain from '@/widgets/footerMain'
 import SentenseFeatureSection from '@/widgets/sentense-feature-section'
 import ScrollUp from '@/shared/ui/ScrollUp/ScrollUp'
+import Pagination from '@/shared/ui/Pagination/Pagination'
+import AdvantagesSection from '@/widgets/advantage-section'
 
 import styles from './EasyScript.module.scss'
 
 const EasyScript = () => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = 10
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
   return (
     <div className={styles.scripts}>
       <MainSection />
-      <div className={styles.easy}>
-        <ArgumentMain />
-      </div>
-      <div className={styles.economy}>
-        <EconomyFeatureSection />
-      </div>
-      <div className={styles.easy}>
-        <ArgumentActions />
-      </div>
-      <AnalystFeatureSection />
-
+      <AdvantagesSection />
       <FeedbackSection />
-
-      <SentenseFeatureSection />
+      <div className={styles.easy}>
+        <SentenseFeatureSection />
+      </div>
       <div className={styles.CaretUp}>
         <ScrollUp />
       </div>
-
       <FooterMain showLinks={false} />
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }

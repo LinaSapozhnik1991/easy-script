@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { Down, Logo, UserAvatar } from '@/shared/assets/icons'
-import UserProfile from '@/entities/user-profile'
-import { User } from '@/entities/user-profile'
+import { Down, Logo } from '@/shared/assets/icons'
+import UserProfileComponent, {
+  User
+} from '@/entities/user-profile/ui/UserProfile'
 
 import styles from './HeaderPersonal.module.scss'
 interface HeaderPersonalProps {
@@ -15,10 +16,10 @@ const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
         <Logo />
       </div>
       <div className={styles.user}>
-        <UserProfile user={user} />
-        <span>{user?.name || 'Юзер'}</span>
-        <UserAvatar />
-        <Down />
+        <UserProfileComponent user={user} />
+        <button type="button">
+          <Down />
+        </button>
       </div>
     </header>
   )

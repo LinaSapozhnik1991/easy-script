@@ -1,9 +1,10 @@
+// Pagination.tsx
 import React from 'react'
 import classNames from 'classnames'
 
 import { NextArrow, Prev } from '@/shared/assets/icons'
 
-import styles from './Pagination.module.scss' // Импорт стилей
+import styles from './Pagination.module.scss'
 
 interface PaginationProps {
   totalPages: number
@@ -33,21 +34,17 @@ const Pagination: React.FC<PaginationProps> = ({
     const endPage = Math.min(totalPages - 1, currentPage + 1)
 
     for (let i = startPage; i <= endPage; i++) {
-      if (i !== 1 && i !== totalPages) {
+      if (i !== totalPages) {
         pages.push(i)
       }
     }
 
-    if (currentPage < totalPages - 3) {
+    if (currentPage < totalPages - 2) {
       pages.push('...')
     }
 
     if (totalPages > 1) {
-      for (let i = Math.max(totalPages - 2, 2); i <= totalPages; i++) {
-        if (!pages.includes(i)) {
-          pages.push(i)
-        }
-      }
+      pages.push(totalPages)
     }
 
     return pages.map((page, index) => (

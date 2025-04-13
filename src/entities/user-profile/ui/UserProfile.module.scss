@@ -1,0 +1,13 @@
+.userProfile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $RadiusM;
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+}
+.userProfile p{
+    font: $fontBody;
+}

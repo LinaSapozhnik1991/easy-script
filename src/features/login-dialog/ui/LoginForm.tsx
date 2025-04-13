@@ -14,9 +14,9 @@ import { Button } from '@/shared/ui/Button'
 import { Check, Eye, EyeClosed } from '@/shared/assets/icons'
 
 import { loginSchema } from '../model/validations'
+import { loginUser } from '../api'
 
 import styles from './Login.module.scss'
-import { loginUser } from '../api'
 
 type FormData = {
   email: string
@@ -86,8 +86,19 @@ const LoginForm: FC<LoginFormProps> = ({
     try {
       const response = await loginUser(data)
 
-      if (response.status === 200) {
-        router.push('/personal')
+      if (
+        response &&
+        response.success &&
+        response.data &&
+        response.data.token
+      ) {
+        console.log('Авторизация успешна, перенаправление на /dashboard')
+        router.push('/dashboard')
+      } else {
+        console.error(
+          'Ошибка: Токен отсутствует или ответ некорректен',
+          response
+        )
       }
     } catch (error) {
       console.error('Ошибка при входе:', error)
