@@ -47,9 +47,6 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     getUserData()
   }, [])
-  const handleSidebarClick = (content: Content) => {
-    setCurrentContent(content)
-  }
 
   if (loading) return <Preloader />
   if (error) return <p>Ошибка: {error}</p>
@@ -59,7 +56,7 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className={styles.layout}>
       <HeaderPersonal user={userData} />
       <div className={styles.content}>
-        <Sidebar onItemClick={handleSidebarClick} />{' '}
+        <Sidebar />{' '}
         <main className={styles.main}>
           {currentContent ? currentContent.component : children}{' '}
         </main>

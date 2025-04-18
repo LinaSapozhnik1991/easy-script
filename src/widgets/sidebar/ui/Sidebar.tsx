@@ -17,7 +17,6 @@ import { Routers } from '@/shared/routes'
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
-  // Установите первую опцию по умолчанию
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
