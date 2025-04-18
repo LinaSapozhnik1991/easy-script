@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import { Meta, StoryObj } from '@storybook/react'
 
-import SegmentedControl from './SegmentedControl'
+import SegmentedControl, { Option } from './SegmentedControl'
 
 const meta: Meta<typeof SegmentedControl> = {
   title: 'UI/SegmentedControl',
@@ -17,10 +17,9 @@ const meta: Meta<typeof SegmentedControl> = {
     variant: {
       control: {
         type: 'select',
-        option: ['on', 'line']
+        options: ['on', 'line'] // Исправлено: 'option' -> 'options'
       }
     },
-
     size: {
       control: {
         type: 'select',
@@ -50,10 +49,20 @@ export default meta
 
 type Story = StoryObj<typeof SegmentedControl>
 
+const createOptions = (titles: string[]): Option[] => {
+  return titles.map(title => ({ title }))
+}
+
 export const DefaultSegmentedControl: Story = {
   args: {
     label: 'Default Segment Control',
-    options: ['Вариант 1', 'Вариант 2', 'Вариант 3', 'Вариант 4', 'Вариант 5'],
+    options: createOptions([
+      'Вариант 1',
+      'Вариант 2',
+      'Вариант 3',
+      'Вариант 4',
+      'Вариант 5'
+    ]),
     selected: 'Вариант 1',
     variant: 'on'
   }
@@ -62,7 +71,13 @@ export const DefaultSegmentedControl: Story = {
 export const FiveSegmentedControl: Story = {
   args: {
     label: 'Disabled Segment Control',
-    options: ['Вариант 1', 'Вариант 2', 'Вариант 3', 'Вариант 4', 'Вариант 5'],
+    options: createOptions([
+      'Вариант 1',
+      'Вариант 2',
+      'Вариант 3',
+      'Вариант 4',
+      'Вариант 5'
+    ]),
     selected: 'Вариант 2',
     disabled: true,
     variant: 'on'
@@ -72,7 +87,12 @@ export const FiveSegmentedControl: Story = {
 export const FourSelectedSegment: Story = {
   args: {
     label: 'Custom Selected Segment Control',
-    options: ['Вариант 1', 'Вариант 2', 'Вариант 3', 'Вариант 4'],
+    options: createOptions([
+      'Вариант 1',
+      'Вариант 2',
+      'Вариант 3',
+      'Вариант 4'
+    ]),
     selected: 'Вариант 4',
     variant: 'on'
   }
@@ -81,23 +101,25 @@ export const FourSelectedSegment: Story = {
 export const ThreeSegmentedControl: Story = {
   args: {
     label: 'Interactive Segment Control',
-    options: ['Вариант 1', 'Вариант 2', 'Вариант 3'],
+    options: createOptions(['Вариант 1', 'Вариант 2', 'Вариант 3']),
     selected: 'Вариант 1',
     variant: 'on'
   }
 }
+
 export const TwoSegmentedControl: Story = {
   args: {
     label: 'Interactive Segment Control',
-    options: ['Вариант 1', 'Вариант 2'],
+    options: createOptions(['Вариант 1', 'Вариант 2']),
     selected: 'Вариант 1',
     variant: 'on'
   }
 }
+
 export const LineControl: Story = {
   args: {
     label: 'Interactive Segment Control',
-    options: ['Вар', 'Вариант', 'Вариантище'],
+    options: createOptions(['Вар', 'Вариант', 'Вариантище']),
     selected: 'Вариант',
     variant: 'line',
     disabled: false
