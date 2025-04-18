@@ -9,10 +9,9 @@ import {
   NextArrow,
   Prev
 } from '@/shared/assets/icons'
-
-//import SegmentedControl from '@/shared/ui/SegmentedControl/SegmentedControl'
-import styles from './Sidebar.module.scss'
 import { Routers } from '@/shared/routes'
+
+import styles from './Sidebar.module.scss'
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
