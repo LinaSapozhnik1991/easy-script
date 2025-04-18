@@ -1,7 +1,8 @@
 'use client'
 import React from 'react'
-import styles from './MyScripts.module.scss'
 import Image from 'next/image'
+
+import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   return (

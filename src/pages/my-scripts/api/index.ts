@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import Cookies from 'js-cookie'
+
 import instance from '@/shared/api'
 
 export interface Creator {
