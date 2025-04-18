@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
 
   sassOptions: {
     includePaths: ['./src'],
-    additionalData: `@import './src/styles/variables.scss'; @import './src/styles/mixins.scss';`
+    additionalData: `@use './src/styles/variables.scss'; @use './src/styles/mixins.scss';`
   },
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(
