@@ -46,7 +46,7 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
 
     getUserData()
-  }, [])
+  }, [router])
 
   if (loading) return <Preloader />
   if (error) return <p>Ошибка: {error}</p>
