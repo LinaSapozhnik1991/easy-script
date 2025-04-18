@@ -11,7 +11,7 @@ const MyScripts = () => {
         <Image
           src="/Worked.jpg"
           alt="Описание изображения"
-          width={700}
+          width={705}
           height={400}
           className={styles.dashboardImage}
         />
