@@ -54,7 +54,7 @@ eslintConfig.push({
     'boundaries/elements': [
       {
         type: 'component',
-        name: '^.*$'
+        name: '^[A-Z].*'
       }
     ],
     'import/resolver': {
