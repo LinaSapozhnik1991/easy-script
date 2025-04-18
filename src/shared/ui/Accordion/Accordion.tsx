@@ -1,9 +1,11 @@
 import React, { useState, FC, HTMLAttributes } from 'react'
 import cx from 'classnames'
+
+import { Down } from '@/shared/assets/icons'
+
 import { Button } from '../Button'
 
 import styles from './Accordion.module.scss'
-import { Down } from '@/shared/assets/icons'
 
 export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   items: AccordionItem
