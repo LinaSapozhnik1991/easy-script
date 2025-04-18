@@ -1,8 +1,5 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import React, { useEffect, useRef, useState } from 'react'
-// eslint-disable-next-line import/order
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 
@@ -167,6 +164,7 @@ const FeedbackSection: React.FC = () => {
         }}
         spaceBetween={50}
         slidesPerView={1}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         onSlideChange={swiper => handlePause()}>
         {reviews.map((review, index) => (
           <SwiperSlide key={index} className={styles.review}>
