@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import Cookies from 'js-cookie'
-
 import instance from '@/shared/api'
 
 export interface Creator {
@@ -42,10 +41,11 @@ interface ScriptsResponse {
   }
 }
 
-export const getScripts = async (): Promise<Script[] | null> => {
+// Функция для получения скриптов
+export const getScripts = async (): Promise<Script[] | { error: string }> => {
   const token = Cookies.get('token')
   if (!token) {
-    return null
+    return { error: 'Токен отсутствует. Пожалуйста, войдите в систему.' }
   }
 
   try {
@@ -58,10 +58,10 @@ export const getScripts = async (): Promise<Script[] | null> => {
     if (response.data.success) {
       return response.data.data
     } else {
-      return null
+      return { error: 'Не удалось получить скрипты.' }
     }
   } catch (error) {
     console.error('Ошибка при получении скриптов:', error)
-    return null
+    return { error: 'Произошла ошибка при получении данных.' }
   }
 }
