@@ -1,18 +1,18 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://easy-script.koston.duckdns.org/api/:path*'
-      }
-    ]
-  },*/
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: 'https://easy-script.koston.duckdns.org/api/:path*'
+  //     }
+  //   ]
+  // },
 
   sassOptions: {
     includePaths: ['./src'],
-    additionalData: `@import './src/styles/variables.scss'; @import './src/styles/mixins.scss';`
+    additionalData: `@use './src/styles/variables' as *; @use './src/styles/mixins' as *;`
   },
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(
@@ -20,46 +20,48 @@ const nextConfig: NextConfig = {
         rule.test?.test?.('.svg')
     )
 
-    config.module.rules.push(
-      {
-        ...fileLoaderRule,
-        test: /\.svg$/i,
-        resourceQuery: /url/
-      },
-      {
-        test: /\.svg$/i,
-        issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
-        use: [
-          {
-            loader: '@svgr/webpack',
-            options: {
-              svgo: false,
-              svgoConfig: {
-                plugins: [
-                  {
-                    name: 'preset-default',
-                    params: {
-                      overrides: {
-                        removeViewBox: false
+    if (fileLoaderRule) {
+      config.module.rules.push(
+        {
+          ...fileLoaderRule,
+          test: /\.svg$/i,
+          resourceQuery: /url/
+        },
+        {
+          test: /\.svg$/i,
+          issuer: fileLoaderRule.issuer,
+          resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
+          use: [
+            {
+              loader: '@svgr/webpack',
+              options: {
+                svgo: false,
+                svgoConfig: {
+                  plugins: [
+                    {
+                      name: 'preset-default',
+                      params: {
+                        overrides: {
+                          removeViewBox: false
+                        }
+                      }
+                    },
+                    {
+                      name: 'removeAttrs',
+                      params: {
+                        attrs: '(id|class)'
                       }
                     }
-                  },
-                  {
-                    name: 'removeAttrs',
-                    params: {
-                      attrs: '(id|class)'
-                    }
-                  }
-                ]
+                  ]
+                }
               }
             }
-          }
-        ]
-      }
-    )
+          ]
+        }
+      )
 
-    fileLoaderRule.exclude = /\.svg$/i
+      fileLoaderRule.exclude = /\.svg$/i
+    }
 
     return config
   }
