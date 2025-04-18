@@ -1,0 +1,86 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 0;
+  font:$fontMain;
+  overflow: hidden;
+  align-items: center;
+  justify-content: space-between;
+  height: 986px;
+  background-color: white;
+  transition: width 0.3s ease;
+  padding: 20px;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0px 6.65px 13.83px 0px rgba(0, 0, 0, 0.0283);
+
+box-shadow: 0px 22.34px 46.46px 0px rgba(0, 0, 0, 0.0417);
+
+
+  &.open {
+    width: 212px;
+  }
+  
+  &.closed {
+    width: 72px;
+  }
+}
+
+.optionsList {
+  width: 100%; 
+}
+
+.option {
+  display: flex;
+  height: 56px;
+  margin-bottom: 16px;
+  align-items: center;
+  width: 100%;
+  cursor: pointer; 
+
+  span {
+    margin-left: 10px;
+    display: none;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+.option:hover {
+  color: $emerald;
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  svg{
+    background: transparent;
+    color:$emerald;
+  }
+}
+
+.sidebar.open .option span {
+  display: inline; 
+}
+.selected {
+  color: $emerald; 
+border-bottom: 1px solid $emerald;
+svg{
+  color:$emerald;
+}
+}
+.toggleButton {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  background-color: transparent;
+  border: none;
+  font: $fontMain;
+  color:$textSlider ;
+  cursor: pointer;
+  svg{
+    width: 20px;
+    height: 20px;
+  }
+}

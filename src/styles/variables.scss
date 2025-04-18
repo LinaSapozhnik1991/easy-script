@@ -30,8 +30,8 @@ $gray-830 : rgba(243, 255, 255, 1);
 $gray-900 : rgba(239, 245, 245, 1);
 $gray-910 : rgba(227, 244, 245, 1);
 $gray-920 : rgba(9, 27, 28, 0.3);
-$gray-930:  rgba(74, 99, 101, 1);
-$gray-940: rgba(177, 204, 205, 1);
+$gray-930 : rgba(74, 99, 101, 1);
+$gray-940 : rgba(177, 204, 205, 1);
 
 
 
@@ -40,18 +40,18 @@ $white: rgba(255, 255, 255, 1);
 $error: rgba(186, 26, 26, 1);
 
 //bacground-color
-$bgPrimary        : $emerald;
-$bgPrimaryHover   : $emerald-200;
-$bgDisabled       : $gray-300;
-$bgInputHover     : $gray-900;
-$bgLine           : $gray-800;
-$bgLineLK         : $gray-810;
-$bgFooter         : $black-400;
-$bgLinePage       : $gray-820;
-$bgCardsSentense  : $gray-830;
-$bgFeedback       : $gray-910;
-$bgModalRootPortal: $gray-920;
-$bgEconomySection: $emerald-600;
+$bgPrimary         : $emerald;
+$bgPrimaryHover    : $emerald-200;
+$bgDisabled        : $gray-300;
+$bgInputHover      : $gray-900;
+$bgLine            : $gray-800;
+$bgLineLK          : $gray-810;
+$bgFooter          : $black-400;
+$bgLinePage        : $gray-820;
+$bgCardsSentense   : $gray-830;
+$bgFeedback        : $gray-910;
+$bgModalRootPortal : $gray-920;
+$bgEconomySection  : $emerald-600;
 $bgPaginationActive: $gray-940;
 
 //border-color
@@ -62,7 +62,7 @@ $borderInputCompleted: $emerald-300;
 $borderPrimary       : $emerald-100;
 $borderError         : $error;
 $borderCards         : $gray-820;
-$borderRadioActive: $emerald-600;
+$borderRadioActive   : $emerald-600;
 
 //shadow
 $defaultShadow: 0px 1px 2px 0px rgba(92, 111, 113, 0.15);
@@ -83,7 +83,7 @@ $textActiveButton : $white;
 $textDisabled   : $gray-500;
 $textPlaceholder: $gray;
 $textError      : $error;
-$textSlider: $gray-930;
+$textSlider     : $gray-930;
 
 $textPrimary        : $emerald;
 $textPassword       : $emerald-800;

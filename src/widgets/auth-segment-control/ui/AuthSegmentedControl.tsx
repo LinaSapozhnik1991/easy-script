@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react'
 import SegmentedControl from '@/shared/ui/SegmentedControl/SegmentedControl'
 import { LoginForm } from '@/features/login-dialog'
 import { RegisterForm } from '@/features/register-dialog'
+import { Option } from '@/shared/ui/SegmentedControl/SegmentedControl'
 
 import styles from './AuthSegmentedControl.module.scss'
 
@@ -15,7 +16,7 @@ const AuthSegmentedControl: FC<AuthSegmentedControlProps> = ({
   selectedOption,
   onSelect
 }) => {
-  const options = ['Регистрация', 'Вход']
+  const options: Option[] = [{ title: 'Регистрация' }, { title: 'Вход' }]
   const [registrationSuccess, setRegistrationSuccess] = useState(false)
   const [email, setEmail] = useState('')
   const handleRegisterSuccess = (registeredEmail: string) => {

@@ -1,13 +1,16 @@
 .userProfile{
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: $RadiusM;
-    -webkit-border-radius: $RadiusM;
-    -moz-border-radius: $RadiusM;
-    -ms-border-radius: $RadiusM;
-    -o-border-radius: $RadiusM;
-}
-.userProfile p{
-    font: $fontBody;
+    justify-content: space-around;
+    //width: 280px;
+    //padding: 10px;
+
+    .userPersonal{
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        p{
+            font: $fontMain;
+        }
+    }
 }

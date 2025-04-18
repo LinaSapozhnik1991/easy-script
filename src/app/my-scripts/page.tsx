@@ -1,15 +1,16 @@
+'use client'
 import React from 'react'
 
-import Dashboard from '@/pages/dashboard/page'
+import MyScripts from '@/pages/my-scripts/page'
 
 import UserLayout from '../UserLayout/UserLayout'
 
-const DashboardPage = () => {
+const ScriptsPage = () => {
   return (
     <UserLayout>
-      <Dashboard />
+      <MyScripts />
     </UserLayout>
   )
 }
 
-export default DashboardPage
+export default ScriptsPage

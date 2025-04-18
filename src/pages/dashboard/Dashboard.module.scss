@@ -2,9 +2,9 @@
    width: 100%;
    padding-right: 104px;
 
-.dashboardCompany{
+.dashboardAnalyst{
     margin:16px;
-    height: 800px;
+    height: 986px;
     border: 1px solid $borderInputCompleted;
     border-radius: $RadiusXL;
     -webkit-border-radius: $RadiusXL;
@@ -12,6 +12,7 @@
     -ms-border-radius: $RadiusXL;
     -o-border-radius: $RadiusXL;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     p{ font: $fontH2;}

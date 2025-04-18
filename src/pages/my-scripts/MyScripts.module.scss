@@ -1,0 +1,23 @@
+.myScripts{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 45px;
+
+    width: 1618px;
+    width: 100%;
+ 
+    .allScripts{
+        border: 1px solid $emerald ;
+        min-height: 752px;
+        height: 100%;
+        margin: 104px 104px 0 110px;
+        //padding:  104px  104px 0 110px ;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+}
+   
+}
