@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
           <Image
             src="/Worked.jpg"
             alt="Описание изображения"
-            width={500}
+            width={505}
             height={300}
             className={styles.dashboardImage}
           />
