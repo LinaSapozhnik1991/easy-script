@@ -61,7 +61,7 @@ const FooterMain = ({ showLinks = true }) => {
           <li>
             <a href="mailto:easyscript@mail.ru">easyscript@mail.ru</a>
           </li>
-          <li>© 2025 easyscript</li>
+          <li>© 2025 easyscript .</li>
         </ul>
       </div>
     </footer>
