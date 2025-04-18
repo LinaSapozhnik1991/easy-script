@@ -21,7 +21,7 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [userData, setUserData] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [currentContent, setCurrentContent] = useState<Content | null>(null)
+  const [currentContent] = useState<Content | null>(null)
   const router = useRouter()
 
   useEffect(() => {
