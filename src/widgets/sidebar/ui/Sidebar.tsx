@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation' // Импортируйте usePathname
 
 import {
   Company,
@@ -16,9 +17,33 @@ import styles from './Sidebar.module.scss'
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname() // Получаем текущий путь
+
+  const options = useMemo(
+    () => [
+      { title: 'Мои скрипты', icon: <Files />, path: Routers.MyScripts },
+      { title: 'Моя компания', icon: <Company />, path: Routers.MyCompany },
+      { title: 'Инструкция', icon: <Instruction />, path: Routers.Instruction },
+      { title: 'Тариф и оплата', icon: <CreditCard />, path: Routers.Billing }
+    ],
+    []
+  )
+
+  const [selectedOption, setSelectedOption] = useState(options[0].title)
+
+  useEffect(() => {
+    const savedState = localStorage.getItem('sidebarOpen')
+    if (savedState !== null) {
+      setIsOpen(JSON.parse(savedState))
+    }
+  }, [])
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(prevState => {
+      const newState = !prevState
+      localStorage.setItem('sidebarOpen', JSON.stringify(newState))
+      return newState
+    })
   }
   const handleSelect = (option: string) => {
     const selectedOption = options.find(opt => opt.title === option)
@@ -27,13 +52,13 @@ const Sidebar = () => {
       router.push(selectedOption.path)
     }
   }
-  const options = [
-    { title: 'Мои скрипты', icon: <Files />, path: Routers.MyScripts },
-    { title: 'Моя компания', icon: <Company />, path: Routers.MyCompany },
-    { title: 'Инструкция', icon: <Instruction />, path: Routers.Instruction },
-    { title: 'Тариф и оплата', icon: <CreditCard />, path: Routers.Billing }
-  ]
-  const [selectedOption, setSelectedOption] = useState(options[0].title)
+  useEffect(() => {
+    const currentOption = options.find(opt => opt.path === pathname)
+    if (currentOption) {
+      setSelectedOption(currentOption.title)
+    }
+  }, [options, pathname])
+
   return (
     <div
       className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>

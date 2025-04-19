@@ -7,9 +7,10 @@ import styles from './MyScripts.module.scss'
 const MyScripts = () => {
   return (
     <div className={styles.myScripts}>
+      <p>Здесь будут ваши скрипты</p>
       <table className={styles.allScripts}>
         <Image
-          src="/Worked.jpg"
+          src="/lenivec.jpg"
           alt="Описание изображения"
           width={700}
           height={450}

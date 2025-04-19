@@ -55,17 +55,18 @@
     color: $emerald;
   }
 }
-
-.sidebar.open .option span {
-  display: inline;
-}
 .selected {
   color: $emerald;
   border-bottom: 1px solid $emerald;
   svg {
-    color: $emerald;
+    stroke: $emerald;
+    fill: none;
   }
 }
+.sidebar.open .option span {
+  display: inline;
+}
+
 .toggleButton {
   display: flex;
   align-items: center;
