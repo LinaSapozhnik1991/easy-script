@@ -15,7 +15,9 @@ export const registrationSchema = z
       .optional()
       .refine(
         value =>
-          value === undefined || /^[A-Za-zА-Яа-яЁё\s\-"'']+$/.test(value),
+          value === undefined ||
+          value.trim() === '' ||
+          /^[A-Za-zА-Яа-яЁё0-9\s\-"'']+$/.test(value),
         'Некорректные данные'
       ),
 

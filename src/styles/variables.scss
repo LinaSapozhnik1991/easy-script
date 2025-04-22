@@ -15,6 +15,8 @@ $black-200: rgba(5, 19, 20, 1);
 $black-300: rgba(21, 21, 21, 0.6);
 $black-400: rgba(43, 50, 50, 1);
 $black-500: rgba(0, 20, 21, 1);
+$black-600: rgba(59, 69, 69, 1);
+
 $gray     : rgba(132, 148, 149, 1);
 $gray-100 : rgba(113, 113, 113, 1);
 $gray-200 : rgba(180, 180, 180, 1);
@@ -79,6 +81,7 @@ $textGeneralInput : $black-200;
 $textLabelCheck   : $black-300;
 $textCardArguments: $black-500;
 $textActiveButton : $white;
+$textUserOption: $black-600;
 
 $textDisabled   : $gray-500;
 $textPlaceholder: $gray;

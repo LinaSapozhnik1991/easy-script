@@ -6,6 +6,7 @@
   border-radius: $RadiusM;
   transition: all 0.3s ease;
   height: fit-content;
+  
 
   .accordionBtn {
     border: none;
@@ -15,14 +16,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    
+    padding:10px;
     height: 56px;
     font: $fontMain;
   }
 
   &.open {
-    padding-bottom: 12px;
-    padding-inline: 8px;
+    padding: 12px;
+    //padding-inline:10px;
   }
 
   &.bordered {
@@ -131,6 +132,10 @@
     list-style: none;
     height: 60px;
     padding-bottom: 4px;
+    &:not(:last-child) {
+      border-bottom: 1px solid $bgPaginationActive; 
+      justify-content: center;
+    }
 
     > * {
       height: 56px;

@@ -9,8 +9,12 @@
         display: flex;
         flex-direction: column;
         text-align: left;
-        p{
+        .name{
             font: $fontMain;
+        }
+        .email{
+            font:$fontSmall;
+            color: $textDisabled;
         }
     }
 }

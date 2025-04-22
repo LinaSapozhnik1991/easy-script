@@ -133,10 +133,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 422) {
-          const errors = error.response.data.data
-
+          const errors = error.response.data.errors
           setServerErrorEmail(null)
-
           if (errors.email) {
             setServerErrorEmail(errors.email.join(', '))
           }

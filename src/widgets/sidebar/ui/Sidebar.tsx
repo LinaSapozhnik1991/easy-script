@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { usePathname } from 'next/navigation' // Импортируйте usePathname
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 import {
   Company,
@@ -16,8 +16,7 @@ import styles from './Sidebar.module.scss'
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const router = useRouter()
-  const pathname = usePathname() // Получаем текущий путь
+  const pathname = usePathname()
 
   const options = useMemo(
     () => [
@@ -29,7 +28,7 @@ const Sidebar = () => {
     []
   )
 
-  const [selectedOption, setSelectedOption] = useState(options[0].title)
+  const [selectedOption, setSelectedOption] = useState<string | null>(null)
 
   useEffect(() => {
     const savedState = localStorage.getItem('sidebarOpen')
@@ -45,13 +44,7 @@ const Sidebar = () => {
       return newState
     })
   }
-  const handleSelect = (option: string) => {
-    const selectedOption = options.find(opt => opt.title === option)
-    if (selectedOption) {
-      setSelectedOption(selectedOption.title)
-      router.push(selectedOption.path)
-    }
-  }
+
   useEffect(() => {
     const currentOption = options.find(opt => opt.path === pathname)
     if (currentOption) {
@@ -62,17 +55,22 @@ const Sidebar = () => {
   return (
     <div
       className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
-      <div className={styles.optionsList}>
-        {options.map(option => (
-          <div
-            className={`${styles.option} ${selectedOption === option.title ? styles.selected : ''}`}
-            key={option.title}
-            onClick={() => handleSelect(option.title)}>
-            {option.icon}
-            {isOpen && <span>{option.title}</span>}
-          </div>
-        ))}
-      </div>
+      <nav>
+        <ul className={styles.optionsList}>
+          {options.map(option => (
+            <li
+              key={option.title}
+              className={`${styles.option} ${selectedOption === option.title ? styles.selected : ''}`}>
+              <Link
+                href={option.path}
+                onClick={() => setSelectedOption(option.title)}>
+                {option.icon}
+                {isOpen && <span>{option.title}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
       <button onClick={toggleSidebar} className={styles.toggleButton}>
         {isOpen ? (
           <>

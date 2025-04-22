@@ -8,10 +8,22 @@
 
   .userAccordion{
     width: 282px;
-    padding: 10px;
  z-index: 99;
     height: 64px;
 
+    .userOptionProfile{
+      display: flex;
+      color: $textUserOption;
+      width: 100%;
+      font: $fontMain;
+      align-items: center;
+      justify-content: space-between;
+      svg{
+        width: 20px;
+        height: 20px;
+      
+      }
+    }
 }
 
 }

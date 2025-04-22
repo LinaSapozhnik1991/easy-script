@@ -42,9 +42,16 @@
   }
 
   &.small {
+    width: 160px;
+    height: 40px;
     font: $fontMain;
     padding: 12px;
-  }
+    border-radius:$RadiusM ;
+    -webkit-border-radius:$RadiusM ;
+    -moz-border-radius:$RadiusM ;
+    -ms-border-radius:$RadiusM ;
+    -o-border-radius:$RadiusM ;
+}
 
   &.medium {
     font: $fontBody;

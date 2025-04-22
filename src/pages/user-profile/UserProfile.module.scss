@@ -1,0 +1,134 @@
+.userProfile{
+    display: flex;
+    background-color:rgba(239, 245, 245, 1) ;
+    height: auto;
+    padding: 68px 0 120px 0;
+    justify-content: center;
+   gap: 32px;
+ .inputField{
+  width: 182px;
+  height: 40px;
+  overflow:hidden ;
+padding:0 16px;
+  font: $fontBody;
+  border: 1px solid rgba(204, 232, 233, 1);
+  border-radius: $RadiusM;
+  -webkit-border-radius: $RadiusM;
+  -moz-border-radius: $RadiusM;
+  -ms-border-radius: $RadiusM;
+  -o-border-radius: $RadiusM;
+
+ }
+  
+  .dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    .userValue{
+      display: flex;
+      align-items: center;
+      font: $fontBody;
+      color:  rgba(0, 32, 34, 1);
+      svg{
+        margin-left: 20px;
+      }
+    }
+  }
+  
+  .dataTable td {
+    padding: 8px;
+
+  }
+    .userCard{
+        display: flex;
+        flex-direction: column;
+        gap:64px;
+        width: 704px;
+        height: 802px;
+        padding: 32px;
+        background-color: $white;
+        border-radius: $RadiusL;
+        -webkit-border-radius: $RadiusL;
+        -moz-border-radius: $RadiusL;
+        -ms-border-radius: $RadiusL;
+        -o-border-radius: $RadiusL;
+     
+        .userCardHead{
+            display: flex;
+            justify-content: space-between;
+            h2{
+                font: $fontH3;
+                font-weight: 500;
+            }
+            .buttonGroup{
+              display: flex;
+              gap: 10px;
+            }
+        }
+        .user{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          align-items: center;
+         svg{
+          
+width: 228px;
+height: 228px;
+color: $bgLinePage;
+        }
+        .name{
+            font: $fontH3;
+            font-weight: 400;
+            .inputField{
+              text-align: center;
+            }
+           
+        }
+}
+.userData{
+    .dataTable {
+        font: $fontP1;
+        color:$textSlider;
+        width: 100%; 
+        border-collapse: collapse; 
+      
+       th, 
+       td {
+        padding: 8px; 
+        text-align: left;
+     
+      }
+      
+ th {
+        background-color: #f2f2f2; 
+        font-weight: bold; 
+      }
+}
+}
+    }
+    .dopInfo{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    .billingCard, .companyCard{
+           background-color: $white;
+           width: 320px;
+           padding: 40px;
+           min-height:152px ;
+           border-radius:$RadiusL ;
+           -webkit-border-radius:$RadiusL ;
+           -moz-border-radius:$RadiusL ;
+           -ms-border-radius:$RadiusL ;
+           -o-border-radius:$RadiusL ;
+           h2{font:$fontH3;}
+}
+.company{
+    font: $fontBody;
+    color:linear-gradient(0deg, #1B1B1B, #1B1B1B),
+    linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2)),
+    linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2)),
+    linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2)),
+    linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2));
+    
+}
+}
+}

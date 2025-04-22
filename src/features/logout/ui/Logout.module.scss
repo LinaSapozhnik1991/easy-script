@@ -1,0 +1,12 @@
+.logoutButton{
+    display: flex;
+    border: none;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    color: $textUserOption;
+    width: 100%;
+    font: $fontMain;
+    svg{width: 20px;
+    height: 20px;}
+}

@@ -7,12 +7,13 @@
   align-items: center;
   justify-content: space-between;
   height: 986px;
-  background-color: white;
+  background-color: $white;
   transition: width 0.3s ease;
   padding: 20px;
   border-radius: 0 10px 10px 0;
   box-shadow: 0px 6.65px 13.83px 0px rgba(0, 0, 0, 0.0283);
   box-shadow: 0px 22.34px 46.46px 0px rgba(0, 0, 0, 0.0417);
+
   &.open {
     width: 212px;
   }
@@ -42,27 +43,38 @@
     width: 24px;
     height: 24px;
   }
+  a {
+    text-decoration: none;
+    color: $textSlider;
+    display: flex;
+    align-items: center;
+  }
 }
-.option:hover {
+
+.option a:hover {
   color: $emerald;
   transform: scale(1.1);
   -webkit-transform: scale(1.1);
   -moz-transform: scale(1.1);
   -ms-transform: scale(1.1);
   -o-transform: scale(1.1);
+
   svg {
     background: transparent;
     color: $emerald;
   }
 }
+
 .selected {
   color: $emerald;
   border-bottom: 1px solid $emerald;
+
   svg {
     stroke: $emerald;
     fill: none;
   }
 }
+
 .sidebar.open .option span {
   display: inline;
 }
@@ -76,6 +88,7 @@
   font: $fontMain;
   color: $textSlider;
   cursor: pointer;
+
   svg {
     width: 20px;
     height: 20px;

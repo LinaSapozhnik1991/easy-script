@@ -2,13 +2,16 @@ import React, { FC } from 'react'
 
 import { UserAvatar } from '@/shared/assets/icons'
 
-import styles from './UserProfile.module.scss'
+import styles from './UserProfileComponent.module.scss'
 
 export interface User {
   id: string
   name: string
   email: string
   phone: string
+  whatsapp: string
+  telegram: string
+  company: string
 }
 
 export interface UserProfileProps {
@@ -20,8 +23,8 @@ const UserProfileComponent: FC<UserProfileProps> = ({ user }) => {
     <div className={styles.userProfile}>
       <UserAvatar />
       <div className={styles.userPersonal}>
-        <p>{user.name}</p>
-        <p>{user.email}</p>
+        <p className={styles.name}>{user.name}</p>
+        <p className={styles.email}>{user.email}</p>
       </div>
     </div>
   )

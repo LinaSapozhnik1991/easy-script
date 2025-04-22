@@ -107,7 +107,7 @@ const LoginForm: FC<LoginFormProps> = ({
         const serverMessage = error.response.data?.message || 'Произошла ошибка'
 
         if (error.response.status === 422) {
-          const errors = error.response.data.data
+          const errors = error.response.data.errors
 
           if (errors.email) {
             setServerErrorEmail(errors.email.join(', '))
