@@ -1,0 +1,137 @@
+.userProfileInfo {
+  display: flex;
+  justify-content: center;
+  .userCard {
+    display: flex;
+    flex-direction: column;
+    width: 704px;
+    height: 802px;
+    padding: 32px;
+    background-color: $white;
+    border-radius: $RadiusL;
+    -webkit-border-radius: $RadiusL;
+    -moz-border-radius: $RadiusL;
+    -ms-border-radius: $RadiusL;
+    -o-border-radius: $RadiusL;
+
+    .value {
+      display: flex;
+      align-items: center;
+      svg {
+        margin-left: 20px;
+      }
+    }
+    .inputField,
+    .inputFieldName {
+      width: 182px;
+      height: 40px;
+      outline: none;
+      overflow: hidden;
+      padding: 0 16px;
+      font: $fontBody;
+      border: 1px solid $borderInputProfile;
+      border-radius: $RadiusM;
+      -webkit-border-radius: $RadiusM;
+      -moz-border-radius: $RadiusM;
+      -ms-border-radius: $RadiusM;
+      -o-border-radius: $RadiusM;
+    }
+
+    .inputFieldName {
+      width: 220px;
+      height: 56px;
+      font: $fontP1;
+      text-align: center;
+    }
+    .inputFieldName.error {
+      width: 264px;
+      height: 54px;
+    }
+    .inputFieldName.error,
+    .inputField.error {
+      border: 1px solid $error;
+    }
+
+    .dataTable {
+      width: 100%;
+      border-collapse: collapse;
+      display: flex;
+      align-items: center;
+      .userValue {
+        display: flex;
+        align-items: center;
+        font: $fontBody;
+        color: $textUserName;
+        svg {
+          margin-left: 20px;
+        }
+      }
+    }
+    .userCardHead {
+      display: flex;
+      justify-content: space-between;
+      h2 {
+        font: $fontH3;
+        font-weight: 500;
+      }
+      .buttonGroup {
+        display: flex;
+        gap: 10px;
+        .editButton {
+          border: none;
+          background: transparent;
+        }
+      }
+    }
+    .user {
+      display: flex;
+      margin-top: 64px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      svg {
+        width: 228px;
+        height: 228px;
+        color: $bgLinePage;
+      }
+      .name {
+        font: $fontH3;
+        font-weight: 400;
+        margin-top: 64px;
+        display: flex;
+        align-items: center;
+        .inputFieldName {
+          text-align: center;
+        }
+      }
+    }
+    .userData {
+      margin-top: 16px;
+      .dataTable {
+        display: flex;
+        align-items: center;
+        font: $fontBody;
+        color: $textSlider;
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+          padding: 10px 24px 10px 10px;
+          text-align: left;
+        }
+        .label {
+          font: $fontP1;
+          svg {
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+  }
+  .error {
+    color: $error;
+    font: $fontSmall;
+    padding-left: 15px;
+  }
+}

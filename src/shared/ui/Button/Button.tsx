@@ -13,11 +13,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   as?: React.ElementType
   href?: string
   children?: ReactNode
+  primaryBorder?: boolean
 }
 
 export const Button: React.FC<ButtonProps> = ({
   primary = false,
   disabled = false,
+  primaryBorder = false,
   size = 'medium',
   onClick,
   href,
@@ -36,6 +38,7 @@ export const Button: React.FC<ButtonProps> = ({
       [styles.smallXL]: size === 'smallXL',
       [styles.primary]: primary,
       [styles.disabled]: disabled,
+      [styles.primaryBorder]: primaryBorder,
       [styles.default]: !primary
     }
   ])

@@ -16,6 +16,7 @@ $black-300: rgba(21, 21, 21, 0.6);
 $black-400: rgba(43, 50, 50, 1);
 $black-500: rgba(0, 20, 21, 1);
 $black-600: rgba(59, 69, 69, 1);
+$black-700:rgba(0, 32, 34, 1);
 
 $gray     : rgba(132, 148, 149, 1);
 $gray-100 : rgba(113, 113, 113, 1);
@@ -34,6 +35,7 @@ $gray-910 : rgba(227, 244, 245, 1);
 $gray-920 : rgba(9, 27, 28, 0.3);
 $gray-930 : rgba(74, 99, 101, 1);
 $gray-940 : rgba(177, 204, 205, 1);
+$gray-950: rgba(204, 232, 233, 1);
 
 
 
@@ -65,6 +67,8 @@ $borderPrimary       : $emerald-100;
 $borderError         : $error;
 $borderCards         : $gray-820;
 $borderRadioActive   : $emerald-600;
+$borderButtonUserProfile: $emerald-400;
+$borderInputProfile: $gray-950;
 
 //shadow
 $defaultShadow: 0px 1px 2px 0px rgba(92, 111, 113, 0.15);
@@ -82,6 +86,7 @@ $textLabelCheck   : $black-300;
 $textCardArguments: $black-500;
 $textActiveButton : $white;
 $textUserOption: $black-600;
+$textUserName: $black-700;
 
 $textDisabled   : $gray-500;
 $textPlaceholder: $gray;

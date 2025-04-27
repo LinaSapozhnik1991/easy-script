@@ -20,6 +20,7 @@
       border: 1px solid $borderPrimary;
       color: $textActiveButton;
     }
+ 
   }
 
   &.default {
@@ -52,7 +53,9 @@
     -ms-border-radius:$RadiusM ;
     -o-border-radius:$RadiusM ;
 }
-
+&.primaryBorder{
+  border: 1px solid $borderButtonUserProfile;
+}
   &.medium {
     font: $fontBody;
     padding: 12px;

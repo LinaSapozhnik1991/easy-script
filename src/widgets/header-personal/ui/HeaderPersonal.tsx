@@ -20,7 +20,7 @@ const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
   const router = useRouter()
 
   const handleProfileClick = () => {
-    router.push('/user-profile')
+    router.push(Routers.UserProfile)
   }
   const handleLogout = async () => {
     try {

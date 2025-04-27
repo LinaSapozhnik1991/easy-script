@@ -36,6 +36,7 @@ const InputField: FC<{
   serverError?: string | null
   inputCompleted: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void
   showPasswordToggle?: () => void
   showPassword?: boolean
   // maxLength: number
@@ -50,6 +51,7 @@ const InputField: FC<{
   register,
   error,
   onKeyDown,
+  onPaste,
   serverError,
   inputCompleted,
   onChange,
@@ -79,6 +81,7 @@ const InputField: FC<{
         error={!!error}
         onChange={onChange}
         onKeyDown={onKeyDown}
+        onPaste={onPaste}
         onBlur={() => trigger(id)}
         //maxLength={maxLength}
       />
@@ -184,6 +187,20 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
       await trigger(field)
     }
 
+  const handlePaste = (
+    event: React.ClipboardEvent<HTMLInputElement>,
+    field: keyof FormData
+  ) => {
+    event.preventDefault()
+
+    const clipboardData = event.clipboardData
+    const pastedData = clipboardData.getData('text')
+
+    const formattedValue = formatPhoneNumber(pastedData)
+    setValue(field, formattedValue)
+    clearErrors(field)
+    trigger(field)
+  }
   useEffect(() => {
     setValue('company', 'Моя компания')
   }, [setValue])
@@ -227,8 +244,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
               inputCompleted={!!watch('phone')}
               onChange={handleChange('phone')}
               onKeyDown={handleKeyDown}
+              onPaste={event => handlePaste(event, 'phone')}
               trigger={trigger}
-              // maxLength={15}
             />
             <InputField
               id="email"

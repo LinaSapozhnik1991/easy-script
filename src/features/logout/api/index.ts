@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
-import instance from '@/shared/api' // Импортируйте ваш централизованный API-инстанс
 
-// Определяем интерфейс для структуры ошибки
+import instance from '@/shared/api'
+
 interface AxiosErrorResponse {
   response?: {
     data: {
@@ -24,18 +24,17 @@ export const logoutUser = async () => {
       }
     )
 
-    return response // Возвращаем ответ
+    return response
   } catch (error: unknown) {
-    // Проверяем, является ли ошибка экземпляром Error
     if (error instanceof Error) {
       throw new Error('Ошибка выхода: ' + error.message)
     } else if (typeof error === 'object' && error !== null) {
-      const axiosError = error as AxiosErrorResponse // Приводим к нашему интерфейсу
+      const axiosError = error as AxiosErrorResponse
       const errorMessage =
         axiosError.response?.data?.message || 'Неизвестная ошибка'
       throw new Error('Ошибка выхода: ' + errorMessage)
     } else {
-      throw new Error('Ошибка выхода: ' + String(error)) // В случае других типов ошибок
+      throw new Error('Ошибка выхода: ' + String(error))
     }
   }
 }

@@ -9,9 +9,9 @@ export interface User {
   name: string
   email: string
   phone: string
-  whatsapp: string
-  telegram: string
-  company: string
+  whatsapp?: string
+  telegram?: string
+  company?: string
 }
 
 export interface UserProfileProps {
