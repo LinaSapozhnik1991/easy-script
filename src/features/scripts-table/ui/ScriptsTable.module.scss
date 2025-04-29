@@ -1,0 +1,61 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    padding: 20px;
+    width: 1618px;
+    height: 72px;
+    border-bottom: 1px solid $borderInputScripts;
+  }
+  tbody {
+    padding-left: 40px;
+
+    .dataScripts {
+      text-align: left;
+      height: 72px;
+      border-bottom: 1px solid $borderInputScripts;
+      td{
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .th {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  .thNumber {
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .thName {
+    width: 300px;
+    .inputFilter {
+      width: 196px;
+      height: 32px;
+      margin-left: 25px;
+      padding: 5px;
+      border-radius: $RadiusSm;
+      -webkit-border-radius: $RadiusSm;
+      -moz-border-radius: $RadiusSm;
+      -ms-border-radius: $RadiusSm;
+      -o-border-radius: $RadiusSm;
+      border: 1px solid $borderInputScripts;
+    }
+  }
+
+  .thCompany {
+    width: 200px;
+  }
+
+  .thDate {
+    width: 200px;
+  }
+
+  .thActions {
+    width: 100px;
+  }
+}

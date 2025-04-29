@@ -16,14 +16,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding:10px;
+    padding:12px;
     height: 56px;
     font: $fontMain;
   }
 
   &.open {
-    padding: 12px;
+    padding: 5px;
     //padding-inline:10px;
+
   }
 
   &.bordered {
@@ -37,6 +38,7 @@
 
   &.filled {
     background-color: $white;
+    width: 246px;
   }
 
   &.filled > *:first-child {
@@ -65,6 +67,7 @@
     border: 1px solid $gray-900;
     box-shadow: $defaultShadowSecondVariant;
     background-color: $white;
+    
   }
 
   &.filledOpen > *:first-child {
@@ -133,7 +136,7 @@
     height: 60px;
     padding-bottom: 4px;
     &:not(:last-child) {
-      border-bottom: 1px solid $bgPaginationActive; 
+     // border-bottom: 1px solid $bgPaginationActive; 
       justify-content: center;
     }
 

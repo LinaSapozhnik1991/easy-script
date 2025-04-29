@@ -1,8 +1,6 @@
 import React, { useState, FC, HTMLAttributes } from 'react'
 import cx from 'classnames'
 
-import { Down } from '@/shared/assets/icons'
-
 import { Button } from '../Button'
 
 import styles from './Accordion.module.scss'
@@ -13,6 +11,8 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   className?: string
   disabled?: boolean
   mode: 'bordered' | 'filled' | 'clear'
+  iconOpen?: React.ReactNode
+  iconClose?: React.ReactNode
 }
 
 type AccordionItem = {
@@ -33,6 +33,8 @@ export const Accordion: FC<AccordionProps> = ({
   className,
   disabled,
   mode,
+  iconOpen,
+  iconClose,
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -69,7 +71,13 @@ export const Accordion: FC<AccordionProps> = ({
         type="button"
         disabled={disabled}>
         {label}
-        <Down className={isOpen ? styles.openSvg : styles.closeSvg} />
+        {isOpen ? (
+          iconClose && React.isValidElement(iconClose) ? (
+            <span className={styles.icon}>{React.cloneElement(iconClose)}</span> // Оборачиваем в span
+          ) : null
+        ) : iconOpen && React.isValidElement(iconOpen) ? (
+          <span className={styles.icon}>{React.cloneElement(iconOpen)}</span> // Оборачиваем в span
+        ) : null}
       </Button>
 
       <ul

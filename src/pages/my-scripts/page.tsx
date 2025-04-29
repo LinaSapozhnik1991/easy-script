@@ -1,22 +1,43 @@
 'use client'
 import React from 'react'
-import Image from 'next/image'
+
+import { AllCompanies } from '@/features/all-company/ui/AllCompanies'
+import FilterComponent from '@/features/filter-row/ui/FilterComponent'
 
 import styles from './MyScripts.module.scss'
+import BuildScripts from '@/features/build-scripts/ui/BuildScripts'
+import ScriptTable from '@/features/scripts-table/ui/ScriptsTable'
 
 const MyScripts = () => {
+  const companiesData = [
+    { name: 'Компания A', id: '1', disabled: false },
+    { name: 'Компания B', id: '2', disabled: false },
+    { name: 'Компания C', id: '3', disabled: false },
+    { name: 'Компания D', id: '4', disabled: false },
+    { name: 'Компания E', id: '5', disabled: false },
+    { name: 'Компания F', id: '5', disabled: false }
+  ]
   return (
     <div className={styles.myScripts}>
-      <p>Здесь будут ваши скрипты</p>
-      <table className={styles.allScripts}>
-        <Image
-          src="/lenivec.jpg"
-          alt="Описание изображения"
-          width={700}
-          height={450}
-          className={styles.dashboardImage}
-        />
-      </table>
+      <div className={styles.scriptsHead}>
+        <div className={styles.scriptHeadLeft}>
+          <AllCompanies
+            companies={companiesData}
+            label="Все компании"
+            disabled={false}
+            mode="bordered"
+          />
+          <FilterComponent />
+        </div>
+        <div className={styles.buildScripts}>
+          <BuildScripts />
+        </div>
+      </div>
+      <div>
+        <div className={styles.allScripts}>
+          <ScriptTable />
+        </div>
+      </div>
     </div>
   )
 }

@@ -108,7 +108,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
             className={classNames(styles.segmentOption, {
               [styles.active]:
                 selected === option.title && !disabled && variant === 'on',
-              [styles.disabled]: disabled
+              [styles.disabled]: disabled,
+              [styles.onIndicator]: variant === 'on'
             })}
             onClick={() => handleSelect(option.title)}>
             {option.icon}

@@ -10,6 +10,10 @@
   .segmentedControl {
     @include flex-container(row, center, center);
     overflow     : hidden;
+    //background-color: $bgInputHover;
+    width: auto;
+
+   
   }
 
   .segmentOption {
@@ -19,32 +23,55 @@
     align-items: center;
     cursor: pointer;
     padding: 12px 16px;
-    border-radius: $RadiusXL ;
-    transition: background-color 0.3s ease;
+    transition: left 0.3s ease;
     position: relative;
-    -webkit-border-radius: $RadiusXL ;
-    -moz-border-radius: $RadiusXL ;
-    -ms-border-radius: $RadiusXL ;
-    -o-border-radius: $RadiusXL ;
-  }
+    -webkit-transition: left 0.3s ease;
+    -moz-transition: left 0.3s ease;
+    -ms-transition: left 0.3s ease;
+    -o-transition: left 0.3s ease;
+    border-radius:$RadiusM ;
+    -webkit-border-radius:$RadiusM ;
+    -moz-border-radius:$RadiusM ;
+    -ms-border-radius:$RadiusM ;
+    -o-border-radius:$RadiusM ;
+    &.onIndicator{
+      display: flex;
+      justify-content: center;
+      width: 160.67px;
+      text-align: center;
+      height: 40px;
+      padding: 8px;
+    }
+    
+}
   .segmentOption  svg{
     width: 20px;
     height: 20px;
     margin-right: 10px;
   }
+  .underline{
+    background-color: white;
+  }
   .vertical {
     flex-direction: column; 
-   
+  
+  
     cursor: pointer;
     .segmentOption{
       width: 179px;
       font: $fontMain;
       text-align: left;
+ 
+
 .active{
-  color: $emerald;
+ color: $emerald;
+ border-radius:$RadiusM ;
+ -webkit-border-radius:$RadiusM ;
+ -moz-border-radius:$RadiusM ;
+ -ms-border-radius:$RadiusM ;
+ -o-border-radius:$RadiusM ;
 }
-    }
-   
+}
     .underline{
       height: 1px;
     }
@@ -52,16 +79,32 @@
   
  
   }
-  .active {
-    font-weight: bold;
-    background-color: $bgInputHover;
-    transition:   background-color 0.3s ease;
-    -webkit-transition:   background-color 0.3s ease;
-    -moz-transition:   background-color 0.3s ease;
-    -ms-transition:   background-color 0.3s ease;
-    -o-transition:   background-color 0.3s ease;
-}
 
+.onIndicator{
+height: 56px;
+  background: $bgInputHover;
+
+  font:$fontMain;
+  color: $textOptionScripts;
+ 
+  &.active {
+    background-color: $bgPrimary;
+    height: 40px;
+  
+    font: $fontMain;
+    color: $textActiveButton;
+    transition: left  0.3s ease;
+    -webkit-transition: left  0.3s ease;
+    -moz-transition: left  0.3s ease;
+    -ms-transition: left  0.3s ease;
+    -o-transition: left  0.3s ease;
+    border-radius:$RadiusM ;
+    -webkit-border-radius:$RadiusM ;
+    -moz-border-radius:$RadiusM ;
+    -ms-border-radius:$RadiusM ;
+    -o-border-radius:$RadiusM ;
+}
+ }
   .disabled {
     opacity       : 0.5;
     pointer-events: none;
@@ -82,7 +125,7 @@
     -moz-border-radius   : $RadiusSm;
     -ms-border-radius    : $RadiusSm;
     -o-border-radius     : $RadiusSm;
-  
-  }
  
+  }
+
 }

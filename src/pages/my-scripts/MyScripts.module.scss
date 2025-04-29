@@ -1,30 +1,47 @@
-.myScripts{
+.myScripts {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+  padding-top: 64px;
+  padding-left: 181px;
+  gap: 40px;
+  text-align: left;
+  max-width: 1618px;
+  width: 100%;
+
+  p {
+    font: $fontP1;
+  }
+  .scriptsHead {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top:70px ;
-    gap: 45px;
-text-align: center;
-    width: 1618px;
+    max-width: 1556px;
     width: 100%;
-    p{
-        font:$fontP1;
+    justify-content: space-between;
+    position: absolute;
+    .scriptHeadLeft {
+      display: flex;
+      gap: 28px;
     }
- 
-    .allScripts{
-        border: 1px solid $emerald ;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 752px;
-        height: 100%;
-        //margin: 104px 104px 0 110px;
-        padding:  104px  104px 0 110px ;
-        border-radius: $RadiusM;
-        -webkit-border-radius: $RadiusM;
-        -moz-border-radius: $RadiusM;
-        -ms-border-radius: $RadiusM;
-        -o-border-radius: $RadiusM;
-}
+    .buildScripts{
+      z-index: 999;
+    }
+  }
+  .allScripts {
+    border: 1px solid $borderInputProfile;
+    position: absolute;
    
+
+    margin-top: 104px;
+    min-height: 752px;
+    max-width: 1556px;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    border-radius: $RadiusM;
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+  }
 }

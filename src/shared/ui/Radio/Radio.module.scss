@@ -12,6 +12,7 @@
 
     .circle {
       border-color: $borderDisabled;
+      
     }
 
     .innerCircle {
@@ -37,6 +38,7 @@
   border-radius: 50%;
   position: relative;
   transition: border-color 0.3s;
+  margin-right: 15px;
   &.medium {
     width: 18px;
     height: 18px;

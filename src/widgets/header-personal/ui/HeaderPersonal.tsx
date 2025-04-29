@@ -3,7 +3,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
-import { Logo, UserAvatar } from '@/shared/assets/icons'
+import { Down, Logo, Up, UserAvatar } from '@/shared/assets/icons'
 import UserProfileComponent, {
   User
 } from '@/entities/user-profile/ui/UserProfile'
@@ -41,6 +41,8 @@ const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
         <Accordion
           mode="bordered"
           label={<UserProfileComponent user={user} />}
+          iconClose={<Up />}
+          iconOpen={<Down />}
           items={[
             {
               content: (

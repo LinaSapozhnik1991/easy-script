@@ -152,7 +152,6 @@ const UserProfileCard: React.FC<{
   }, [setValue])
 
   const onSubmit = async (data: User) => {
-    console.log('Submitting data:', data)
     try {
       const token = Cookies.get('token')
       if (!token) {

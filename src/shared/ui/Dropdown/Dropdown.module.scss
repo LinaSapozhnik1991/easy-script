@@ -1,0 +1,187 @@
+.dropdown {
+  max-width: 374px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: $RadiusM;
+  transition: all 0.3s ease;
+  height: fit-content;
+  position: absolute;
+  z-index: 10;
+
+  .dropdownBtn {
+    border: none;
+    outline: none;
+    border-radius: $RadiusM;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 16px;
+    height: 56px;
+    font: $fontMain;
+  }
+
+  &.open {
+    padding-bottom: 12px;
+    padding-inline: 8px;
+  }
+
+  &.bordered {
+    border: 1px solid rgba(204, 232, 233, 1);
+    background-color: $white;
+  }
+
+  &.bordered > *:first-child {
+    background-color: $white;
+  }
+
+  &.filled {
+    background-color: $white;
+  }
+
+  &.filled > *:first-child {
+    background-color: $emerald-600;
+    border: 1px solid $emerald-600;
+    color: $white;
+  }
+
+  &.filled > *:first-child > svg > path {
+    stroke: $white;
+  }
+
+  &.clear {
+    background-color: transparent;
+  }
+
+  &.clear > *:first-child {
+    background-color: transparent;
+  }
+
+  &.borderedOpen {
+    box-shadow: $defaultShadowSecondVariant;
+  }
+
+  &.filledOpen {
+    border: 1px solid $gray-900;
+    box-shadow: $defaultShadowSecondVariant;
+    background-color: $white;
+  }
+
+  &.filledOpen > *:first-child {
+    background-color: $white;
+    border: none;
+    color: $black;
+  }
+
+  &.filledOpen > *:first-child > svg > path {
+    stroke: $black;
+  }
+
+  &.clearOpen {
+    background-color: $gray-900;
+  }
+
+  .openSvg {
+    transform: rotate(180deg);
+    transition: all ease 0.3s;
+  }
+
+  .closeSvg {
+    transform: rotate(0deg);
+    transition: all ease 0.3s;
+  }
+
+  .dropdownList {
+    display: flex;
+    flex-direction: column;
+    max-height: 240px;
+    overflow-y: hidden;
+    transition: height 0.3s ease;
+
+    &.dropdownListClosed {
+      height: 0;
+    }
+
+    &.dropdownListOpen {
+      height: 240px;
+    }
+
+    &.dropdownListOverflow {
+      padding-right: 4px;
+      overflow-y: auto;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $gray-800;
+      border-radius: 4px;
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-clip: content-box;
+      width: 6px;
+    }
+  }
+
+  .dropdownItem {
+    list-style: none;
+    height: 60px;
+    padding-bottom: 4px;
+
+    > * {
+      height: 56px;
+      padding: 16px 16px;
+      outline: none;
+      border: none;
+      border-radius: $RadiusSm;
+      width: 100%;
+      justify-content: left;
+      font: $fontSmall;
+      display: flex;
+      justify-content: space-between;
+
+      &:hover {
+        background-color: $gray-900;
+      }
+
+      &:active {
+        background-color: $white;
+        color: $emerald-600;
+      }
+
+      &:disabled {
+        background-color: $gray-300;
+      }
+    }
+  }
+
+  &.clear .dropdownItem {
+    > * {
+      &:hover {
+        background-color: rgba(218, 228, 229, 1);
+      }
+
+      &:active {
+        background-color: $white;
+        color: $emerald-600;
+      }
+
+      &:disabled {
+        background-color: rgba(226, 226, 226, 1);
+      }
+    }
+  }
+
+  .dropdownSeparator {
+    border: none;
+    background-color: rgba(177, 204, 205, 1);
+    border-color: rgba(177, 204, 205, 1);
+    padding: 0.5px;
+  }
+}

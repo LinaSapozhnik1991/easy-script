@@ -24,6 +24,8 @@
 }
 .company{
 font: $fontBody;
+width: 240px;
+overflow-y: auto;
 color:linear-gradient(0deg, #1B1B1B, #1B1B1B),
 linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2)),
 linear-gradient(0deg, rgba(27, 27, 27, 0.2), rgba(27, 27, 27, 0.2)),
