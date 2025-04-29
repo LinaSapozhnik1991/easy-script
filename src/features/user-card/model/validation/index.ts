@@ -21,14 +21,20 @@ export const userSchema = z.object({
     .optional()
     .refine(
       value =>
-        value === undefined || (value.length >= 10 && value.length <= 15),
+        value === undefined ||
+        value === '' ||
+        (value.length >= 10 && value.length <= 15),
       'Некорректные данные'
     ),
+
   telegram: z
     .string()
     .optional()
     .refine(
-      value => value === undefined || /^@?[A-Za-z0-9_]{5,255}$/.test(value),
+      value =>
+        value === undefined ||
+        value === '' ||
+        /^@?[A-Za-z0-9_]{5,255}$/.test(value),
       'Некорректные данные'
     ),
   email: z.string().email('Некорректный email'),
