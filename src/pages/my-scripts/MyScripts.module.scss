@@ -1,43 +1,30 @@
 .myScripts {
   display: flex;
   flex-direction: column;
-
-  position: relative;
-  padding-top: 64px;
-  padding-left: 181px;
-  gap: 40px;
+  gap: 32px;
   text-align: left;
-  max-width: 1618px;
   width: 100%;
+  padding: 56px 118px 0 110px;
 
   p {
     font: $fontP1;
   }
   .scriptsHead {
     display: flex;
-    max-width: 1556px;
     width: 100%;
     justify-content: space-between;
-    position: absolute;
     .scriptHeadLeft {
       display: flex;
       gap: 28px;
     }
-    .buildScripts{
+    .buildScripts {
       z-index: 999;
     }
   }
   .allScripts {
     border: 1px solid $borderInputProfile;
-    position: absolute;
-   
-
-    margin-top: 104px;
     min-height: 752px;
-    max-width: 1556px;
     width: 100%;
-    height: 100%;
-    z-index: 9;
     border-radius: $RadiusM;
     -webkit-border-radius: $RadiusM;
     -moz-border-radius: $RadiusM;

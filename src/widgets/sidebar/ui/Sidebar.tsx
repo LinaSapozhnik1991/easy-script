@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-
 import {
+  Analyst,
   Company,
   CreditCard,
   Files,
@@ -11,17 +11,21 @@ import {
   Prev
 } from '@/shared/assets/icons'
 import { Routers } from '@/shared/routes'
-
 import styles from './Sidebar.module.scss'
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false)
+interface SidebarProps {
+  isOpen: boolean
+  toggleSidebar: () => void
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const pathname = usePathname()
 
   const options = useMemo(
     () => [
       { title: 'Мои скрипты', icon: <Files />, path: Routers.MyScripts },
       { title: 'Моя компания', icon: <Company />, path: Routers.MyCompany },
+      { title: 'Аналитика', icon: <Analyst />, path: Routers.Dashboard },
       { title: 'Инструкция', icon: <Instruction />, path: Routers.Instruction },
       { title: 'Тариф и оплата', icon: <CreditCard />, path: Routers.Billing }
     ],
@@ -29,21 +33,6 @@ const Sidebar = () => {
   )
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
-
-  useEffect(() => {
-    const savedState = localStorage.getItem('sidebarOpen')
-    if (savedState !== null) {
-      setIsOpen(JSON.parse(savedState))
-    }
-  }, [])
-
-  const toggleSidebar = () => {
-    setIsOpen(prevState => {
-      const newState = !prevState
-      localStorage.setItem('sidebarOpen', JSON.stringify(newState))
-      return newState
-    })
-  }
 
   useEffect(() => {
     const currentOption = options.find(opt => opt.path === pathname)

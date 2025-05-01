@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-import instance from '@/shared/api'
+import { instance } from '@/shared/api'
 
 export const loginUser = async (data: { email: string; password: string }) => {
   try {
@@ -11,7 +11,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
     const { token } = responseData
 
     if (token) {
-      Cookies.set('token', token, { expires: 7 })
+      Cookies.set('token', token, { expires: 0.33 })
     } else {
       throw new Error('Произошла ошибка')
     }

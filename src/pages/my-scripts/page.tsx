@@ -3,10 +3,10 @@ import React from 'react'
 
 import { AllCompanies } from '@/features/all-company/ui/AllCompanies'
 import FilterComponent from '@/features/filter-row/ui/FilterComponent'
-
-import styles from './MyScripts.module.scss'
 import BuildScripts from '@/features/build-scripts/ui/BuildScripts'
 import ScriptTable from '@/features/scripts-table/ui/ScriptsTable'
+
+import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   const companiesData = [
@@ -33,10 +33,9 @@ const MyScripts = () => {
           <BuildScripts />
         </div>
       </div>
-      <div>
-        <div className={styles.allScripts}>
-          <ScriptTable />
-        </div>
+
+      <div className={styles.allScripts}>
+        <ScriptTable />
       </div>
     </div>
   )

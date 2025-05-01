@@ -85,7 +85,12 @@ const UserCard: React.FC<{
                 </Button>
               </>
             ) : (
-              <Pencil onClick={onEdit} />
+              <button
+                type="button"
+                onClick={onEdit}
+                className={styles.editButton}>
+                <Pencil />
+              </button>
             )}
           </div>
         </div>

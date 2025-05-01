@@ -3,7 +3,7 @@ import React from 'react'
 import { Plus, Close } from '@/shared/assets/icons' // Импортируем иконки
 import { Accordion } from '@/shared/ui/Accordion/Accordion'
 
-//import styles from './BuildScripts.model.scss'
+import styles from './BuildScripts.module.scss'
 const BuildScripts = () => {
   const items = [
     { content: 'Пустой скрипт' },
@@ -15,7 +15,7 @@ const BuildScripts = () => {
   ]
 
   return (
-    <div>
+    <div className={styles.buildScripts}>
       <Accordion
         items={items}
         label="Создать скрипт"

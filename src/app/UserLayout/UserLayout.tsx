@@ -16,6 +16,7 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [userData, setUserData] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -50,7 +51,11 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className={styles.layout}>
       <HeaderPersonal user={userData} />
       <div className={styles.content}>
-        <Sidebar /> <main className={styles.main}>{children}</main>
+        <Sidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen(prev => !prev)}
+        />{' '}
+        <main className={styles.main}>{children}</main>
       </div>
       <FooterMain showLinks={true} />
     </div>

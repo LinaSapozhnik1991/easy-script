@@ -4,9 +4,62 @@
 
   thead {
     padding: 20px;
-    width: 1618px;
     height: 72px;
     border-bottom: 1px solid $borderInputScripts;
+    .th {
+      text-align: left;
+      padding-left: 25px;
+      font: $fontSmall;
+    }
+
+    .thNumber {
+      width: 50px;
+      margin-left: 15px;
+    }
+
+    .thName {
+      display: flex;
+      align-items: center;
+      height: 72px;
+      padding-left: 25px;
+
+      .inputContainer {
+        position: relative;
+        width: 196px;
+
+        .inputFilter {
+          width: 196px;
+          height: 32px;
+          margin-left: 25px;
+          padding-left: 35px;
+          border-radius: $RadiusSm;
+          -webkit-border-radius: $RadiusSm;
+          -moz-border-radius: $RadiusSm;
+          -ms-border-radius: $RadiusSm;
+          -o-border-radius: $RadiusSm;
+          border: 1px solid $borderInputScripts;
+        }
+
+        .inputIcon {
+          position: absolute;
+          top: 50%;
+          left: 30px;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
+      }
+    }
+    .thCompany {
+      width: 23%;
+    }
+
+    .thDate {
+      width: 23%;
+    }
+
+    .thActions {
+      width: 11%;
+    }
   }
   tbody {
     padding-left: 40px;
@@ -15,47 +68,29 @@
       text-align: left;
       height: 72px;
       border-bottom: 1px solid $borderInputScripts;
-      td{
-        padding-left: 20px;
+      td {
+        padding-left: 25px;
+        font: $fontMain;
+        .actions {
+          display: flex;
+          gap: 10px;
+          .btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+
+            &:hover {
+              opacity: 0.7;
+            }
+
+            &:focus {
+              outline: none;
+            }
+          }
+        }
       }
     }
-  }
-
-  .th {
-    text-align: left;
-    padding-left: 15px;
-  }
-
-  .thNumber {
-    width: 50px;
-    margin-left: 15px;
-  }
-
-  .thName {
-    width: 300px;
-    .inputFilter {
-      width: 196px;
-      height: 32px;
-      margin-left: 25px;
-      padding: 5px;
-      border-radius: $RadiusSm;
-      -webkit-border-radius: $RadiusSm;
-      -moz-border-radius: $RadiusSm;
-      -ms-border-radius: $RadiusSm;
-      -o-border-radius: $RadiusSm;
-      border: 1px solid $borderInputScripts;
-    }
-  }
-
-  .thCompany {
-    width: 200px;
-  }
-
-  .thDate {
-    width: 200px;
-  }
-
-  .thActions {
-    width: 100px;
   }
 }

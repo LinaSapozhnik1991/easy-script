@@ -80,6 +80,10 @@
         .editButton {
           border: none;
           background: transparent;
+          cursor: pointer;
+        }
+        .editButton:hover{
+          transform: scale(1.1);
         }
       }
     }

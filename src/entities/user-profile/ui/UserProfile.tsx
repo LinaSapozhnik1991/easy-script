@@ -13,7 +13,6 @@ export interface User {
   telegram?: string
   company?: string
 }
-
 export interface UserProfileProps {
   user: User
 }

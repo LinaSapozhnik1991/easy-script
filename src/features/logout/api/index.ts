@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-import instance from '@/shared/api'
+import { instance } from '@/shared/api'
 
 interface AxiosErrorResponse {
   response?: {

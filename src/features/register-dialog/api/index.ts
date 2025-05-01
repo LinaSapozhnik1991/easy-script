@@ -1,4 +1,4 @@
-import instance from '@/shared/api'
+import { instance } from '@/shared/api'
 
 export const registerUser = async (userData: {
   name: string
