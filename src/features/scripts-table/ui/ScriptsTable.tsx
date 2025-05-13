@@ -69,19 +69,16 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     script: Script,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    const buttonRect = event.currentTarget.getBoundingClientRect() // Получаем размеры кнопки
-    const popupWidth = 200 // Ширина всплывающего окна
-    const offset = 10 // Отступ от кнопки
+    const buttonRect = event.currentTarget.getBoundingClientRect()
+    const popupWidth = 200
+    const offset = 10
 
-    // Вычисляем позицию
-    const top = buttonRect.bottom + offset // Под кнопкой
-    let left = buttonRect.left + buttonRect.width / 2 - popupWidth / 2 // Центрируем по горизонтали
-
-    // Проверка на выход за границы экрана
+    const top = buttonRect.bottom + offset
+    let left = buttonRect.left + buttonRect.width / 2 - popupWidth / 2
     if (left < 0) {
-      left = 0 // Не выходим за левую границу
+      left = 0
     }
-    if (left + popupWidth > window.innerWidth) {
+    if (left - popupWidth > window.innerWidth) {
       left = window.innerWidth - popupWidth
     }
 

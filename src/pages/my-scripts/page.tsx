@@ -25,9 +25,11 @@ const MyScripts = () => {
   const [scripts, setScripts] = useState<Script[]>([])
 
   useEffect(() => {
-    const savedPage = localStorage.getItem('currentPage')
-    if (savedPage) {
-      setCurrentPage(Number(savedPage))
+    if (typeof window !== 'undefined') {
+      const savedPage = localStorage.getItem('currentPage')
+      if (savedPage) {
+        setCurrentPage(Number(savedPage))
+      }
     }
   }, [])
 
