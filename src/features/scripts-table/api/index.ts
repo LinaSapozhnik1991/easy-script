@@ -2,7 +2,8 @@
 import Cookies from 'js-cookie'
 
 import { instance } from '@/shared/api'
-import { Company, Script } from '@/entities/user-script'
+import { Script } from '@/entities/user-script'
+import { Company } from '@/entities/company'
 
 interface ScriptsResponse {
   success: boolean
