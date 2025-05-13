@@ -16,7 +16,7 @@ import { createScript } from '../api'
 import styles from './ScriptModal.module.scss'
 
 interface Company {
-  id: number
+  id: string
   name: string
 }
 
@@ -91,20 +91,19 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
           title: createdScriptResponse.title,
           description: createdScriptResponse.description || '',
           target: createdScriptResponse.target || 'defaultTarget',
-          company_id: Number(selectedCompanyId),
+          company_id: selectedCompanyId ?? '',
           user_id: Number(user?.id) || 0,
           type_id: 1,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           creator: {
-            id: Number(user?.id) || 0,
+            id: user?.id || '',
             name: user?.name || 'Unknown'
           },
           company: {
-            id: Number(selectedCompanyId),
+            id: selectedCompanyId ?? '',
             name:
-              user?.companies?.find(c => c.id === Number(selectedCompanyId))
-                ?.name || ''
+              user?.companies?.find(c => c.id === selectedCompanyId)?.name || ''
           },
           type: {
             id: '1',
@@ -169,7 +168,7 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
             }))}
             label={
               selectedCompanyId
-                ? user.companies.find(c => c.id === Number(selectedCompanyId))
+                ? user.companies.find(c => String(c.id) === selectedCompanyId)
                     ?.name || 'Неизвестная компания'
                 : 'Выберите компанию'
             }
