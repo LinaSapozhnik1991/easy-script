@@ -1,6 +1,8 @@
 import React from 'react'
-import styles from './ExitConfirmation.module.scss'
+
 import { Button } from '@/shared/ui/Button'
+
+import styles from './ExitConfirmation.module.scss'
 
 interface ExitConfirmationModalProps {
   onClose: () => void

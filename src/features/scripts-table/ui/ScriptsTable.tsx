@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+/* eslint-disable no-console */
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Burger, EditScript, Search } from '@/shared/assets/icons'
 import { Script } from '@/entities/user-script'
+import PopupMenu from '@/features/popup-menu/PopupMenu'
 
 import styles from './ScriptsTable.module.scss'
 
@@ -18,6 +20,13 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     key: SortableKeys
     direction: 'ascending' | 'descending' | null
   } | null>(null)
+  const [showPopup, setShowPopup] = useState<boolean>(false)
+  const [selectedScript, setSelectedScript] = useState<Script | null>(null)
+  const [popupPosition, setPopupPosition] = useState<{
+    top: number
+    left: number
+  } | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
 
   const filteredScripts = React.useMemo(
     () =>
@@ -56,63 +65,143 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     setSortConfig(direction ? { key, direction } : null)
   }
 
+  const handleBurgerClick = (
+    script: Script,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    const buttonRect = event.currentTarget.getBoundingClientRect() // Получаем размеры кнопки
+    const popupWidth = 200 // Ширина всплывающего окна
+    const offset = 10 // Отступ от кнопки
+
+    // Вычисляем позицию
+    const top = buttonRect.bottom + offset // Под кнопкой
+    let left = buttonRect.left + buttonRect.width / 2 - popupWidth / 2 // Центрируем по горизонтали
+
+    // Проверка на выход за границы экрана
+    if (left < 0) {
+      left = 0 // Не выходим за левую границу
+    }
+    if (left + popupWidth > window.innerWidth) {
+      left = window.innerWidth - popupWidth
+    }
+
+    setPopupPosition({ top, left })
+    setSelectedScript(script)
+    setShowPopup(true)
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false)
+    setSelectedScript(null)
+    setPopupPosition(null)
+  }
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      handleClosePopup()
+    }
+  }
+
+  useEffect(() => {
+    if (showPopup) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showPopup])
+
+  const handleViewDescription = () => {
+    console.log('Просмотр описания для', selectedScript)
+  }
+  const handleInvite = () => {
+    console.log('Пригласить', selectedScript)
+  }
+
+  const handleDelete = () => {
+    console.log('Удалить', selectedScript)
+  }
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th className={`${styles.th} ${styles.thNumber}`}>№</th>
-          <th
-            className={`${styles.th} ${styles.thName}`}
-            onClick={() => requestSort('title')}
-            style={{ cursor: 'pointer' }}>
-            Название скрипта
-            <div className={styles.inputContainer}>
-              <input
-                type="text"
-                placeholder="Поиск"
-                value={filter}
-                onChange={e => setFilter(e.target.value)}
-                className={styles.inputFilter}
-              />
-              <Search className={styles.inputIcon} />
-            </div>
-          </th>
-          <th
-            className={`${styles.th} ${styles.thCompany}`}
-            onClick={() => requestSort('company')}
-            style={{ cursor: 'pointer' }}>
-            Компания
-          </th>
-          <th
-            className={`${styles.th} ${styles.thDate}`}
-            onClick={() => requestSort('updated_at')}
-            style={{ cursor: 'pointer' }}>
-            Дата последнего изменения
-          </th>
-          <th className={`${styles.th} ${styles.thActions}`}>Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedScripts.map((script, index) => (
-          <tr key={script.id} className={styles.dataScripts}>
-            <td>{index + 1}</td>
-            <td>{script.title}</td>
-            <td>{script.company.name}</td>
-            <td>{new Date(script.updated_at).toLocaleDateString()}</td>
-            <td>
-              <div className={styles.actions}>
-                <button type="button" className={styles.btn}>
-                  <EditScript />
-                </button>
-                <button type="button" className={styles.btn}>
-                  <Burger />
-                </button>
+    <>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th className={`${styles.th} ${styles.thNumber}`}>№</th>
+            <th
+              className={`${styles.th} ${styles.thName}`}
+              onClick={() => requestSort('title')}
+              style={{ cursor: 'pointer' }}>
+              Название скрипта
+              <div className={styles.inputContainer}>
+                <input
+                  type="text"
+                  placeholder="Поиск"
+                  value={filter}
+                  onChange={e => setFilter(e.target.value)}
+                  className={styles.inputFilter}
+                />
+                <Search className={styles.inputIcon} />
               </div>
-            </td>
+            </th>
+            <th
+              className={`${styles.th} ${styles.thCompany}`}
+              onClick={() => requestSort('company')}
+              style={{ cursor: 'pointer' }}>
+              Компания
+            </th>
+            <th
+              className={`${styles.th} ${styles.thDate}`}
+              onClick={() => requestSort('updated_at')}
+              style={{ cursor: 'pointer' }}>
+              Дата последнего изменения
+            </th>
+            <th className={`${styles.th} ${styles.thActions}`}>Действия</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {sortedScripts.map((script, index) => (
+            <tr key={script.id} className={styles.dataScripts}>
+              <td>{index + 1}</td>
+              <td>{script.title}</td>
+              <td>{script.company.name}</td>
+              <td>{new Date(script.updated_at).toLocaleDateString()}</td>
+              <td>
+                <div className={styles.actions}>
+                  <button type="button" className={styles.btn}>
+                    <EditScript />
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.btn}
+                    onClick={event => handleBurgerClick(script, event)}>
+                    <Burger />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {showPopup && selectedScript && popupPosition && (
+        <div
+          ref={popupRef}
+          style={{
+            position: 'absolute',
+            top: popupPosition.top,
+            left: popupPosition.left
+          }}>
+          <PopupMenu
+            onClose={handleClosePopup}
+            onViewDescription={handleViewDescription}
+            onInvite={handleInvite}
+            onDelete={handleDelete}
+          />
+        </div>
+      )}
+    </>
   )
 }
 

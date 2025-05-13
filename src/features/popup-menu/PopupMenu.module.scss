@@ -1,0 +1,26 @@
+.popupMenu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $white;
+    width: 205px;
+    height: 118px;
+    z-index: 9999;
+
+    font: $fontSmall;
+    position: absolute;
+    text-align: left;
+    border: 1px solid rgba(74, 99, 101, 1);
+    border-radius: $RadiusM;
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+    button{
+        border: none;
+        padding: 12px;
+        background-color: transparent;
+        text-align: left;
+        height: 30px;
+    }
+}
