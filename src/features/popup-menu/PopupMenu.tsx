@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './PopupMenu.module.scss' // Импортируйте стили для вашего меню
+import { Delete, Instruction, PersonCall } from '@/shared/assets/icons'
 
 interface PopupMenuProps {
   onClose: () => void
@@ -21,21 +22,21 @@ const PopupMenu: React.FC<PopupMenuProps> = ({
           onViewDescription()
           onClose()
         }}>
-        Посмотреть описание
+        <Instruction /> Посмотреть описание
       </button>
       <button
         onClick={() => {
           onInvite()
           onClose()
         }}>
-        Пригласить
+        <PersonCall /> Пригласить
       </button>
       <button
         onClick={() => {
           onDelete()
           onClose()
         }}>
-        Удалить
+        <Delete /> Удалить
       </button>
     </div>
   )

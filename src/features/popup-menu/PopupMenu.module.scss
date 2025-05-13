@@ -6,8 +6,6 @@
     width: 205px;
     height: 118px;
     z-index: 9999;
-
-    font: $fontSmall;
     position: absolute;
     text-align: left;
     border: 1px solid rgba(74, 99, 101, 1);
@@ -17,10 +15,22 @@
     -ms-border-radius: $RadiusM;
     -o-border-radius: $RadiusM;
     button{
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        font: $fontSmall;
+        gap: 10px;
         border: none;
-        padding: 12px;
+        padding-left: 20px;
         background-color: transparent;
         text-align: left;
         height: 30px;
     }
+    button:hover{
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        -o-transform: scale(1.1);
+}
 }

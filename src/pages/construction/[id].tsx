@@ -75,8 +75,7 @@ const Construction = () => {
   }
 
   const handleExitWithoutSaving = () => {
-    // Логика выхода без сохранения
-    router.push('/some-route') // Замените на нужный маршрут
+    router.push('/some-route')
   }
 
   const handleStayInEditor = () => {
@@ -84,9 +83,7 @@ const Construction = () => {
   }
 
   const handleSaveAndExit = () => {
-    // Логика сохранения скрипта
-    // После сохранения можно выйти
-    router.push('/some-route') // Замените на нужный маршрут
+    router.push('/some-route')
   }
   const handleOpenModal = () => {
     if (script && script.title) {

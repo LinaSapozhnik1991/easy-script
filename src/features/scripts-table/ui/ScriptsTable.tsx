@@ -74,7 +74,7 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     const offset = 10
 
     const top = buttonRect.bottom + offset
-    let left = buttonRect.left + buttonRect.width / 2 - popupWidth / 2
+    let left = buttonRect.left + buttonRect.width - popupWidth
     if (left < 0) {
       left = 0
     }
