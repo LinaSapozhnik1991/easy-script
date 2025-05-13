@@ -1,0 +1,15 @@
+.mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font:$fontSmall;
+padding: 0 5px;
+width: 384px;
+  border-radius: $RadiusM;
+  height: 56px;
+  background-color: $bgInputHover;
+  -webkit-border-radius: $RadiusM;
+  -moz-border-radius: $RadiusM;
+  -ms-border-radius: $RadiusM;
+  -o-border-radius: $RadiusM;
+}

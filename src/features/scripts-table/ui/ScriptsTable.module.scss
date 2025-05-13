@@ -74,6 +74,9 @@
         .actions {
           display: flex;
           gap: 10px;
+          justify-content: flex-end;
+          padding-right: 35px;
+         
           .btn {
             background: transparent;
             border: none;
@@ -83,7 +86,13 @@
 
             &:hover {
               opacity: 0.7;
-            }
+              transform: scale(1.1);
+              cursor: pointer;
+              -webkit-transform: scale(1.1);
+              -moz-transform: scale(1.1);
+              -ms-transform: scale(1.1);
+              -o-transform: scale(1.1);
+}
 
             &:focus {
               outline: none;

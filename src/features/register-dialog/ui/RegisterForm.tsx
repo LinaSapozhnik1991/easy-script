@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/named */
 'use client'
 import React, { FC, useEffect, useState } from 'react'
@@ -126,6 +127,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ onRegisterSuccess }) => {
         name: data.name,
         email: data.email,
         phone: data.phone,
+        company: data.company,
         password: data.password,
         password_confirmation: data.confirmPassword
       })

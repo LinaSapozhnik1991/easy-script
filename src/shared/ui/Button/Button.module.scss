@@ -41,7 +41,45 @@
       color: $textDisabled;
     }
   }
-
+  &.exitStyle{
+    color: $textActiveButton;
+    background-color: $bgExitButton;
+    border: none;
+    svg{
+    margin-right: 5px ;
+    }
+    &:hover{
+      opacity: 0.5;
+    }
+  }
+  &.scriptStyle{
+    color: $textOptionScripts;
+    background-color: $gray-900 ;
+    border-color: $borderButtonUserProfile;
+    border-radius: $RadiusM;
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+    svg{
+      color: $emerald;
+      margin-right: 10px;
+    }
+    &:hover{
+      opacity: 0.5;
+    }
+}
+&.borderMedium{
+  border-radius: $RadiusM;
+  -webkit-border-radius: $RadiusM;
+  -moz-border-radius: $RadiusM;
+  -ms-border-radius: $RadiusM;
+  -o-border-radius: $RadiusM;
+}
+&.clear{
+  border: none;
+  color: $textOptionScripts ;
+}
   &.small {
     width: 160px;
     height: 40px;
@@ -58,9 +96,30 @@
 }
   &.medium {
     font: $fontBody;
-    padding: 12px;
+  width: 259px;
+  height: 56px;
   }
-
+&.mediumScript{
+  min-width: 246px;
+  height: 56px;
+  font: $fontMain;
+  border-radius: $RadiusM ;
+  -webkit-border-radius: $RadiusM ;
+  -moz-border-radius: $RadiusM ;
+  -ms-border-radius: $RadiusM ;
+  -o-border-radius: $RadiusM ;
+ 
+}
+&.largeScript{
+  min-width: 280px;
+  min-height: 56px;
+  font: $fontMain;
+  border-radius: $RadiusM;
+  -webkit-border-radius: $RadiusM;
+  -moz-border-radius: $RadiusM;
+  -ms-border-radius: $RadiusM;
+  -o-border-radius: $RadiusM;
+}
   &.large {
     width: 570px;
     height: 48px;

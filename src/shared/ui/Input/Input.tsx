@@ -17,6 +17,7 @@ const Input: FC<InputProps> = memo(
         error = '',
         disabled,
         inputCompleted = false,
+        inputScript = false,
         onChange,
         type = InputTypes.Text,
         maxLength,
@@ -31,9 +32,12 @@ const Input: FC<InputProps> = memo(
       const inputFieldClasses = classNames(styles.input, {
         [styles.rounded]: rounded,
         [styles.inputCompleted]: inputCompleted,
+        [styles.inputScript]: inputScript,
         [styles.small]: inputSize === InputSizes.Small,
         [styles.medium]: inputSize === InputSizes.Medium,
         [styles.large]: inputSize === InputSizes.Large,
+        [styles.largeXL]: inputSize === InputSizes.LargeXL,
+        [styles.largeScript]: inputSize === InputSizes.LargeScript,
         [styles.error]: !!error
       })
 

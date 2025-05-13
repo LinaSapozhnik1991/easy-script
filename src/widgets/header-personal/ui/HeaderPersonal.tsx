@@ -3,7 +3,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
-import { Down, Logo, Up, UserAvatar } from '@/shared/assets/icons'
+import { Down, Logo, Person, Up } from '@/shared/assets/icons'
 import UserProfileComponent, {
   User
 } from '@/entities/user-profile/ui/UserProfile'
@@ -15,8 +15,13 @@ import { Routers } from '@/shared/routes'
 import styles from './HeaderPersonal.module.scss'
 interface HeaderPersonalProps {
   user: User
+  setUserName: React.Dispatch<React.SetStateAction<string>>
 }
-const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
+
+const HeaderPersonal: React.FC<HeaderPersonalProps> = ({
+  user,
+  setUserName
+}) => {
   const router = useRouter()
 
   const handleProfileClick = () => {
@@ -40,7 +45,7 @@ const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
       <div className={styles.userAccordion}>
         <Accordion
           mode="bordered"
-          label={<UserProfileComponent user={user} />}
+          label={<UserProfileComponent user={user} setUserName={setUserName} />}
           iconClose={<Up />}
           iconOpen={<Down />}
           items={[
@@ -49,7 +54,7 @@ const HeaderPersonal: React.FC<HeaderPersonalProps> = ({ user }) => {
                 <span
                   className={styles.userOptionProfile}
                   onClick={handleProfileClick}>
-                  Профиль <UserAvatar />
+                  Профиль <Person />
                 </span>
               )
             },

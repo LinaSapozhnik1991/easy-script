@@ -19,7 +19,15 @@ export const userMe = async (): Promise<User | null> => {
     })
 
     if (response.data.success && response.data.data.user) {
-      return response.data.data.user
+      const user: User = {
+        id: response.data.data.user.id,
+        name: response.data.data.user.name,
+        email: response.data.data.user.email,
+        phone: response.data.data.user.phone || '',
+        companies: response.data.data.companies || [],
+        currentCompany: response.data.data.current_company || null
+      }
+      return user
     } else {
       return null
     }
@@ -34,7 +42,15 @@ export const userMe = async (): Promise<User | null> => {
             }
           })
           if (response.data.success && response.data.data.user) {
-            return response.data.data.user
+            const user: User = {
+              id: response.data.data.user.id,
+              name: response.data.data.user.name,
+              email: response.data.data.user.email,
+              phone: response.data.data.user.phone || '',
+              companies: response.data.data.companies || [],
+              currentCompany: response.data.data.current_company || null
+            }
+            return user
           }
         }
       }

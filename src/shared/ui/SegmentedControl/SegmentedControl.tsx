@@ -11,7 +11,7 @@ interface SegmentedControlProps {
   label?: string
   options: Option[]
   onSelect: (option: string) => void
-  size?: 'large' | 'medium' | 'small' | 'xs'
+  size?: 'large' | 'medium' | 'small' | 'xs' | 'smallConstructor'
   disabled?: boolean
   variant: 'line' | 'on'
   defaultSelected?: string
@@ -109,6 +109,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
               [styles.active]:
                 selected === option.title && !disabled && variant === 'on',
               [styles.disabled]: disabled,
+              [styles.smallConstructor]: 'smallConstructor',
               [styles.onIndicator]: variant === 'on'
             })}
             onClick={() => handleSelect(option.title)}>

@@ -1,0 +1,145 @@
+.editor {
+  width: 100%;
+  .editorPanel {
+    padding: 16px;
+    height: 72px;
+
+    .editorButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        outline: none;
+      }
+      button:hover {
+        transform: scale(1.2);
+        -webkit-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -ms-transform: scale(1.2);
+        -o-transform: scale(1.2);
+      }
+      button.active {
+        background-color: $bgInputHover;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+      }
+      select {
+        width: 82px;
+        height: 40px;
+        padding: 10px;
+        font: $fontSmall;
+        outline: none;
+        border: 1px solid $borderInputProfile;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+        option {
+          outline: none;
+          border: 1px solid $borderInputProfile;
+        }
+      }
+      select:focus {
+        outline: none; 
+      }
+    }
+    .colorPicker {
+      display: flex;
+      background-color: $white;
+      position: absolute;
+      box-shadow: 0px 6.65px 13.83px 0px rgba(0, 0, 0, 0.0283);
+      box-shadow: 0px 22.34px 46.46px 0px rgba(0, 0, 0, 0.0417);
+      border: 1px solid $borderInputProfile;
+
+      padding: 5px;
+      z-index: 99;
+      width: 208px;
+      height: 112px;
+      border-radius: $RadiusM;
+      -webkit-border-radius: $RadiusM;
+      -moz-border-radius: $RadiusM;
+      -ms-border-radius: $RadiusM;
+      -o-border-radius: $RadiusM;
+      button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        outline: none;
+      }
+      .colorContent {
+        margin: 10px 15px;
+        display: flex;
+        flex-direction: column;
+
+        gap: 25px;
+
+        .colorText {
+          display: flex;
+          gap: 32px;
+
+          .redLetter {
+            color: $textError;
+            font: $fontMain;
+          }
+          .blackLetter {
+            color: $textGeneral;
+            font: $fontMain;
+          }
+          .grayLetter {
+            color: $gray-960;
+            font: $fontMain;
+          }
+          .greenLetter {
+            color: $emerald-600;
+            font: $fontMain;
+          }
+        }
+        .colorSquares {
+          display: flex;
+          gap: 15px;
+          button {
+            margin-right: 5px;
+            color: $textActiveButton;
+            font: $fontMain;
+            border: none;
+            cursor: pointer;
+            width: 19px;
+            height: 24px;
+          }
+          .redButton {
+            background-color: $error;
+          }
+          .blackButton {
+            background-color: $black;
+          }
+          .greenButton {
+            background-color: $emerald-600;
+          }
+          .grayButton {
+            background-color: $gray-960;
+          }
+        }
+      }
+      .closeButton svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  hr {
+    height: 1px;
+    background-color: $borderInputProfile;
+    opacity: 0.3;
+  }
+  .text {
+    width: 100%;
+    padding: 40px;
+  }
+}

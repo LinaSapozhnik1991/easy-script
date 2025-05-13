@@ -15,11 +15,14 @@
     justify-content: space-between;
     .scriptHeadLeft {
       display: flex;
-      gap: 28px;
+      gap: 32px;
     }
-    .buildScripts {
-      z-index: 999;
+    .buildScripts{
+  svg{
+    margin-left: 65px;
+  }
     }
+    
   }
   .allScripts {
     border: 1px solid $borderInputProfile;

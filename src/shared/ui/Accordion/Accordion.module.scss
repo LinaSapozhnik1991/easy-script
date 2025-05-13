@@ -1,11 +1,12 @@
 .accordion {
-  max-width: 374px;
+  max-width: 630px;
   width: 100%;
   display: flex;
   flex-direction: column;
   border-radius: $RadiusM;
   transition: all 0.3s ease;
   height: fit-content;
+
   
 
   .accordionBtn {
@@ -13,6 +14,7 @@
     outline: none;
     border-radius: $RadiusM;
     display: flex;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
@@ -35,7 +37,9 @@
   &.bordered > *:first-child {
     background-color: $white;
   }
-
+  &.errorClassName{
+    border:1px solid $error;
+  }
   &.filled {
     background-color: $white;
     width: 246px;
@@ -98,7 +102,7 @@
     display: flex;
     flex-direction: column;
     max-height: 240px;
-    overflow-y: hidden;
+    overflow: hidden;
     transition: height 0.3s ease;
 
     &.accordionListClosed {

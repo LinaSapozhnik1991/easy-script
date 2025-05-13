@@ -4,6 +4,7 @@ export const registerUser = async (userData: {
   name: string
   email: string
   phone: string
+  company?: string
   password: string
   password_confirmation: string
 }) => {

@@ -1,13 +1,12 @@
 .filter{
   display: flex;
     align-items: center;
+    justify-content: center;
     z-index: 99;
     min-width: 498px;
-
     border-radius: $RadiusM;
     height: 56px;
     background-color: $bgInputHover;
-    //position: absolute;
     -webkit-border-radius: $RadiusM;
     -moz-border-radius: $RadiusM;
     -ms-border-radius: $RadiusM;

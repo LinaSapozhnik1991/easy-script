@@ -28,11 +28,15 @@ const UserProfile = () => {
   const handleCancel = () => {
     setIsEditing(false)
   }
+  const setUserName = (name: string) => {
+    setUser(prev => {
+      if (prev) {
+        return { ...prev, name }
+      }
+      return prev
+    })
+  }
 
-  /*const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setUser(prev => (prev ? { ...prev, [name]: value } : null))
-  }*/
   return (
     <div className={styles.userProfile}>
       <UserProfileCard
@@ -40,6 +44,7 @@ const UserProfile = () => {
         isEditing={isEditing}
         onEdit={handleEdit}
         onCancel={handleCancel}
+        setUserName={setUserName}
       />
       <div className={styles.dopInfo}>
         <div className={styles.billingCard}>
@@ -49,8 +54,26 @@ const UserProfile = () => {
           </Button>
         </div>
         <div className={styles.companyCard}>
-          <h2>Компании</h2>
-          <p className={styles.company}>{user ? user.company : 'Нет данных'}</p>
+          <div className={styles.companiesList}>
+            <h2>Компании</h2>
+            {user && user.companies && user.companies.length > 0 ? (
+              <ul>
+                {user.companies.map(company => (
+                  <li
+                    key={company.id}
+                    className={
+                      company.id === user.currentCompany?.id
+                        ? styles.currentCompany
+                        : ''
+                    }>
+                    {company.name}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Нет данных о компаниях</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

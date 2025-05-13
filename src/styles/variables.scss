@@ -38,12 +38,15 @@ $gray-920 : rgba(9, 27, 28, 0.3);
 $gray-930 : rgba(74, 99, 101, 1);
 $gray-940 : rgba(177, 204, 205, 1);
 $gray-950: rgba(204, 232, 233, 1);
+$gray-960: rgba(111, 121, 121, 1);
+
 
 
 
 $white: rgba(255, 255, 255, 1);
 
 $error: rgba(186, 26, 26, 1);
+$exit: rgba(218, 52, 46, 1);
 
 //bacground-color
 $bgPrimary         : $emerald;
@@ -59,7 +62,7 @@ $bgFeedback        : $gray-910;
 $bgModalRootPortal : $gray-920;
 $bgEconomySection  : $emerald-600;
 $bgPaginationActive: $gray-940;
-
+$bgExitButton: $exit;
 //border-color
 $borderDisabled      : $gray-500;
 $borderInput         : $gray;

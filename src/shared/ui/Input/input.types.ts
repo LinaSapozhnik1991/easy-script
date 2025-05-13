@@ -3,10 +3,17 @@ import { InputHTMLAttributes, ReactNode } from 'react'
 export enum InputSizes {
   Small = 'small',
   Medium = 'medium',
-  Large = 'large'
+  Large = 'large',
+  LargeXL = 'largeXL',
+  LargeScript = 'largeScript'
 }
 
-export type InputSize = InputSizes.Large | InputSizes.Medium | InputSizes.Small
+export type InputSize =
+  | InputSizes.Large
+  | InputSizes.Medium
+  | InputSizes.Small
+  | InputSizes.LargeXL
+  | InputSizes.LargeScript
 
 export enum InputTypes {
   Text = 'text',
@@ -35,6 +42,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean
   inputSize?: InputSizes
   inputCompleted?: boolean
+  inputScript?: boolean
   error?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   icon?: ReactNode

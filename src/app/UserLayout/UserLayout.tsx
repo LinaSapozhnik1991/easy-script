@@ -14,6 +14,7 @@ import styles from './UserLayout.module.scss'
 
 const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [userData, setUserData] = useState<User | null>(null)
+  const [userName, setUserName] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -29,6 +30,9 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       try {
         const data: User | null = await userMe()
         setUserData(data)
+        if (data) {
+          setUserName(data.name)
+        }
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message)
@@ -49,7 +53,10 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className={styles.layout}>
-      <HeaderPersonal user={userData} />
+      <HeaderPersonal
+        user={{ ...userData, name: userName }}
+        setUserName={setUserName}
+      />
       <div className={styles.content}>
         <Sidebar
           isOpen={isSidebarOpen}

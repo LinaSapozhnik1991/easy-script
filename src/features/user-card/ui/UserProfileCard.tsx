@@ -37,6 +37,10 @@ const UserDataRow: React.FC<{
     field: FieldValues
   ) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  onPaste?: (
+    event: React.ClipboardEvent<HTMLInputElement>,
+    field: FieldValues
+  ) => void //
   errorMessage?: string
 }> = ({
   label,
@@ -48,7 +52,8 @@ const UserDataRow: React.FC<{
   name,
   iconMail,
   errorMessage,
-  icon
+  icon,
+  onPaste
 }) => (
   <tr>
     <td className={styles.label}>
@@ -67,6 +72,11 @@ const UserDataRow: React.FC<{
               className={`${styles.inputField} ${errorMessage ? styles.error : ''}`}
               placeholder={`Введите ${label.toLowerCase()}`}
               onKeyDown={onKeyDown}
+              onPaste={e => {
+                if (onPaste) {
+                  onPaste(e, field)
+                }
+              }}
               onChange={e => {
                 if (onChange) {
                   onChange(e, field)
@@ -87,11 +97,15 @@ const UserDataRow: React.FC<{
   </tr>
 )
 const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  if (
-    !/^\d$/.test(event.key) &&
-    event.key !== 'Backspace' &&
-    event.key !== 'Tab'
-  ) {
+  const allowedKeys = [
+    'Backspace',
+    'Tab',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowUp',
+    'ArrowDown'
+  ]
+  if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
     event.preventDefault()
   }
 }
@@ -100,9 +114,18 @@ const handlePhoneChange = (
   event: React.ChangeEvent<HTMLInputElement>,
   field: FieldValues
 ) => {
-  const rawValue = event.target.value.replace(/\D/g, '') // Удаляем все нецифровые символы
-  const formattedValue = formatPhoneNumber(rawValue) // Используем вашу функцию форматирования
-  field.onChange(formattedValue) // Обновляем состояние
+  const rawValue = event.target.value.replace(/\D/g, '')
+  const formattedValue = formatPhoneNumber(rawValue)
+  field.onChange(formattedValue)
+}
+const handlePaste = (
+  event: React.ClipboardEvent<HTMLInputElement>,
+  field: FieldValues
+) => {
+  event.preventDefault()
+  const pastedData = event.clipboardData.getData('text')
+  const formattedValue = formatPhoneNumber(pastedData.replace(/\D/g, ''))
+  field.onChange(formattedValue)
 }
 
 const UserProfileCard: React.FC<{
@@ -110,7 +133,8 @@ const UserProfileCard: React.FC<{
   isEditing: boolean
   onEdit: () => void
   onCancel: () => void
-}> = ({ isEditing, onEdit, onCancel }) => {
+  setUserName: (name: string) => void
+}> = ({ isEditing, onEdit, onCancel, setUserName }) => {
   const [userInfo, setUserInfo] = useState<User | null>(null)
 
   const {
@@ -159,6 +183,7 @@ const UserProfileCard: React.FC<{
       }
       await updateUserData(data, token)
       setUserInfo(data)
+      setUserName(data.name)
       onCancel()
     } catch (error) {
       console.error('Ошибка при обновлении данных пользователя:', error)
@@ -219,6 +244,7 @@ const UserProfileCard: React.FC<{
                       placeholder="Введите имя"
                       onChange={e => {
                         field.onChange(e)
+                        setUserName(e.target.value)
                         trigger('name')
                       }}
                     />
@@ -285,6 +311,7 @@ const UserProfileCard: React.FC<{
                     handlePhoneChange(e, field)
                     trigger('whatsapp')
                   }}
+                  onPaste={(e, field) => handlePaste(e, field)}
                   errorMessage={errors.whatsapp?.message}
                 />
               </tbody>

@@ -39,7 +39,10 @@
   &:focus {
     outline: none;
   }
+&.inputScript{
+  border-color: $borderInputProfile;
 
+}
   &:disabled {
     color: $textPlaceholder;
     cursor: not-allowed;
@@ -75,6 +78,14 @@
   &.large {
     height: 52px;
     width: 540px;
+  }
+  &.largeXL{
+    width: 555px;
+    height: 56px;
+  }
+  &.largeScript{
+    width: 630px;
+    height: 48px;
   }
 }
 .error {

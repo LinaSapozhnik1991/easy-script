@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import { UserAvatar } from '@/shared/assets/icons'
+import { Company } from '@/entities/company'
 
 import styles from './UserProfileComponent.module.scss'
 
@@ -11,10 +12,13 @@ export interface User {
   phone: string
   whatsapp?: string
   telegram?: string
-  company?: string
+  companies?: Company[]
+  currentCompany?: Company | null
 }
+
 export interface UserProfileProps {
   user: User
+  setUserName: (newName: string) => void
 }
 
 const UserProfileComponent: FC<UserProfileProps> = ({ user }) => {

@@ -1,0 +1,89 @@
+.buildScripts{
+    display: flex;
+    flex-direction: column;
+    gap:32px;
+    padding: 32px;
+    width: 694px;
+    height: auto;
+    .scriptName{
+        width: 630px;
+        height: 48px;
+        padding-left: 15px;
+        font: $fontBody;
+        outline: none;
+        border: 1px solid $borderInputProfile;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+    }
+    h2{
+        font: $fontP1 ;
+    }
+    .accordion{
+        width: 630px;
+        height: 56px;
+        z-index: 99;
+    }
+    .description{
+     
+        .descriptionValue{
+            width: 630px;
+            outline: none;
+            font: $fontBody;
+            padding: 15px;
+            min-height:128px ;
+            border: 1px solid $borderInputProfile;
+            border-radius: $RadiusM;
+            -webkit-border-radius: $RadiusM;
+            -moz-border-radius: $RadiusM;
+            -ms-border-radius: $RadiusM;
+            -o-border-radius: $RadiusM;
+}
+    }
+    .modalButtons{
+        display: flex;
+        gap: 24px;
+        .cancelButton, .buildButton{
+            width: 308px;
+            height: 56px;
+            font: $fontMain;
+            cursor: pointer;
+        }
+        .cancelButton:hover, .buildButton:hover{
+            transform: scale(0.95);
+            opacity: 0.8;
+            -webkit-transform: scale(0.95);
+            -moz-transform: scale(0.95);
+            -ms-transform: scale(0.95);
+            -o-transform: scale(0.95);
+}
+        .cancelButton{
+            color: $textOptionScripts;
+            border: none;
+            background-color: transparent;
+        }
+        .buildButton{
+            color:$textActiveButton;
+            background-color: $emerald-400;
+            border: none;
+            border-radius: $RadiusM;
+            -webkit-border-radius: $RadiusM;
+            -moz-border-radius: $RadiusM;
+            -ms-border-radius: $RadiusM;
+            -o-border-radius: $RadiusM;
+}
+     
+}
+.error {
+    color: $error; 
+    margin-top: 5px;
+    margin-left: 10px;
+  }
+  
+  .inputError {
+    border: 1px solid $error;
+  }
+
+}
