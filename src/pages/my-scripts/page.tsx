@@ -16,22 +16,10 @@ import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   const { openModal, closeModal } = useModalStore()
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = localStorage.getItem('currentPage')
-    return savedPage ? Number(savedPage) : 1
-  })
+  const [currentPage, setCurrentPage] = useState(1) // Установка начального значения на 1
   const [totalPages, setTotalPages] = useState(0)
   const scriptsPerPage = 10
   const [scripts, setScripts] = useState<Script[]>([])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedPage = localStorage.getItem('currentPage')
-      if (savedPage) {
-        setCurrentPage(Number(savedPage))
-      }
-    }
-  }, [])
 
   useEffect(() => {
     const fetchScripts = async () => {
@@ -45,10 +33,6 @@ const MyScripts = () => {
 
     fetchScripts()
   }, [])
-
-  useEffect(() => {
-    localStorage.setItem('currentPage', String(currentPage))
-  }, [currentPage])
 
   const handleOpenModal = () => {
     openModal(<ScriptModal onClose={closeModal} />)
