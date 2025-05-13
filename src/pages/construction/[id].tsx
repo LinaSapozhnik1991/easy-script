@@ -124,12 +124,12 @@ const Construction = () => {
                     {
                       content: (
                         <span className={styles.company}>
-                          {script?.company?.name || 'Неизвестная компания'}
+                          {script?.company?.name || 'Моя компания'}
                         </span>
                       )
                     }
                   ]}
-                  label={script?.company?.name || 'Неизвестная компания'}
+                  label={script?.company?.name || 'Компании'}
                   mode="bordered"
                   iconClose={<Up />}
                   iconOpen={<Down />}

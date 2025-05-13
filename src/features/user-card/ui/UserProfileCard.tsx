@@ -69,6 +69,7 @@ const UserDataRow: React.FC<{
             <input
               type="text"
               {...field}
+              value={typeof field.value === 'string' ? field.value : ''}
               className={`${styles.inputField} ${errorMessage ? styles.error : ''}`}
               placeholder={`Введите ${label.toLowerCase()}`}
               onKeyDown={onKeyDown}
@@ -89,7 +90,7 @@ const UserDataRow: React.FC<{
         />
       ) : (
         <span className={styles.value}>
-          {value} {iconMail}
+          {value ?? ''} {iconMail}
         </span>
       )}
       {errorMessage && <span className={styles.error}>{errorMessage}</span>}
@@ -162,10 +163,10 @@ const UserProfileCard: React.FC<{
         setUserInfo(user)
         if (user) {
           setValue('name', user.name)
-          setValue('phone', user.phone || '')
+          setValue('phone', user.phone ?? '')
           setValue('email', user.email)
-          setValue('whatsapp', user.whatsapp || '')
-          setValue('telegram', user.telegram || '')
+          setValue('whatsapp', user.whatsapp ?? '')
+          setValue('telegram', user.telegram ?? '')
         }
       } catch (error) {
         console.error('Ошибка при получении данных пользователя:', error)
@@ -240,6 +241,7 @@ const UserProfileCard: React.FC<{
                     <input
                       type="text"
                       {...field}
+                      value={field.value ?? ''}
                       className={`${styles.inputFieldName} ${errors.name ? styles.error : ''}`}
                       placeholder="Введите имя"
                       onChange={e => {
@@ -268,7 +270,7 @@ const UserProfileCard: React.FC<{
                 <UserDataRow
                   icon={<Phone />}
                   label="Номер телефона"
-                  value={userInfo.phone || ''}
+                  value={userInfo.phone ?? ''}
                   isEditing={isEditing}
                   control={control}
                   onKeyDown={handleKeyDown}
@@ -282,14 +284,14 @@ const UserProfileCard: React.FC<{
                 <UserDataRow
                   icon={<Mail />}
                   label="Электронная почта"
-                  value={userInfo.email || ''}
+                  value={userInfo.email ?? ''}
                   isEditing={false}
                   iconMail={<Check />}
                 />
                 <UserDataRow
                   icon={<TgUser />}
                   label="Telegram"
-                  value={userInfo.telegram || ''}
+                  value={userInfo.telegram ?? ''}
                   isEditing={isEditing}
                   control={control}
                   onChange={(e, field) => {
@@ -302,7 +304,7 @@ const UserProfileCard: React.FC<{
                 <UserDataRow
                   icon={<WaUser />}
                   label="WhatsApp"
-                  value={userInfo.whatsapp || ''}
+                  value={userInfo.whatsapp ?? ''}
                   isEditing={isEditing}
                   control={control}
                   name="whatsapp"

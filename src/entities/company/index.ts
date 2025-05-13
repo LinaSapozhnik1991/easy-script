@@ -1,8 +1,8 @@
 export interface Company {
-  id: number
+  id: string
   name: string
   position?: {
-    id: number
+    id: string
     name: string
   }
 }

@@ -1,10 +1,7 @@
-export interface Creator {
-  id: number
-  name: string
-}
+import { Company } from '../company'
 
-export interface Company {
-  id: number
+export interface Creator {
+  id: string
   name: string
 }
 
@@ -18,7 +15,7 @@ export interface Script {
   title: string
   description: string
   target: string
-  company_id: number
+  company_id: string
   user_id: number
   type_id: number
   created_at: string

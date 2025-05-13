@@ -20,13 +20,13 @@ const ScriptEditModalLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [])
 
-  const { closeModal } = useModalStore()
+  const { isOpen, closeModal } = useModalStore()
   const { scriptName } = useScriptStore()
   const { scriptId } = useScriptStore()
   return (
     <>
       {children}
-      <Modal isOpen={false} onClose={closeModal}>
+      <Modal isOpen={isOpen} onClose={closeModal}>
         <ScriptEditModal
           scriptName={scriptName || 'Без названия'}
           onClose={closeModal}

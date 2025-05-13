@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 'use client'
+import { useEffect, useState } from 'react'
+
 import FilterComponent from '@/features/filter-row/ui/FilterComponent'
 import BuildScripts from '@/features/build-scripts/ui/BuildScripts'
 import ScriptTable from '@/features/scripts-table/ui/ScriptsTable'
@@ -7,12 +9,11 @@ import useModalStore from '@/shared/Modal/model/useModalStore'
 import ScriptModal from '@/features/script-modal/ui/ScriptModal'
 import { AllCompanies } from '@/features/all-company/ui/AllCompanies'
 import { Plus } from '@/shared/assets/icons'
-
-import styles from './MyScripts.module.scss'
 import Pagination from '@/shared/ui/Pagination/Pagination'
-import { useEffect, useState } from 'react'
 import { getScripts } from '@/features/scripts-table/api'
 import { Script } from '@/entities/user-script'
+
+import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   const { openModal, closeModal } = useModalStore()
