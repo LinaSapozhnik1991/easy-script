@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use client'
 import { useEffect, useState } from 'react'
 
@@ -17,21 +16,25 @@ import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   const { openModal, closeModal } = useModalStore()
-
-  // Попробуем загрузить текущую страницу из localStorage
   const [currentPage, setCurrentPage] = useState(() => {
     const savedPage = localStorage.getItem('currentPage')
-    return savedPage ? Number(savedPage) : 1 // Если нет сохраненной страницы, начинаем с 1
+    return savedPage ? Number(savedPage) : 1
   })
   const [totalPages, setTotalPages] = useState(0)
-  const scriptsPerPage = 10 // Количество скриптов на странице
+  const scriptsPerPage = 10
   const [scripts, setScripts] = useState<Script[]>([])
+
+  useEffect(() => {
+    const savedPage = localStorage.getItem('currentPage')
+    if (savedPage) {
+      setCurrentPage(Number(savedPage))
+    }
+  }, [])
 
   useEffect(() => {
     const fetchScripts = async () => {
       const result = await getScripts()
       if ('error' in result) {
-        console.error(result.error)
         return
       }
       setScripts(result)
