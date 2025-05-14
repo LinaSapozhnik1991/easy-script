@@ -9,30 +9,25 @@ import ScriptModal from '@/features/script-modal/ui/ScriptModal'
 import { AllCompanies } from '@/features/all-company/ui/AllCompanies'
 import { Plus } from '@/shared/assets/icons'
 import Pagination from '@/shared/ui/Pagination/Pagination'
-import { getScripts } from '@/features/scripts-table/api'
-import { Script } from '@/entities/user-script'
+import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 
 import styles from './MyScripts.module.scss'
 
 const MyScripts = () => {
   const { openModal, closeModal } = useModalStore()
-  const [currentPage, setCurrentPage] = useState(1) // Установка начального значения на 1
+  const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const scriptsPerPage = 10
-  const [scripts, setScripts] = useState<Script[]>([])
+  const { scripts, fetchScripts } = useScriptStore()
 
   useEffect(() => {
-    const fetchScripts = async () => {
-      const result = await getScripts()
-      if ('error' in result) {
-        return
-      }
-      setScripts(result)
-      setTotalPages(Math.ceil(result.length / scriptsPerPage))
+    const loadScripts = async () => {
+      await fetchScripts()
+      setTotalPages(Math.ceil(scripts.length / scriptsPerPage))
     }
 
-    fetchScripts()
-  }, [])
+    loadScripts()
+  }, [fetchScripts, scripts.length])
 
   const handleOpenModal = () => {
     openModal(<ScriptModal onClose={closeModal} />)

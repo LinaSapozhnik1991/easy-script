@@ -1,20 +1,34 @@
+/* eslint-disable no-console */
 import React from 'react'
-import styles from './PopupMenu.module.scss' // Импортируйте стили для вашего меню
-import { Delete, Instruction, PersonCall } from '@/shared/assets/icons'
+
+import { Instruction, PersonCall } from '@/shared/assets/icons'
+import DeleteScriptButton from '@/features/delete-script/DeLeteScriptButton'
+
+import styles from './PopupMenu.module.scss'
 
 interface PopupMenuProps {
   onClose: () => void
   onViewDescription: () => void
   onInvite: () => void
   onDelete: () => void
+  scriptId: string
 }
 
 const PopupMenu: React.FC<PopupMenuProps> = ({
   onClose,
   onViewDescription,
   onInvite,
-  onDelete
+  onDelete,
+  scriptId
 }) => {
+  const handleDeleteSuccess = () => {
+    onDelete()
+    onClose()
+  }
+
+  const handleError = (error: string) => {
+    console.error(error)
+  }
   return (
     <div className={styles.popupMenu}>
       <button
@@ -31,13 +45,11 @@ const PopupMenu: React.FC<PopupMenuProps> = ({
         }}>
         <PersonCall /> Пригласить
       </button>
-      <button
-        onClick={() => {
-          onDelete()
-          onClose()
-        }}>
-        <Delete /> Удалить
-      </button>
+      <DeleteScriptButton
+        scriptId={scriptId}
+        onDeleteSuccess={handleDeleteSuccess}
+        onError={handleError}
+      />
     </div>
   )
 }

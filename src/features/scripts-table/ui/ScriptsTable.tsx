@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Burger, EditScript, Search } from '@/shared/assets/icons'
 import { Script } from '@/entities/user-script'
-import PopupMenu from '@/features/popup-menu/PopupMenu'
+import PopupMenu from '@/features/popup-menu/ui/PopupMenu'
+import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 
 import styles from './ScriptsTable.module.scss'
 
@@ -15,7 +16,7 @@ interface ScriptTableProps {
 
 const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
   const [filter, setFilter] = useState<string>('')
-
+  const { deleteScript } = useScriptStore()
   const [sortConfig, setSortConfig] = useState<{
     key: SortableKeys
     direction: 'ascending' | 'descending' | null
@@ -109,7 +110,7 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [showPopup])
+  }, [handleClickOutside, showPopup])
 
   const handleViewDescription = () => {
     console.log('Просмотр описания для', selectedScript)
@@ -118,8 +119,11 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
     console.log('Пригласить', selectedScript)
   }
 
-  const handleDelete = () => {
-    console.log('Удалить', selectedScript)
+  const handleDelete = async () => {
+    if (selectedScript) {
+      deleteScript(selectedScript.id)
+      handleClosePopup()
+    }
   }
   return (
     <>
@@ -191,6 +195,7 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
             left: popupPosition.left
           }}>
           <PopupMenu
+            scriptId={selectedScript.id}
             onClose={handleClosePopup}
             onViewDescription={handleViewDescription}
             onInvite={handleInvite}

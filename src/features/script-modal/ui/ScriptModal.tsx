@@ -206,7 +206,6 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
           disabled={loadingSubmit}>
           Создать
         </button>
-        {loadingSubmit && <span>Создание...</span>}
         {errors.general && <div className={styles.error}>{errors.general}</div>}
       </div>
     </div>

@@ -40,13 +40,6 @@ const TextEditor = () => {
 
   const [currentTextColor, setCurrentTextColor] = useState('BLACK')
 
-  /*const updateEditorState = (newState: EditorState) => {
-    setEditorState(newState)
-    if (!newState.getCurrentInlineStyle().has(currentTextColor)) {
-      setEditorState(RichUtils.toggleInlineStyle(newState, currentTextColor))
-    }
-  }
-*/
   const options = [
     { value: '12px', label: '12' },
     { value: '14px', label: '14' },
