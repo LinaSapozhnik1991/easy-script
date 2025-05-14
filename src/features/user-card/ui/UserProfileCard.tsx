@@ -123,7 +123,6 @@ const handlePaste = (
   event: React.ClipboardEvent<HTMLInputElement>,
   field: FieldValues
 ) => {
-  event.preventDefault()
   const pastedData = event.clipboardData.getData('text')
   const formattedValue = formatPhoneNumber(pastedData.replace(/\D/g, ''))
   field.onChange(formattedValue)

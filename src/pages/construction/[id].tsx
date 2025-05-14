@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import ModeSelector from '@/features/mode-selector/ui/ModeSelector'
 import { Accordion } from '@/shared/ui/Accordion/Accordion'
-import { Down, Plus, Up } from '@/shared/assets/icons'
+import { Down, PlusGreen, Up } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { getScriptById } from '@/entities/user-script/api'
@@ -19,6 +19,9 @@ import ScriptEditModalLayout from '@/app/ScriptEditModalLayout'
 import ExitConfirmationModal from '@/features/exit-modal/ExitConfirmationModal'
 
 import styles from './Construction.module.scss'
+import AddMode from '@/features/add-mode/ui/AddMode'
+import AddHeadMode from '@/features/add-head-mode/ui/AddHeadMode'
+import SelectTarget from '@/features/selected-target/ui/SelectedTargets'
 
 interface Construction {
   createdScript?: {
@@ -140,15 +143,23 @@ const Construction = () => {
               </div>
             </div>
             <Button scriptStyle size="medium">
-              <Plus /> Создать группу
+              <PlusGreen /> Создать группу
             </Button>
           </div>
           <div className={styles.sectionsEditor}>
-            <div className={styles.leftSection}></div>
+            <div className={styles.leftSection}>
+              <AddMode />
+              <AddHeadMode />
+              <SelectTarget />
+            </div>
             <div className={styles.centerSection}>
               <TextEditor />
             </div>
-            <div className={styles.rightSection}></div>
+            <div className={styles.rightSection}>
+              <AddMode />
+              <AddHeadMode />
+              <SelectTarget />
+            </div>
           </div>
         </div>
       </ScriptEditModalLayout>

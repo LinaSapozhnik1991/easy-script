@@ -19,6 +19,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'mediumXL'
     | 'mediumXXL'
     | 'smallXL'
+    | 'largeMode'
   label?: string
   onClick?: () => void
   as?: React.ElementType
@@ -54,6 +55,7 @@ export const Button: React.FC<ButtonProps> = ({
       [styles.smallXL]: size === 'smallXL',
       [styles.mediumScript]: size === 'mediumScript',
       [styles.largeScript]: size === 'largeScript',
+      [styles.largeMode]: size === 'largeMode',
       [styles.primary]: primary,
       [styles.disabled]: disabled,
       [styles.primaryBorder]: primaryBorder,

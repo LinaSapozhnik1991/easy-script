@@ -125,6 +125,12 @@
     height: 48px;
     font: $fontBody;
   }
+  &.largeMode{
+    max-width: 330px;
+    font:$fontMain;
+    width: 100%;
+    height: 40px;
+  }
   &.mediumXL {
     font: $fontP1;
     width: 308px;
