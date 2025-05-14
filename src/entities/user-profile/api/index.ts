@@ -23,6 +23,8 @@ export const userMe = async (): Promise<User | null> => {
         id: response.data.data.user.id,
         name: response.data.data.user.name,
         email: response.data.data.user.email,
+        telegram: response.data.data.user.telegram,
+        whatsapp: response.data.data.user.whatsapp,
         phone: response.data.data.user.phone || '',
         companies: response.data.data.companies || [],
         currentCompany: response.data.data.current_company || null
@@ -46,6 +48,8 @@ export const userMe = async (): Promise<User | null> => {
               id: response.data.data.user.id,
               name: response.data.data.user.name,
               email: response.data.data.user.email,
+              telegram: response.data.data.user.telegram,
+              whatsapp: response.data.data.user.whatsapp,
               phone: response.data.data.user.phone || '',
               companies: response.data.data.companies || [],
               currentCompany: response.data.data.current_company || null

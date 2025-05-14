@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 
@@ -65,6 +66,13 @@ const TextEditor = () => {
     if (currentInlineStyle.has(currentTextColor)) {
       newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
     }
+    const oldFontSize = currentFontSize
+    if (currentInlineStyle.has(`FONT_SIZE_${oldFontSize}`)) {
+      newState = RichUtils.toggleInlineStyle(
+        newState,
+        `FONT_SIZE_${oldFontSize}`
+      )
+    }
 
     newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
 
@@ -93,6 +101,7 @@ const TextEditor = () => {
       const newEditorState = EditorState.set(editorState, {
         currentContent: contentStateWithEntity
       })
+      console.log('Обновление состояния редактора:', newEditorState)
       setEditorState(
         RichUtils.toggleLink(
           newEditorState,
@@ -158,9 +167,11 @@ const TextEditor = () => {
             value={currentFontSize}
             onChange={(newSize: string) => {
               setCurrentFontSize(newSize)
-              updateEditorState(
-                RichUtils.toggleInlineStyle(editorState, `FONT_SIZE_${newSize}`)
+              const newEditorState = RichUtils.toggleInlineStyle(
+                editorState,
+                `FONT_SIZE_${newSize}`
               )
+              setEditorState(newEditorState)
             }}
           />
         </div>
