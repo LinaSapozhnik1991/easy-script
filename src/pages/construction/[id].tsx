@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import React, { useEffect, useState } from 'react'
@@ -12,7 +13,6 @@ import { getScriptById } from '@/entities/user-script/api'
 import TextEditor from '@/features/text-editor/ui/TextEditor'
 import Exit from '@/features/exit-designer/ui/ExitButton'
 import SaveScriprt from '@/features/save-script/ui/SaveScriprt'
-import UserLayout from '@/app/UserLayout/UserLayout'
 import OpenModalEditScript from '@/features/edit-script/ui/EditScript'
 import ScriptEditModal from '@/features/script-edit-modal/ui/ScriptEditModal'
 import useModalStore from '@/shared/Modal/model/useModalStore'
@@ -26,6 +26,7 @@ import { createSection } from '@/features/add-mode/api'
 import AddMode from '@/features/add-mode/ui/AddMode'
 import ModalSectionNode from '@/entities/section/ui/ModalSectionNode'
 import { getSections } from '@/entities/section/api'
+import UserLayout from '@/app/UserLayout/UserLayout'
 
 import styles from './Construction.module.scss'
 
