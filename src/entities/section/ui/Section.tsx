@@ -21,8 +21,9 @@ export interface Section {
 export interface Scenario {
   id: string
   title: string
+  script_id?: string
   scenarioId: string
-  scriptId: string // Изменено на строку, если это просто строка
+  scriptId: string
   description?: string | null
   weight?: number
 }

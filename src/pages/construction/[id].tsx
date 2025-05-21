@@ -20,6 +20,7 @@ import ScriptEditModalLayout from '@/app/ScriptEditModalLayout'
 import ExitConfirmationModal from '@/features/exit-modal/ExitConfirmationModal'
 import SectionComponent, {
   Scenario,
+  Scenarios,
   Section
 } from '@/entities/section/ui/Section'
 import { createSection } from '@/features/add-mode/api'
@@ -280,7 +281,7 @@ const Construction = () => {
           <div className={styles.sectionsEditor}>
             <div className={styles.leftSection}>
               {renderSections()}
-              <AddMode onAddSection={handleAddSection} scenarios={} />
+              <AddMode onAddSection={handleAddSection} scenarios={scenarios} />
               <Button
                 scriptStyle
                 size="largeMode"
