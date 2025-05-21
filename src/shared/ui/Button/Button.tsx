@@ -12,6 +12,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   scriptStyle?: boolean
   size?:
     | 'small'
+    | 'smallClient'
+    | 'smallOperator'
     | 'medium'
     | 'mediumScript'
     | 'large'
@@ -48,6 +50,8 @@ export const Button: React.FC<ButtonProps> = ({
     styles.button,
     {
       [styles.small]: size === 'small',
+      [styles.smallClient]: size === 'smallClient',
+      [styles.smallOperator]: size === 'smallOperator',
       [styles.medium]: size === 'medium',
       [styles.large]: size === 'large',
       [styles.mediumXL]: size === 'mediumXL',

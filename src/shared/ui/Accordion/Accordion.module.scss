@@ -99,6 +99,7 @@
   }
 
   .accordionList {
+    padding: 0;
     display: flex;
     flex-direction: column;
     max-height: 240px;
@@ -110,7 +111,7 @@
     }
 
     &.accordionListOpen {
-      height: 240px;
+      height: auto;
     }
 
     &.accordionListOverflow {
@@ -138,7 +139,7 @@
   .accordionItem {
     list-style: none;
     height: 60px;
-    padding-bottom: 4px;
+    ///padding-bottom: 4px;
     &:not(:last-child) {
      // border-bottom: 1px solid $bgPaginationActive; 
       justify-content: center;

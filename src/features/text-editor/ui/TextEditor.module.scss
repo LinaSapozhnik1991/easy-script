@@ -49,6 +49,20 @@
       select:focus {
         outline: none; 
       }
+      .saveAnswer{
+        margin-left:10px;
+        font: $fontSmall;
+        font-weight: 500;
+        color: $emerald;
+        border: 1px solid $borderInputProfile;
+        width: 86px;
+        height:36px;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+}
     }
     .colorPicker {
       display: flex;

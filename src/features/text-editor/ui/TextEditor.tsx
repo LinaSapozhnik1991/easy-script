@@ -31,7 +31,10 @@ const styleMap = {
   FONT_SIZE_14px: { fontSize: '14px' },
   FONT_SIZE_16px: { fontSize: '16px' },
   FONT_SIZE_18px: { fontSize: '18px' },
-  FONT_SIZE_20px: { fontSize: '20px' }
+  FONT_SIZE_20px: { fontSize: '20px' },
+  FONT_SIZE_24px: { fontSize: '24px' },
+  FONT_SIZE_32px: { fontSize: '32px' },
+  FONT_SIZE_48px: { fontSize: '48px' }
 }
 
 const TextEditor = () => {
@@ -62,7 +65,6 @@ const TextEditor = () => {
   }
   const updateEditorState = (newState: EditorState) => {
     const currentInlineStyle = newState.getCurrentInlineStyle()
-
     if (currentInlineStyle.has(currentTextColor)) {
       newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
     }
@@ -73,7 +75,10 @@ const TextEditor = () => {
         `FONT_SIZE_${oldFontSize}`
       )
     }
-
+    newState = RichUtils.toggleInlineStyle(
+      newState,
+      `FONT_SIZE_${currentFontSize}`
+    )
     newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
 
     setEditorState(newState)
@@ -174,6 +179,7 @@ const TextEditor = () => {
               setEditorState(newEditorState)
             }}
           />
+          <button className={styles.saveAnswer}>Сохранить</button>
         </div>
 
         {colorPickerVisible && (

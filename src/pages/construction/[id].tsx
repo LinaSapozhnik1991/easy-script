@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -12,85 +13,117 @@ import TextEditor from '@/features/text-editor/ui/TextEditor'
 import Exit from '@/features/exit-designer/ui/ExitButton'
 import SaveScriprt from '@/features/save-script/ui/SaveScriprt'
 import UserLayout from '@/app/UserLayout/UserLayout'
-import useModalStore from '@/shared/Modal/model/useModalStore'
-import ScriptEditModal from '@/features/script-edit-modal/ui/ScriptEditModal'
 import OpenModalEditScript from '@/features/edit-script/ui/EditScript'
+import ScriptEditModal from '@/features/script-edit-modal/ui/ScriptEditModal'
+import useModalStore from '@/shared/Modal/model/useModalStore'
 import ScriptEditModalLayout from '@/app/ScriptEditModalLayout'
 import ExitConfirmationModal from '@/features/exit-modal/ExitConfirmationModal'
+import SectionComponent, {
+  Scenario,
+  Section
+} from '@/entities/section/ui/Section'
+import { createSection } from '@/features/add-mode/api'
+import AddMode from '@/features/add-mode/ui/AddMode'
+import ModalSectionNode from '@/entities/section/ui/ModalSectionNode'
+import { getSections } from '@/entities/section/api'
 
 import styles from './Construction.module.scss'
-import AddMode from '@/features/add-mode/ui/AddMode'
-import AddHeadMode from '@/features/add-head-mode/ui/AddHeadMode'
-import SelectTarget from '@/features/selected-target/ui/SelectedTargets'
-
-interface Construction {
-  createdScript?: {
-    id: string
-  }
-}
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const { openModal, closeModal } = useModalStore()
+  const [error, setError] = useState<string | null>(null)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
+  const [sections, setSections] = useState<Section[]>([])
+  const [isModalNodeOpen, setIsModalNodeOpen] = useState(false)
+  const [currentMode, setCurrentMode] = useState('operator')
+  const [scenarioId, setScenarioId] = useState<string | null>(null)
+  const [scriptId, setScriptId] = useState<string | null>(null)
+  const [scenarios, setScenarios] = useState<Scenario[]>([])
+  const [isSectionsLoading, setIsSectionsLoading] = useState(false)
+  const [sectionsError, setSectionsError] = useState<string | null>(null)
+
+  const fetchScript = async () => {
+    if (!router.isReady || !router.query.id) return
+
+    const id = Array.isArray(router.query.id)
+      ? router.query.id[0]
+      : router.query.id
+
+    if (!id) {
+      setError('ID скрипта отсутствует')
+      return
+    }
+
+    try {
+      const fetchedScript = await getScriptById(id)
+      if ('error' in fetchedScript) {
+        setError(fetchedScript.error)
+      } else {
+        setScript(fetchedScript)
+        setScriptId(fetchedScript.id)
+      }
+    } catch {
+      setError('Произошла ошибка при получении скрипта.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchScript = async () => {
+    const fetchSections = async () => {
+      if (!scriptId || !scenarioId) return
+
+      setIsSectionsLoading(true)
+      setSectionsError(null)
+
       try {
-        if (!router.isReady || !router.query.id) {
-          return
-        }
-
-        const id = Array.isArray(router.query.id)
-          ? router.query.id[0]
-          : router.query.id
-
-        if (!id) {
-          setError('ID скрипта отсутствует')
-          return
-        }
-
-        const fetchedScript = await getScriptById(id)
-
-        if ('error' in fetchedScript) {
-          setError(fetchedScript.error)
-        } else {
-          setScript(fetchedScript)
-        }
-      } catch {
-        setError('Произошла ошибка при получении скрипта.')
+        const fetchedSections = await getSections(scriptId, scenarioId)
+        setSections(fetchedSections)
+      } catch (error) {
+        console.error('Не удалось загрузить разделы:', error)
+        setSectionsError('Ошибка при загрузке разделов')
       } finally {
-        setLoading(false)
+        setIsSectionsLoading(false)
       }
     }
 
+    fetchSections()
+  }, [scriptId, scenarioId])
+
+  useEffect(() => {
     fetchScript()
-  }, [router.isReady, router.query, router.query.id, setScript])
+  }, [router.isReady, router.query.id, setScript])
 
-  if (loading) return <div>Загрузка...</div>
-  if (error) return <div>Ошибка: {error}</div>
+  useEffect(() => {
+    if (script?.scenarios?.length) {
+      setScenarioId(String(script.scenarios[0].id))
+    }
+  }, [script])
 
-  const handleExitClick = () => {
-    setIsExitModalOpen(true)
-  }
+  useEffect(() => {
+    if (script?.scenarios) {
+      const validScenarios: Scenario[] = script.scenarios.map(scenario => ({
+        id: String(scenario.id),
+        title: scenario.title,
+        scenarioId: String(scenario.scenarioId), // Убедитесь, что это поле существует
+        scriptId: String(scenario.script_id), // Убедитесь, что это поле существует
+        description: scenario.description || null,
+        weight: scenario.weight || undefined
+      }))
+      setScenarios(validScenarios) // Убедитесь, что это массив Scenario
+    }
+  }, [script])
 
-  const handleExitWithoutSaving = () => {
-    router.push('/some-route')
-  }
+  useEffect(() => {
+    const modeFromQuery = router.query.mode as string
+    setCurrentMode(modeFromQuery === 'operator' ? 'operator' : 'construction')
+  }, [router.query.mode])
 
-  const handleStayInEditor = () => {
-    setIsExitModalOpen(false)
-  }
-
-  const handleSaveAndExit = () => {
-    router.push('/some-route')
-  }
   const handleOpenModal = () => {
-    if (script && script.title) {
-      console.log('Opening modal with script:', script.title)
+    if (script?.title) {
       openModal(
         <ScriptEditModal
           scriptId={script.id}
@@ -103,14 +136,112 @@ const Construction = () => {
     }
   }
 
+  const handleAddSection = async (newSection: Section) => {
+    if (!script || !scenarioId) {
+      console.error('Script or scenarioId not loaded yet')
+      return
+    }
+
+    const params = {
+      title: newSection.title,
+      scriptId: script.id,
+      scenarioId: scenarioId
+    }
+
+    const createdSection = await createSection(params)
+    if (createdSection) {
+      const sectionToAdd: Section = {
+        ...createdSection,
+        scriptId: script.id,
+        scenarioId: scenarioId,
+        scenarios: []
+      }
+      setSections(prev => [...prev, sectionToAdd])
+    } else {
+      console.error('Failed to create section')
+    }
+  }
+
+  const handleUpdateTitle = (id: string, newTitle: string) => {
+    setSections(prevSections =>
+      prevSections.map(section =>
+        section.id === id ? { ...section, title: newTitle } : section
+      )
+    )
+  }
+
+  const saveScript = async () => {
+    console.log('Скрипт сохранен с разделами:')
+    alert('Скрипт сохранен')
+  }
+
+  const handleExitClick = () => {
+    setIsExitModalOpen(true)
+  }
+
+  const handleModeChange = (newMode: string) => {
+    setCurrentMode(newMode)
+  }
+
+  const handleExitWithoutSaving = () => {
+    router.push('/')
+  }
+
+  const handleStayInEditor = () => {
+    setIsExitModalOpen(false)
+  }
+
+  const handleSaveAndExit = async () => {
+    await saveScript()
+    router.push('/')
+  }
+
+  const handleSelectGoals = (selectedGoals: any) => {
+    // Логика обработки выбранных целей
+    console.log('Selected goals:', selectedGoals)
+  }
+  const handleSectionDeleted = (deletedSectionId: string) => {
+    setSections(prev => prev.filter(s => s.id !== deletedSectionId))
+  }
+  const renderSections = () => {
+    if (isSectionsLoading) {
+      return <div>Загрузка разделов...</div>
+    }
+
+    if (sectionsError) {
+      return <div className={styles.error}>{sectionsError}</div>
+    }
+
+    if (sections.length === 0) {
+      return <div className={styles.empty}>Разделы не найдены</div>
+    }
+
+    return sections.map(section => (
+      <SectionComponent
+        key={section.id}
+        section={section}
+        onUpdateTitle={handleUpdateTitle}
+        scenarioId={scenarioId!}
+        scenarios={scenarios}
+        onSectionDeleted={handleSectionDeleted}
+      />
+    ))
+  }
+
+  if (loading) return <div>Загрузка...</div>
+  if (error) return <div>Ошибка: {error}</div>
+
   return (
     <UserLayout>
       <ScriptEditModalLayout>
         <div className={styles.designer}>
           <div className={styles.designerActions}>
             <div className={styles.designerActionsLeft}>
-              <SaveScriprt />
-              <ModeSelector />
+              <SaveScriprt onSaveScript={saveScript} />
+              <ModeSelector
+                selectedOption={currentMode}
+                onSelect={handleModeChange}
+              />
             </div>
             <div className={styles.designerActionsRigth}>
               <Exit onClick={handleExitClick} />
@@ -124,12 +255,12 @@ const Construction = () => {
                     {
                       content: (
                         <span className={styles.company}>
-                          {script?.company?.name || 'Моя компания'}
+                          {script?.company?.name || 'Неизвестная компания'}
                         </span>
                       )
                     }
                   ]}
-                  label={script?.company?.name || 'Компании'}
+                  label={'Компания'}
                   mode="bordered"
                   iconClose={<Up />}
                   iconOpen={<Down />}
@@ -148,18 +279,19 @@ const Construction = () => {
           </div>
           <div className={styles.sectionsEditor}>
             <div className={styles.leftSection}>
-              <AddMode />
-              <AddHeadMode />
-              <SelectTarget />
+              {renderSections()}
+              <AddMode onAddSection={handleAddSection} scenarios={} />
+              <Button
+                scriptStyle
+                size="largeMode"
+                onClick={() => setIsModalNodeOpen(true)}>
+                Добавить цель
+              </Button>
             </div>
             <div className={styles.centerSection}>
               <TextEditor />
             </div>
-            <div className={styles.rightSection}>
-              <AddMode />
-              <AddHeadMode />
-              <SelectTarget />
-            </div>
+            <div className={styles.rightSection}></div>
           </div>
         </div>
       </ScriptEditModalLayout>
@@ -169,6 +301,13 @@ const Construction = () => {
           onExitWithoutSaving={handleExitWithoutSaving}
           onStayInEditor={handleStayInEditor}
           onSaveAndExit={handleSaveAndExit}
+        />
+      )}
+      {isModalNodeOpen && (
+        <ModalSectionNode
+          sections={sections}
+          onClose={() => setIsModalNodeOpen(false)}
+          onSelectGoals={handleSelectGoals}
         />
       )}
     </UserLayout>

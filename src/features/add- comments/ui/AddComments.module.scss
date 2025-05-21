@@ -1,0 +1,47 @@
+.commentSection {
+  border: 1px solid $borderInputProfile ;
+  border-radius: $RadiusM ;
+  max-width: 624px;
+  padding: 22px;
+  -webkit-border-radius: $RadiusM ;
+  -moz-border-radius: $RadiusM ;
+  -ms-border-radius: $RadiusM ;
+  -o-border-radius: $RadiusM ;
+}
+
+.commentsList {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.comment {
+  padding: 15px;
+ 
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.commentInput {
+  flex: 1;
+  padding: 5px;
+  width: 532px;
+  height: 32px;
+  margin-right: 10px;
+  outline: none;
+  border: 1px solid $borderInputProfile;
+  border-radius: $RadiusM;
+  -webkit-border-radius: $RadiusM;
+  -moz-border-radius: $RadiusM;
+  -ms-border-radius: $RadiusM;
+  -o-border-radius: $RadiusM;
+}
+
+.addButton{
+    background: transparent;
+    border: none;
+
+}

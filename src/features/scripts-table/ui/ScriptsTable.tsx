@@ -17,6 +17,7 @@ interface ScriptTableProps {
 const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
   const [filter, setFilter] = useState<string>('')
   const { deleteScript } = useScriptStore()
+
   const [sortConfig, setSortConfig] = useState<{
     key: SortableKeys
     direction: 'ascending' | 'descending' | null

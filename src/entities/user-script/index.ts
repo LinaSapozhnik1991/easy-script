@@ -1,4 +1,5 @@
 import { Company } from '../company'
+import { Section } from '../section/ui/Section'
 
 export interface Creator {
   id: string
@@ -9,7 +10,14 @@ export interface Type {
   id: string
   name: string
 }
-
+export interface Scenarios {
+  scenarioId: string
+  id: number | string
+  script_id: number | string
+  title: string
+  description?: string | null
+  weight?: number
+}
 export interface Script {
   id: string
   title: string
@@ -22,8 +30,10 @@ export interface Script {
   updated_at: string
   creator: Creator
   company: Company
+  scenarios: Scenarios[]
   type: Type
   companies?: Company[]
+  sections?: Section[]
 }
 export interface ScriptResponse {
   id: string
@@ -36,4 +46,5 @@ export interface ScriptResponse {
   created_at: string
   updated_at: string
   script: Script
+  scenarios: Scenarios[]
 }

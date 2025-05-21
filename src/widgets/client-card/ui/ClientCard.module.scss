@@ -1,0 +1,69 @@
+.clientCard{
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+   
+        background-color: rgba(239, 245, 245, 1);
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+        //padding: 32px;
+        min-width: 342px;
+      
+        height: 543px;
+        .name, .mail span, .phone span, .company span{ 
+            display: flex;
+            align-items: center;
+     margin-left: 16px;
+            border: 1px solid $borderInputProfile;
+        font: $fontMain;
+        background-color:$white;
+        height: 48px;
+        width: 214px;
+        border-radius:$RadiusM ;
+        -webkit-border-radius:$RadiusM ;
+        -moz-border-radius:$RadiusM ;
+        -ms-border-radius:$RadiusM ;
+        -o-border-radius:$RadiusM ;
+}
+.mail, .phone, .company{
+    display: flex;
+    margin-left: 16px;
+    gap: 16px;
+    align-items: center;
+}
+.mail span, .phone span, .company span{
+    max-width: 156px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 32px;
+
+}
+.noteSection{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+     padding-left: 15px;
+    font:$fontSmall;
+    textarea{
+        width: 302px;
+       //padding-left:10px;
+       font: $fontSmall;
+        height: 170px;
+        border: 1px solid $borderInputProfile;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+}
+}
+.clientCardButtons{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+    }

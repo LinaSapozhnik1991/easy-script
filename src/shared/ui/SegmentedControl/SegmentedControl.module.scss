@@ -10,6 +10,7 @@
   .segmentedControl {
     @include flex-container(row, center, center);
     overflow     : hidden;
+    padding: 5px;
     //background-color: $bgInputHover;
     width: auto;
 
@@ -37,9 +38,9 @@
     &.onIndicator{
       display: flex;
       justify-content: center;
-      min-width: 160.67px;
+      min-width: 120.67px;
       text-align: center;
-      min-height: 40px;
+      //min-height: 40px;
       padding: 8px;
     }
     
@@ -83,7 +84,7 @@
   }
 
 .onIndicator{
-max-height: 56px;
+max-height: 64px;
   background: $bgInputHover;
 
   font:$fontMain;
@@ -91,7 +92,7 @@ max-height: 56px;
  
   &.active {
     background-color: $bgPrimary;
-    height: 40px;
+    max-height: 40px;
   
     font: $fontMain;
     color: $textActiveButton;

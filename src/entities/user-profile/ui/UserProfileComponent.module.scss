@@ -4,16 +4,20 @@
     justify-content: space-around;
     width: 280px;
     z-index: 1;
-
+svg{width: 48px;
+height: 48px;}
     .userPersonal{
         display: flex;
         flex-direction: column;
         text-align: left;
+        justify-content: space-between;
         .name{
             font: $fontMain;
+            text-align: left;
         }
         .email{
             overflow: hidden; 
+            text-align: left;
             white-space: nowrap;
             text-overflow: ellipsis; 
             width: 120px;

@@ -1,7 +1,9 @@
 import { FC, Fragment, HTMLAttributes, ReactNode, useState } from 'react'
 import cx from 'classnames'
-import { Button } from '../Button'
+
 import { Down } from '@/shared/assets/icons'
+
+import { Button } from '../Button'
 
 import styles from './Dropdown.module.scss'
 

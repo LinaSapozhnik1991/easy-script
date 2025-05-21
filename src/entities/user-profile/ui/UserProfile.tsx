@@ -26,8 +26,8 @@ const UserProfileComponent: FC<UserProfileProps> = ({ user }) => {
     <div className={styles.userProfile}>
       <UserAvatar />
       <div className={styles.userPersonal}>
-        <p className={styles.name}>{user.name}</p>
-        <p className={styles.email}>{user.email}</p>
+        <span className={styles.name}>{user.name}</span>
+        <span className={styles.email}>{user.email}</span>
       </div>
     </div>
   )

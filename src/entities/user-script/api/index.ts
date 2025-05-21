@@ -6,9 +6,8 @@ import { Script } from '@/entities/user-script'
 
 interface ScriptResponse {
   success: boolean
-  data: Script
+  data: Script & { scenarios?: Array<{ id: string; name: string }> }
 }
-
 interface ApiError {
   message?: string
   data: {

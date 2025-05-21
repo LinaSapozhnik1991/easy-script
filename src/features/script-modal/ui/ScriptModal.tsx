@@ -6,19 +6,15 @@ import { Accordion } from '@/shared/ui/Accordion/Accordion'
 import { Down, Up } from '@/shared/assets/icons'
 import { userMe } from '@/entities/user-profile/api'
 import { Routers } from '@/shared/routes'
-import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { Script } from '@/entities/user-script'
 import { User } from '@/entities/user-profile/ui/UserProfile'
+import { Company } from '@/entities/company'
+import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 
 import { scriptSchema } from '../model/validation'
 import { createScript } from '../api'
 
 import styles from './ScriptModal.module.scss'
-
-interface Company {
-  id: string
-  name: string
-}
 
 interface ScriptModalProps {
   onClose: () => void
@@ -43,6 +39,7 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
   const [errors, setErrors] = useState<Errors>({})
   const [loadingUserData, setLoadingUserData] = useState(true)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -108,12 +105,14 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
           type: {
             id: '1',
             name: 'Default Type'
-          }
+          },
+          scenarios: createdScriptResponse.scenarios || []
         }
 
         setScript(createdScript)
         setErrors({})
         onClose()
+        console.log('Созданный скрипт:', createdScript)
         router.push(`${Routers.Construction}/${createdScript.id}`)
       } else {
         setErrors({ general: 'Не удалось создать скрипт. Попробуйте еще раз.' })
@@ -125,6 +124,7 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
       setLoadingSubmit(false)
     }
   }
+
   const handleScriptNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScriptName(e.target.value)
     setErrors(prev => ({ ...prev, scriptName: undefined }))

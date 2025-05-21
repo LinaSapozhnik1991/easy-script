@@ -1,0 +1,18 @@
+.ClientSegmentedControl{
+    background-color: rgba(239, 245, 245, 1);
+
+    height: 40px;
+    width: 290px;
+    border-radius: $RadiusM;
+  
+    -webkit-border-radius: $RadiusM;
+    -moz-border-radius: $RadiusM;
+    -ms-border-radius: $RadiusM;
+    -o-border-radius: $RadiusM;
+  .content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 45px;
+}
+}

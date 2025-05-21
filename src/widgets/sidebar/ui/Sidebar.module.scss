@@ -15,11 +15,13 @@
   box-shadow: 0px 22.34px 46.46px 0px rgba(0, 0, 0, 0.0417);
 
   &.open {
-    width: 212px;
+    max-width: 212px;
+    width: 100%;
   }
 
   &.closed {
-    width: 72px;
+    max-width: 72px;
+    width: 100%;
   }
 }
 .optionsList {

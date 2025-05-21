@@ -2,16 +2,11 @@
     position: relative;
     display: inline-block;
     width: 82px;
+    z-index:999;
     cursor: pointer;
 
 }
-.select:hover{
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
-}
+
   
   .selected {
     background-color: white;
@@ -45,6 +40,6 @@
   }
   
   .options li:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0f1; 
   }
   

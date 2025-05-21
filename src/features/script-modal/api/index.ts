@@ -11,6 +11,10 @@ interface CreateScriptParams {
   description?: string
   companyId: string | null
   target?: string
+  scenarios?: {
+    id: string
+    name: string
+  }[]
 }
 
 export const createScript = async (
