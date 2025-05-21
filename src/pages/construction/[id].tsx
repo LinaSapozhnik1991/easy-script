@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
+
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
