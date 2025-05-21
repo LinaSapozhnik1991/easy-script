@@ -294,22 +294,23 @@ const Construction = () => {
             <div className={styles.rightSection}></div>
           </div>
         </div>
+
+        {isExitModalOpen && (
+          <ExitConfirmationModal
+            onClose={() => setIsExitModalOpen(false)}
+            onExitWithoutSaving={handleExitWithoutSaving}
+            onStayInEditor={handleStayInEditor}
+            onSaveAndExit={handleSaveAndExit}
+          />
+        )}
+        {isModalNodeOpen && (
+          <ModalSectionNode
+            sections={sections}
+            onClose={() => setIsModalNodeOpen(false)}
+            onSelectGoals={handleSelectGoals}
+          />
+        )}
       </ScriptEditModalLayout>
-      {isExitModalOpen && (
-        <ExitConfirmationModal
-          onClose={() => setIsExitModalOpen(false)}
-          onExitWithoutSaving={handleExitWithoutSaving}
-          onStayInEditor={handleStayInEditor}
-          onSaveAndExit={handleSaveAndExit}
-        />
-      )}
-      {isModalNodeOpen && (
-        <ModalSectionNode
-          sections={sections}
-          onClose={() => setIsModalNodeOpen(false)}
-          onSelectGoals={handleSelectGoals}
-        />
-      )}
     </UserLayout>
   )
 }
