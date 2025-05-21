@@ -233,86 +233,91 @@ const Construction = () => {
   if (error) return <div>Ошибка: {error}</div>
 
   return (
-    <UserLayout>
-      <ScriptEditModalLayout>
-        <div className={styles.designer}>
-          <div className={styles.designerActions}>
-            <div className={styles.designerActionsLeft}>
-              <SaveScriprt onSaveScript={saveScript} />
-              <ModeSelector
-                selectedOption={currentMode}
-                onSelect={handleModeChange}
-              />
-            </div>
-            <div className={styles.designerActionsRigth}>
-              <Exit onClick={handleExitClick} />
-            </div>
-          </div>
-          <div className={styles.designerInfoScript}>
-            <div className={styles.leftInfo}>
-              <div className={styles.company}>
-                <Accordion
-                  items={[
-                    {
-                      content: (
-                        <span className={styles.company}>
-                          {script?.company?.name || 'Неизвестная компания'}
-                        </span>
-                      )
-                    }
-                  ]}
-                  label={'Компания'}
-                  mode="bordered"
-                  iconClose={<Up />}
-                  iconOpen={<Down />}
+    <>
+      <UserLayout>
+        <ScriptEditModalLayout>
+          <div className={styles.designer}>
+            <div className={styles.designerActions}>
+              <div className={styles.designerActionsLeft}>
+                <SaveScriprt onSaveScript={saveScript} />
+                <ModeSelector
+                  selectedOption={currentMode}
+                  onSelect={handleModeChange}
                 />
               </div>
-              <div className={styles.nameScript}>
-                <span>{script?.title || 'Неизвестный заголовок'}</span>
-                <OpenModalEditScript openModal={handleOpenModal}>
-                  Редактировать
-                </OpenModalEditScript>
+              <div className={styles.designerActionsRigth}>
+                <Exit onClick={handleExitClick} />
               </div>
             </div>
-            <Button scriptStyle size="medium">
-              <PlusGreen /> Создать группу
-            </Button>
-          </div>
-          <div className={styles.sectionsEditor}>
-            <div className={styles.leftSection}>
-              {renderSections()}
-              <AddMode onAddSection={handleAddSection} scenarios={scenarios} />
-              <Button
-                scriptStyle
-                size="largeMode"
-                onClick={() => setIsModalNodeOpen(true)}>
-                Добавить цель
+            <div className={styles.designerInfoScript}>
+              <div className={styles.leftInfo}>
+                <div className={styles.company}>
+                  <Accordion
+                    items={[
+                      {
+                        content: (
+                          <span className={styles.company}>
+                            {script?.company?.name || 'Неизвестная компания'}
+                          </span>
+                        )
+                      }
+                    ]}
+                    label={'Компания'}
+                    mode="bordered"
+                    iconClose={<Up />}
+                    iconOpen={<Down />}
+                  />
+                </div>
+                <div className={styles.nameScript}>
+                  <span>{script?.title || 'Неизвестный заголовок'}</span>
+                  <OpenModalEditScript openModal={handleOpenModal}>
+                    Редактировать
+                  </OpenModalEditScript>
+                </div>
+              </div>
+              <Button scriptStyle size="medium">
+                <PlusGreen /> Создать группу
               </Button>
             </div>
-            <div className={styles.centerSection}>
-              <TextEditor />
+            <div className={styles.sectionsEditor}>
+              <div className={styles.leftSection}>
+                {renderSections()}
+                <AddMode
+                  onAddSection={handleAddSection}
+                  scenarios={scenarios}
+                />
+                <Button
+                  scriptStyle
+                  size="largeMode"
+                  onClick={() => setIsModalNodeOpen(true)}>
+                  Добавить цель
+                </Button>
+              </div>
+              <div className={styles.centerSection}>
+                <TextEditor />
+              </div>
+              <div className={styles.rightSection}></div>
             </div>
-            <div className={styles.rightSection}></div>
           </div>
-        </div>
 
-        {isExitModalOpen && (
-          <ExitConfirmationModal
-            onClose={() => setIsExitModalOpen(false)}
-            onExitWithoutSaving={handleExitWithoutSaving}
-            onStayInEditor={handleStayInEditor}
-            onSaveAndExit={handleSaveAndExit}
-          />
-        )}
-        {isModalNodeOpen && (
-          <ModalSectionNode
-            sections={sections}
-            onClose={() => setIsModalNodeOpen(false)}
-            onSelectGoals={handleSelectGoals}
-          />
-        )}
-      </ScriptEditModalLayout>
-    </UserLayout>
+          {isExitModalOpen && (
+            <ExitConfirmationModal
+              onClose={() => setIsExitModalOpen(false)}
+              onExitWithoutSaving={handleExitWithoutSaving}
+              onStayInEditor={handleStayInEditor}
+              onSaveAndExit={handleSaveAndExit}
+            />
+          )}
+          {isModalNodeOpen && (
+            <ModalSectionNode
+              sections={sections}
+              onClose={() => setIsModalNodeOpen(false)}
+              onSelectGoals={handleSelectGoals}
+            />
+          )}
+        </ScriptEditModalLayout>
+      </UserLayout>
+    </>
   )
 }
 
