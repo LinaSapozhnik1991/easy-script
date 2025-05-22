@@ -23,7 +23,6 @@ import SectionComponent, {
 } from '@/entities/section/ui/Section'
 import { createSection } from '@/features/add-mode/api'
 import AddMode from '@/features/add-mode/ui/AddMode'
-import ModalSectionNode from '@/entities/section/ui/ModalSectionNode'
 import { getSections } from '@/entities/section/api'
 
 import styles from './Construction.module.scss'
@@ -37,7 +36,6 @@ const Construction = () => {
   const [error, setError] = useState<string | null>(null)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
   const [sections, setSections] = useState<Section[]>([])
-  const [isModalNodeOpen, setIsModalNodeOpen] = useState(false)
   const [scenarioId, setScenarioId] = useState<string | null>(null)
   const [scriptId, setScriptId] = useState<string | null>(null)
   const [scenarios, setScenarios] = useState<Scenario[]>([])
@@ -195,10 +193,6 @@ const Construction = () => {
     }
     router.push(`${Routers.Operator}/${scriptId}`)
   }
-
-  const handleSelectGoals = (selectedGoals: any) => {
-    console.log('Selected goals:', selectedGoals)
-  }
   const handleSectionDeleted = (deletedSectionId: string) => {
     setSections(prev => prev.filter(s => s.id !== deletedSectionId))
   }
@@ -300,7 +294,7 @@ const Construction = () => {
               <Button
                 scriptStyle
                 size="largeMode"
-                onClick={() => setIsModalNodeOpen(true)}>
+                onClick={() => console.log('')}>
                 Добавить цель
               </Button>
             </div>
@@ -317,13 +311,6 @@ const Construction = () => {
             onExitWithoutSaving={handleExitWithoutSaving}
             onStayInEditor={handleStayInEditor}
             onSaveAndExit={handleSaveAndExit}
-          />
-        )}
-        {isModalNodeOpen && (
-          <ModalSectionNode
-            sections={sections}
-            onClose={() => setIsModalNodeOpen(false)}
-            onSelectGoals={handleSelectGoals}
           />
         )}
       </ScriptEditModalLayout>
