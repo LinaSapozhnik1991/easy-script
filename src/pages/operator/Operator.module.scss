@@ -9,6 +9,20 @@
         display: flex;
         gap:24px;
         align-items: center;
+            
+     
+        .modeButton{
+            display: flex;
+            align-items: center;
+        width: 400px;
+        height: 56px;
+        background-color: $bgInputHover;
+        border-radius: $RadiusM;
+        -webkit-border-radius: $RadiusM;
+        -moz-border-radius: $RadiusM;
+        -ms-border-radius: $RadiusM;
+        -o-border-radius: $RadiusM;
+        }
         .timer{
             display: flex;
             padding-left: 54px;

@@ -22,7 +22,7 @@ const ClientSegmentedControl: FC<ClientSegmentedControlProps> = ({
   onSave,
   onCancel
 }) => {
-  const options: Option[] = [{ title: 'Клиент' }, { title: 'Скрипт' }]
+  const options: Option[] = [{ title: 'Скрипт' }, { title: 'Клиент' }]
 
   return (
     <div className={styles.ClientSegmentedControl}>

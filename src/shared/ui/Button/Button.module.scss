@@ -52,6 +52,20 @@
       opacity: 0.5;
     }
   }
+  &.noBorderScript{
+     color: $textOptionScripts;
+    background-color: $gray-900 ;
+    border: none;
+    &:active{
+      background-color: $bgPrimary;
+      color: $textActiveButton;
+      border-radius: $RadiusM;
+      -webkit-border-radius: $RadiusM;
+      -moz-border-radius: $RadiusM;
+      -ms-border-radius: $RadiusM;
+      -o-border-radius: $RadiusM;
+}
+  }
   &.scriptStyle{
     color: $textOptionScripts;
     background-color: $gray-900 ;
@@ -142,6 +156,11 @@
     font-weight: 400;
     width: 392px;
     height: 72px;
+  }
+  &.mediumConstructor{
+    width: 192px;
+    height: 40px;
+    font: $fontMain;
   }
   &.smallXL {
     font: $fontH3;

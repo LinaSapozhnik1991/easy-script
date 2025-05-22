@@ -16,6 +16,7 @@
         .name, .mail span, .phone span, .company span{ 
             display: flex;
             align-items: center;
+            padding-left: 5px;
      margin-left: 16px;
             border: 1px solid $borderInputProfile;
         font: $fontMain;

@@ -6,5 +6,6 @@ export enum Routers {
   MyCompany = '/my-company',
   Instruction = '/instruction',
   Billing = '/billing',
-  Construction = '/construction'
+  Construction = '/construction',
+  Operator = '/operator'
 }

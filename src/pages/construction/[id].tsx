@@ -4,9 +4,8 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import ModeSelector from '@/features/mode-selector/ui/ModeSelector'
 import { Accordion } from '@/shared/ui/Accordion/Accordion'
-import { Down, PlusGreen, Up } from '@/shared/assets/icons'
+import { Down, PlusGreen, Preloader, Up } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { getScriptById } from '@/entities/user-script/api'
@@ -28,6 +27,7 @@ import ModalSectionNode from '@/entities/section/ui/ModalSectionNode'
 import { getSections } from '@/entities/section/api'
 
 import styles from './Construction.module.scss'
+import { Routers } from '@/shared/routes'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
@@ -38,7 +38,6 @@ const Construction = () => {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
   const [sections, setSections] = useState<Section[]>([])
   const [isModalNodeOpen, setIsModalNodeOpen] = useState(false)
-  const [currentMode, setCurrentMode] = useState('operator')
   const [scenarioId, setScenarioId] = useState<string | null>(null)
   const [scriptId, setScriptId] = useState<string | null>(null)
   const [scenarios, setScenarios] = useState<Scenario[]>([])
@@ -108,19 +107,14 @@ const Construction = () => {
       const validScenarios: Scenario[] = script.scenarios.map(scenario => ({
         id: String(scenario.id),
         title: scenario.title,
-        scenarioId: String(scenario.scenarioId), // Убедитесь, что это поле существует
-        scriptId: String(scenario.script_id), // Убедитесь, что это поле существует
+        scenarioId: String(scenario.scenarioId),
+        scriptId: String(scenario.script_id),
         description: scenario.description || null,
         weight: scenario.weight || undefined
       }))
-      setScenarios(validScenarios) // Убедитесь, что это массив Scenario
+      setScenarios(validScenarios)
     }
   }, [script])
-
-  useEffect(() => {
-    const modeFromQuery = router.query.mode as string
-    setCurrentMode(modeFromQuery === 'operator' ? 'operator' : 'construction')
-  }, [router.query.mode])
 
   const handleOpenModal = () => {
     if (script?.title) {
@@ -179,10 +173,6 @@ const Construction = () => {
     setIsExitModalOpen(true)
   }
 
-  const handleModeChange = (newMode: string) => {
-    setCurrentMode(newMode)
-  }
-
   const handleExitWithoutSaving = () => {
     router.push('/')
   }
@@ -194,6 +184,16 @@ const Construction = () => {
   const handleSaveAndExit = async () => {
     await saveScript()
     router.push('/')
+  }
+  const handleRouteConstructor = () => {
+    router.push(`${Routers.Construction}/${scriptId}`)
+  }
+  const handleRouteOperator = () => {
+    if (!scriptId) {
+      console.error('Script ID is missing!')
+      return
+    }
+    router.push(`${Routers.Operator}/${scriptId}`)
   }
 
   const handleSelectGoals = (selectedGoals: any) => {
@@ -227,7 +227,12 @@ const Construction = () => {
     ))
   }
 
-  if (loading) return <div>Загрузка...</div>
+  if (loading)
+    return (
+      <div>
+        <Preloader />
+      </div>
+    )
   if (error) return <div>Ошибка: {error}</div>
 
   return (
@@ -237,10 +242,22 @@ const Construction = () => {
           <div className={styles.designerActions}>
             <div className={styles.designerActionsLeft}>
               <SaveScriprt onSaveScript={saveScript} />
-              <ModeSelector
-                selectedOption={currentMode}
-                onSelect={handleModeChange}
-              />
+              <div className={styles.modeButton}>
+                <Button
+                  borderMedium
+                  primary
+                  size="mediumConstructor"
+                  onClick={handleRouteConstructor}>
+                  Режим конструктора
+                </Button>
+                <Button
+                  noBorderScript
+                  borderMedium
+                  size="mediumConstructor"
+                  onClick={handleRouteOperator}>
+                  Режим оператора
+                </Button>
+              </div>
             </div>
             <div className={styles.designerActionsRigth}>
               <Exit onClick={handleExitClick} />

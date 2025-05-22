@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 // pages/scripts/operator.[id].tsx
+'use client'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import { getScriptById } from '@/entities/user-script/api'
 import UserLayout from '@/app/UserLayout/UserLayout'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
-import ModeSelector from '@/features/mode-selector/ui/ModeSelector'
 import { Button } from '@/shared/ui/Button'
 import { Clock } from '@/shared/assets/icons'
 import EndTheCall from '@/features/end-the-call/ui/EndTheCall'
@@ -15,6 +15,7 @@ import ResultModal from '@/features/results-modal/ui/ResultModal'
 import styles from './Operator.module.scss'
 
 import ClientSegmentedControl from '@/widgets/client-segment-control/ui/ClientSegmentControl'
+import { Routers } from '@/shared/routes'
 
 interface Operator {
   createdScript?: {
@@ -30,31 +31,14 @@ const Operator = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [timer, setTimer] = useState(0)
-  const [currentMode, setCurrentMode] = useState('operator')
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [isResultModalOpen, setIsResultModalOpen] = useState(false)
-  const [rightSectionTab, setRightSectionTab] = useState<'script' | 'client'>(
-    'script'
+  const [rightSectionTab, setRightSectionTab] = useState<'Скрипт' | 'Клиент'>(
+    'Скрипт'
   )
-  const [clientNote, setClientNote] = useState('')
-  useEffect(() => {
-    const modeFromQuery = router.query.mode as string
-    if (modeFromQuery === 'operator' || modeFromQuery === 'construction') {
-      setCurrentMode(modeFromQuery)
-    } else {
-      setCurrentMode('operator')
-    }
-  }, [router.query.mode])
 
-  const handleModeChange = (mode: string) => {
-    setCurrentMode(mode)
-    const scriptId = Array.isArray(id) ? id[0] : id
-    if (mode === 'Режим оператора') {
-      router.push(`/operator/${scriptId}?mode=operator`)
-    } else {
-      router.push(`/construction/${scriptId}?mode=construction`)
-    }
-  }
+  const [clientNote, setClientNote] = useState('')
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
@@ -70,7 +54,7 @@ const Operator = () => {
   }, [isTimerRunning])
 
   useEffect(() => {
-    console.log(`Fetching script for ID: ${id}`) // Логирование ID
+    console.log(`Fetching script for ID: ${id}`)
     const fetchScript = async () => {
       if (!id) return
 
@@ -78,7 +62,7 @@ const Operator = () => {
 
       try {
         const fetchedScript = await getScriptById(scriptId)
-        console.log('Fetched script:', fetchedScript) // Логирование полученного скрипта
+        console.log('Fetched script:', fetchedScript)
         if ('error' in fetchedScript) {
           setError(fetchedScript.error)
         } else {
@@ -100,7 +84,6 @@ const Operator = () => {
 
   const handleCallButtonClick = () => {
     if (isTimerRunning) {
-      // Вместо сразу останавливать таймер — открыть модалку
       setIsModalOpen(true)
     } else {
       setIsTimerRunning(true)
@@ -108,25 +91,34 @@ const Operator = () => {
   }
 
   const confirmEndCall = () => {
-    setIsTimerRunning(false) // Остановить таймер
-    setTimer(0) // Сбросить таймер
-    setIsModalOpen(false) // Закрыть модальное окно завершения звонка
-    setIsResultModalOpen(true) // Открыть модальное окно результата разговора
+    setIsTimerRunning(false)
+    setTimer(0)
+    setIsModalOpen(false)
+    setIsResultModalOpen(true)
   }
 
   const cancelEndCall = () => {
-    setIsModalOpen(false) // Просто закрыть модалку завершения звонка
+    setIsModalOpen(false)
   }
   const handleResult = (result: string) => {
     console.log('Результат разговора:', result)
-    // Здесь вы можете обработать результат разговора
-    setIsResultModalOpen(false) // Закрыть модальное окно результата разговора
+    setIsResultModalOpen(false)
   }
   const formatTime = (time: number) => {
     const hours = String(Math.floor(time / 3600)).padStart(2, '0')
     const minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0')
     const seconds = String(time % 60).padStart(2, '0')
     return `${hours}:${minutes}:${seconds}`
+  }
+  const handleRouteConstructor = () => {
+    router.push(`${Routers.Construction}/${id}`)
+  }
+  const handleRouteOperator = () => {
+    if (!script) {
+      console.error('Script ID is missing!')
+      return
+    }
+    router.push(`${Routers.Operator}/${id}`)
   }
   return (
     <UserLayout>
@@ -139,11 +131,22 @@ const Operator = () => {
               onClick={() => console.log('Сбросить результаты')}>
               Сбросить результаты
             </Button>
-
-            <ModeSelector
-              selectedOption={currentMode}
-              onSelect={handleModeChange}
-            />
+            <div className={styles.modeButton}>
+              <Button
+                borderMedium
+                noBorderScript
+                size="mediumConstructor"
+                onClick={handleRouteConstructor}>
+                Режим конструктора
+              </Button>
+              <Button
+                borderMedium
+                primary
+                size="mediumConstructor"
+                onClick={handleRouteOperator}>
+                Режим оператора
+              </Button>
+            </div>
 
             <div className={styles.timer}>
               <Clock />
@@ -178,7 +181,7 @@ const Operator = () => {
               <ClientSegmentedControl
                 selectedOption={rightSectionTab}
                 onSelect={(option: string) =>
-                  setRightSectionTab(option as 'script' | 'client')
+                  setRightSectionTab(option as 'Скрипт' | 'Клиент')
                 }
                 setClientNote={setClientNote}
                 clientNote={clientNote}

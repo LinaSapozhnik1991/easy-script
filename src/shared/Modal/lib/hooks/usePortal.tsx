@@ -4,16 +4,13 @@ const usePortal = (id: string) => {
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    let element = document.getElementById(id)
-    if (!element) {
-      element = document.createElement('div')
-      element.setAttribute('id', id)
-      document.body.appendChild(element)
-    }
-    setPortalRoot(element)
+    const element = document.createElement('div')
+    element.setAttribute('id', id)
+    document.body.appendChild(element)
 
+    setPortalRoot(element)
     return () => {
-      if (element) {
+      if (element && document.body.contains(element)) {
         document.body.removeChild(element)
       }
     }

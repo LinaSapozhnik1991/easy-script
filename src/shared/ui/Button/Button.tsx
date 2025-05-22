@@ -7,6 +7,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
   primary?: boolean
   exitStyle?: boolean
+  noBorderScript?: boolean
   backgroundColor?: string
   borderMedium?: boolean
   scriptStyle?: boolean
@@ -16,6 +17,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'smallOperator'
     | 'medium'
     | 'mediumScript'
+    | 'mediumConstructor'
     | 'large'
     | 'largeScript'
     | 'mediumXL'
@@ -36,6 +38,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   exitStyle = false,
   scriptStyle = false,
+  noBorderScript = false,
   primaryBorder = false,
   borderMedium = false,
   clear = false,
@@ -55,6 +58,7 @@ export const Button: React.FC<ButtonProps> = ({
       [styles.medium]: size === 'medium',
       [styles.large]: size === 'large',
       [styles.mediumXL]: size === 'mediumXL',
+      [styles.mediumConstructor]: size === 'mediumConstructor',
       [styles.mediumXXL]: size === 'mediumXXL',
       [styles.smallXL]: size === 'smallXL',
       [styles.mediumScript]: size === 'mediumScript',
@@ -67,7 +71,8 @@ export const Button: React.FC<ButtonProps> = ({
       [styles.exitStyle]: exitStyle,
       [styles.scriptStyle]: scriptStyle,
       [styles.borderMedium]: borderMedium,
-      [styles.clear]: clear
+      [styles.clear]: clear,
+      [styles.noBorderScript]: noBorderScript
     }
   ])
   const handleClick = (

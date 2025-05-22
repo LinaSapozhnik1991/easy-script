@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Accordion } from '@/shared/ui/Accordion/Accordion'
-import { Down, Up } from '@/shared/assets/icons'
+import { Down, Preloader, Up } from '@/shared/assets/icons'
 import { userMe } from '@/entities/user-profile/api'
 import { Routers } from '@/shared/routes'
 import { Script } from '@/entities/user-script'
@@ -136,7 +136,12 @@ const ScriptModal: React.FC<ScriptModalProps> = ({ onClose }) => {
     setIsOpen(false)
   }
 
-  if (loadingUserData) return <div>Загрузка...</div>
+  if (loadingUserData)
+    return (
+      <div>
+        <Preloader />
+      </div>
+    )
 
   return (
     <div className={styles.buildScripts}>
