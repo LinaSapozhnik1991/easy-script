@@ -27,6 +27,7 @@ import AddMode from '@/features/add-mode/ui/AddMode'
 import { getSections } from '@/entities/section/api'
 import { Routers } from '@/shared/routes'
 import UserLayout from '@/app/UserLayout/UserLayout'
+import { saveNodeData } from '@/features/text-editor/api'
 
 import styles from './Construction.module.scss'
 
@@ -174,10 +175,50 @@ const Construction = () => {
   }
   const handleAnswerClick = (answer: AnswerNode) => {
     setSelectedAnswer(answer)
-    const contentState = ContentState.createFromText(answer.content)
+    const contentState = ContentState.createFromText(answer.content || '')
     setEditorState(EditorState.createWithContent(contentState))
   }
+  const handleEditorChange = (newEditorState: EditorState) => {
+    setEditorState(newEditorState)
+    if (selectedAnswer) {
+      // Обновляем содержимое выбранного ответа
+      const content = newEditorState.getCurrentContent().getPlainText()
+      setSelectedAnswer({
+        ...selectedAnswer,
+        content
+      })
+    }
+  }
+  const handleSaveAnswer = async () => {
+    if (!selectedAnswer || !scriptId || !scenarioId) return
 
+    try {
+      const content = editorState.getCurrentContent().getPlainText()
+      const result = await saveNodeData(
+        scriptId,
+        scenarioId,
+        selectedAnswer.sectionId,
+        selectedAnswer.id,
+        {
+          content,
+          title: selectedAnswer.title
+        }
+      )
+
+      if (result.success) {
+        // Обновляем sections, чтобы триггернуть перерендер SectionComponent
+        setSections(prev => [...prev])
+
+        // Обновляем selectedAnswer
+        setSelectedAnswer({
+          ...selectedAnswer,
+          content
+        })
+      }
+    } catch (error) {
+      console.error('Ошибка сохранения ответа:', error)
+    }
+  }
   const handleExitClick = () => {
     setIsExitModalOpen(true)
   }
@@ -330,17 +371,18 @@ const Construction = () => {
                 {selectedAnswer ? (
                   <TextEditor
                     editorState={editorState}
-                    onEditorStateChange={setEditorState}
+                    onEditorStateChange={handleEditorChange} // Добавляем обработчик изменений
                     scriptId={scriptId || ''}
                     scenarioId={scenarioId || ''}
-                    sectionId={selectedAnswer.sectionId || ''}
-                    nodeId={selectedAnswer.id || ''}
+                    sectionId={selectedAnswer?.sectionId || ''}
+                    nodeId={selectedAnswer?.id || ''}
                     initialNodeData={{
-                      title: selectedAnswer.title || 'Новый ответ',
-                      text: selectedAnswer.content || 'Новый ответ',
+                      title: selectedAnswer?.title || 'Новый ответ',
+                      text: selectedAnswer?.content || 'Новый ответ',
                       weight: null,
                       is_target: false
                     }}
+                    onSave={handleSaveAnswer} // Добавляем обработчик сохранения
                   />
                 ) : (
                   <div className={styles.emptyEditor}>

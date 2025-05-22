@@ -176,7 +176,7 @@ const SectionComponent: React.FC<{
       setIsAddingNewNode(false)
     }
   }
-  const handleAnswerClick = (node: AnswerNode) => {
+  /* const handleAnswerClick = (node: AnswerNode) => {
     if (onAnswerClick) {
       onAnswerClick({
         ...node,
@@ -184,7 +184,7 @@ const SectionComponent: React.FC<{
         scenarioId: section.scenarioId
       })
     }
-  }
+  }*/
   const handleNodeContentBlur = async (nodeId: string) => {
     const nodeIndex = nodes.findIndex(n => n.id === nodeId)
     if (nodeIndex === -1) return
@@ -210,7 +210,11 @@ const SectionComponent: React.FC<{
     setEditingNodeContent(node.content)
     setIsAddingNewNode(false)
   }*/
-
+  const handleNodeClick = (node: AnswerNode) => {
+    if (onAnswerClick) {
+      onAnswerClick(node)
+    }
+  }
   const handleNodeContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditingNodeContent(e.target.value)
   }
@@ -305,7 +309,7 @@ const SectionComponent: React.FC<{
               {nodes.map(node => (
                 <li
                   key={node.id}
-                  onClick={() => handleAnswerClick(node)}
+                  onClick={() => handleNodeClick(node)}
                   className={`${styles.liAnswer} ${
                     selectedAnswerId === node.id ? styles.activeAnswer : ''
                   }`}>
