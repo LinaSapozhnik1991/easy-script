@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 
@@ -52,6 +53,7 @@ interface TextEditorProps {
   sectionId: string | number
   nodeId: string
   initialNodeData: NodeData
+  onSave?: () => Promise<void>
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -157,15 +159,21 @@ const TextEditor: React.FC<TextEditorProps> = ({
     editorState.getCurrentInlineStyle().has(style)
   const handleSave = async () => {
     try {
+      const content = editorState.getCurrentContent().getPlainText()
       await saveNodeData({
-        editorState,
-        initialNodeData,
         scriptId,
         scenarioId,
         sectionId,
-        nodeId
+        nodeId,
+        editorState,
+        initialNodeData: {
+          ...initialNodeData,
+          text: content
+        }
       })
-    } catch {}
+    } catch (error) {
+      console.error('Ошибка сохранения:', error)
+    }
   }
 
   return (

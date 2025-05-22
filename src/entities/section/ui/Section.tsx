@@ -35,9 +35,12 @@ export interface AnswerNode {
   title: string
   id: string
   content: string
+  text?: string
   type: string
   isNew?: boolean
   scenarioId?: string | null
+  weight?: number | null
+  is_target?: boolean
 }
 
 export type Scenarios = Scenario
@@ -82,9 +85,15 @@ const SectionComponent: React.FC<{
           scenarioId,
           section.id
         )
-        setNodes(fetchedNodes)
+        setNodes(
+          fetchedNodes.map(node => ({
+            ...node,
+            content: node.content || node.text || node.title || '', // Учитываем все варианты
+            text: node.text || node.content || node.title || '' // Для обратной совместимости
+          }))
+        )
       } catch (error) {
-        console.error('Failed to load nodes:', error)
+        console.error('Ошибка загрузки ответов:', error)
       } finally {
         setLoadingNodes(false)
       }
@@ -116,14 +125,13 @@ const SectionComponent: React.FC<{
   }
 
   const handleSaveNewNode = async () => {
-    if (!editingNodeContent.trim()) {
-      return
-    }
+    if (!editingNodeContent.trim()) return
 
     const tempId = 'temp-' + Date.now()
     const newNode: AnswerNode = {
       id: tempId,
       content: editingNodeContent.trim(),
+      text: editingNodeContent.trim(),
       type: 'answer',
       isNew: true,
       sectionId: section.id,
@@ -212,7 +220,12 @@ const SectionComponent: React.FC<{
   }*/
   const handleNodeClick = (node: AnswerNode) => {
     if (onAnswerClick) {
-      onAnswerClick(node)
+      onAnswerClick({
+        ...node,
+        sectionId: section.id,
+        scenarioId: section.scenarioId as string,
+        content: node.content || node.title // Убедимся, что content всегда есть
+      })
     }
   }
   const handleNodeContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -317,6 +330,11 @@ const SectionComponent: React.FC<{
                     <UpDown />
                   </div>
                   {node.title}
+                  {node.content && node.content !== node.title && (
+                    <div className={styles.contentPreview}>
+                      {node.content.substring(0, 30)}...
+                    </div>
+                  )}
                   <CloseGreen onClick={() => handleDeleteNode(node.id)} />
                 </li>
               ))}

@@ -9,7 +9,7 @@ import { Down, PlusGreen, Preloader, Up } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { getScriptById } from '@/entities/user-script/api'
-import TextEditor from '@/features/text-editor/ui/TextEditor'
+import TextEditor, { NodeData } from '@/features/text-editor/ui/TextEditor'
 import Exit from '@/features/exit-designer/ui/ExitButton'
 import SaveScriprt from '@/features/save-script/ui/SaveScriprt'
 import OpenModalEditScript from '@/features/edit-script/ui/EditScript'
@@ -181,7 +181,6 @@ const Construction = () => {
   const handleEditorChange = (newEditorState: EditorState) => {
     setEditorState(newEditorState)
     if (selectedAnswer) {
-      // Обновляем содержимое выбранного ответа
       const content = newEditorState.getCurrentContent().getPlainText()
       setSelectedAnswer({
         ...selectedAnswer,
@@ -189,34 +188,41 @@ const Construction = () => {
       })
     }
   }
+
   const handleSaveAnswer = async () => {
     if (!selectedAnswer || !scriptId || !scenarioId) return
 
     try {
       const content = editorState.getCurrentContent().getPlainText()
-      const result = await saveNodeData(
+
+      // Явно обрабатываем все возможные случаи для weight
+      const weight =
+        selectedAnswer.weight !== undefined ? selectedAnswer.weight : null
+
+      // Создаем полный объект initialNodeData
+      const initialNodeData: NodeData = {
+        title: selectedAnswer.title,
+        text: content,
+        weight: weight, // теперь точно number | null
+        is_target: selectedAnswer.is_target ?? false // аналогично для boolean
+      }
+
+      await saveNodeData({
         scriptId,
         scenarioId,
-        selectedAnswer.sectionId,
-        selectedAnswer.id,
-        {
-          content,
-          title: selectedAnswer.title
-        }
-      )
+        sectionId: selectedAnswer.sectionId,
+        nodeId: selectedAnswer.id,
+        editorState,
+        initialNodeData
+      })
 
-      if (result.success) {
-        // Обновляем sections, чтобы триггернуть перерендер SectionComponent
-        setSections(prev => [...prev])
-
-        // Обновляем selectedAnswer
-        setSelectedAnswer({
-          ...selectedAnswer,
-          content
-        })
-      }
+      setSelectedAnswer({
+        ...selectedAnswer,
+        content
+      })
     } catch (error) {
       console.error('Ошибка сохранения ответа:', error)
+      // Можно добавить обработку ошибки для пользователя
     }
   }
   const handleExitClick = () => {
@@ -370,6 +376,7 @@ const Construction = () => {
               <div className={styles.centerSection}>
                 {selectedAnswer ? (
                   <TextEditor
+                    key={selectedAnswer.id}
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange} // Добавляем обработчик изменений
                     scriptId={scriptId || ''}

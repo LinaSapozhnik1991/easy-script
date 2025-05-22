@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import axios from 'axios'
+// eslint-disable-next-line import/named
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import Cookies from 'js-cookie'
 import { EditorState } from 'draft-js'
 
@@ -13,38 +14,40 @@ interface NodeData {
 }
 
 interface SaveNodeParams {
-  editorState: EditorState
-  initialNodeData: NodeData
   scriptId: string | number
   scenarioId: string | number
   sectionId: string | number
   nodeId: string | number
+  editorState: EditorState
+  initialNodeData: NodeData
 }
 
 export const saveNodeData = async ({
-  editorState,
-  initialNodeData,
   scriptId,
   scenarioId,
   sectionId,
-  nodeId
-}: SaveNodeParams): Promise<void> => {
+  nodeId,
+  editorState,
+  initialNodeData
+}: SaveNodeParams): Promise<NodeData> => {
   const token = Cookies.get('token')
   if (!token) {
     console.error('No authorization token found.')
-    return
+    throw new Error('No authorization token')
   }
 
   try {
-    const contentState = editorState.getCurrentContent()
-    const text = contentState.getPlainText()
+    const content = editorState.getCurrentContent().getPlainText()
 
-    const updatedNode = {
+    const updatedNode: NodeData = {
       ...initialNodeData,
-      text: text
+      text: content,
+      title: initialNodeData.title,
+      weight: initialNodeData.weight,
+      is_target: initialNodeData.is_target
     }
 
-    const response = await instance.put(
+    const response: AxiosResponse<NodeData> = await instance.put(
       `/scripts/${Number(scriptId)}/scenarios/${Number(scenarioId)}/sections/${Number(sectionId)}/nodes/${Number(nodeId)}`,
       updatedNode,
       {
@@ -55,23 +58,17 @@ export const saveNodeData = async ({
       }
     )
 
-    console.log('Данные успешно сохранены:', response.data.data)
-    return response.data.data
+    console.log('Node saved successfully:', response.data)
+    return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        console.error('Unauthorized access - please check your token.')
-      } else if (error.response?.status === 403) {
-        console.error(
-          'Access to company is forbidden:',
-          error.response.data.message
-        )
-      } else {
-        console.error('Error updating node:', error.response?.data)
-      }
-    } else {
-      console.error('Unexpected error:', error)
+      const axiosError = error as AxiosError<{ message?: string }>
+      console.error('Error saving node:', axiosError.response?.data)
+      throw new Error(
+        axiosError.response?.data?.message || 'Failed to save node'
+      )
     }
-    throw error
+    console.error('Unexpected error:', error)
+    throw new Error('An unexpected error occurred')
   }
 }
