@@ -9,7 +9,7 @@ padding-right: 118px;
         padding: 32px 0 32px 32px;
        .designerActionsLeft{
         display: flex;
-        gap:24px;
+        gap:16px;
        
      
         .modeButton{
@@ -34,13 +34,13 @@ padding-right: 118px;
         height: 72px;
         .leftInfo{
             display: flex;
-            gap:32px;
+            gap:18px;
         padding: 32px 0 32px 32px;
         .company{
             z-index: 99;
             max-width: 410px;
-            min-width: 340px;
-            max-height: 56px;
+            min-width: 400px;
+            height: 56px;
             height: 100%;
           
         }
@@ -72,7 +72,7 @@ padding-right: 118px;
         padding-left: 32px;
         display: flex;
         align-items: center;
-        gap: 28px;
+        gap: 16px;
 
     .leftSection, .rightSection{
         display: flex;
@@ -80,21 +80,24 @@ padding-right: 118px;
         align-items: center;
         align-content: center;
         gap: 10px;
-max-width: 410px;
 min-width: 340px;
+max-width: 410px;
+width: 100%;
+
 
     }
     .centerSection{
-        min-width: 828px;
+        min-width: 815px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
  
     }
-  
     .leftSection, .rightSection, .centerSection{
        height: 100vh;
+       overflow: hidden;
+       overflow-y: auto;
         padding-top: 24px;
         border: 1px solid $borderInputProfile;
         border-radius:$RadiusM ;

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+
 import {
   Analyst,
   Company,
@@ -11,6 +12,7 @@ import {
   Prev
 } from '@/shared/assets/icons'
 import { Routers } from '@/shared/routes'
+
 import styles from './Sidebar.module.scss'
 
 interface SidebarProps {

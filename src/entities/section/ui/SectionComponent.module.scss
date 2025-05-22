@@ -14,8 +14,10 @@ margin-top: 25px;
 .upDownIcon {
   margin-right: 8px;
   cursor: grab;
-  width: 40px;
-  height: 56px;
+  svg{
+    width: 40px;
+    height: 56px;
+  }
 }
 
 
@@ -27,6 +29,7 @@ margin-top: 25px;
   background-color: rgba(239, 245, 245, 1);
   width: 260px;
   height: auto;
+    margin-right: 8px;
   border-radius: $RadiusM;
 padding:8px;
   -webkit-border-radius: $RadiusM;
@@ -96,11 +99,11 @@ ul{
 }
 
 .clearIcon {
+
   width: 36px;
   height: 46px;
   cursor: pointer;
   svg {
-    margin-left: 1px;
     width: 24px;
     height: 24px;
   }

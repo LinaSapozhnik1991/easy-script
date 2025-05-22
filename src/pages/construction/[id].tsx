@@ -24,9 +24,9 @@ import { createSection } from '@/features/add-mode/api'
 import AddMode from '@/features/add-mode/ui/AddMode'
 import { getSections } from '@/entities/section/api'
 import { Routers } from '@/shared/routes'
+import UserLayout from '@/app/UserLayout/UserLayout'
 
 import styles from './Construction.module.scss'
-import UserLayout from '@/app/UserLayout/UserLayout'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
@@ -69,6 +69,18 @@ const Construction = () => {
     }
   }
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const link = document.createElement('link')
+      link.href = '/path-to-your-styles.css'
+      link.rel = 'stylesheet'
+      document.head.appendChild(link)
+
+      return () => {
+        document.head.removeChild(link)
+      }
+    }
+  }, [])
   useEffect(() => {
     const fetchSections = async () => {
       if (!scriptId || !scenarioId) return
