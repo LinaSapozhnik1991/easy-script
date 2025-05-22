@@ -26,6 +26,7 @@ import { getSections } from '@/entities/section/api'
 import { Routers } from '@/shared/routes'
 
 import styles from './Construction.module.scss'
+import UserLayout from '@/app/UserLayout/UserLayout'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
@@ -230,89 +231,94 @@ const Construction = () => {
 
   return (
     <>
-      <ScriptEditModalLayout>
-        <div className={styles.designer}>
-          <div className={styles.designerActions}>
-            <div className={styles.designerActionsLeft}>
-              <SaveScriprt onSaveScript={saveScript} />
-              <div className={styles.modeButton}>
-                <Button
-                  borderMedium
-                  primary
-                  size="mediumConstructor"
-                  onClick={handleRouteConstructor}>
-                  Режим конструктора
-                </Button>
-                <Button
-                  noBorderScript
-                  borderMedium
-                  size="mediumConstructor"
-                  onClick={handleRouteOperator}>
-                  Режим оператора
-                </Button>
+      <UserLayout>
+        <ScriptEditModalLayout>
+          <div className={styles.designer}>
+            <div className={styles.designerActions}>
+              <div className={styles.designerActionsLeft}>
+                <SaveScriprt onSaveScript={saveScript} />
+                <div className={styles.modeButton}>
+                  <Button
+                    borderMedium
+                    primary
+                    size="mediumConstructor"
+                    onClick={handleRouteConstructor}>
+                    Режим конструктора
+                  </Button>
+                  <Button
+                    noBorderScript
+                    borderMedium
+                    size="mediumConstructor"
+                    onClick={handleRouteOperator}>
+                    Режим оператора
+                  </Button>
+                </div>
+              </div>
+              <div className={styles.designerActionsRigth}>
+                <Exit onClick={handleExitClick} />
               </div>
             </div>
-            <div className={styles.designerActionsRigth}>
-              <Exit onClick={handleExitClick} />
-            </div>
-          </div>
-          <div className={styles.designerInfoScript}>
-            <div className={styles.leftInfo}>
-              <div className={styles.company}>
-                <Accordion
-                  items={[
-                    {
-                      content: (
-                        <span className={styles.company}>
-                          {script?.company?.name || 'Неизвестная компания'}
-                        </span>
-                      )
-                    }
-                  ]}
-                  label={'Компания'}
-                  mode="bordered"
-                  iconClose={<Up />}
-                  iconOpen={<Down />}
-                />
+            <div className={styles.designerInfoScript}>
+              <div className={styles.leftInfo}>
+                <div className={styles.company}>
+                  <Accordion
+                    items={[
+                      {
+                        content: (
+                          <span className={styles.company}>
+                            {script?.company?.name || 'Неизвестная компания'}
+                          </span>
+                        )
+                      }
+                    ]}
+                    label={'Компания'}
+                    mode="bordered"
+                    iconClose={<Up />}
+                    iconOpen={<Down />}
+                  />
+                </div>
+                <div className={styles.nameScript}>
+                  <span>{script?.title || 'Неизвестный заголовок'}</span>
+                  <OpenModalEditScript openModal={handleOpenModal}>
+                    Редактировать
+                  </OpenModalEditScript>
+                </div>
               </div>
-              <div className={styles.nameScript}>
-                <span>{script?.title || 'Неизвестный заголовок'}</span>
-                <OpenModalEditScript openModal={handleOpenModal}>
-                  Редактировать
-                </OpenModalEditScript>
-              </div>
-            </div>
-            <Button scriptStyle size="medium">
-              <PlusGreen /> Создать группу
-            </Button>
-          </div>
-          <div className={styles.sectionsEditor}>
-            <div className={styles.leftSection}>
-              {renderSections()}
-              <AddMode onAddSection={handleAddSection} scenarios={scenarios} />
-              <Button
-                scriptStyle
-                size="largeMode"
-                onClick={() => console.log('')}>
-                Добавить цель
+              <Button scriptStyle size="medium">
+                <PlusGreen /> Создать группу
               </Button>
             </div>
-            <div className={styles.centerSection}>
-              <TextEditor />
+            <div className={styles.sectionsEditor}>
+              <div className={styles.leftSection}>
+                {renderSections()}
+                <AddMode
+                  onAddSection={handleAddSection}
+                  scenarios={scenarios}
+                />
+                <Button
+                  scriptStyle
+                  size="largeMode"
+                  onClick={() => console.log('')}>
+                  Добавить цель
+                </Button>
+              </div>
+              <div className={styles.centerSection}>
+                <TextEditor />
+              </div>
+              <div className={styles.rightSection}></div>
             </div>
-            <div className={styles.rightSection}></div>
           </div>
-        </div>
 
-        {isExitModalOpen && (
-          <ExitConfirmationModal
-            onClose={() => setIsExitModalOpen(false)}
-            onExitWithoutSaving={handleExitWithoutSaving}
-            onStayInEditor={handleStayInEditor}
-            onSaveAndExit={handleSaveAndExit}
-          />
-        )}
-      </ScriptEditModalLayout>
+          {isExitModalOpen && (
+            <ExitConfirmationModal
+              onClose={() => setIsExitModalOpen(false)}
+              onExitWithoutSaving={handleExitWithoutSaving}
+              onStayInEditor={handleStayInEditor}
+              onSaveAndExit={handleSaveAndExit}
+            />
+          )}
+        </ScriptEditModalLayout>
+      </UserLayout>
     </>
   )
 }
