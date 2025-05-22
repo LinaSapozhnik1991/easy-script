@@ -18,7 +18,6 @@
     -ms-border-radius: $RadiusM;
     -o-border-radius: $RadiusM;
 }
-  
   .options {
     position: absolute;
     top: 100%;
@@ -27,11 +26,11 @@
     background-color: white;
     border: 1px solid $borderInputProfile;
     border-radius: $RadiusM;
-    border-top: none;
+    
     z-index: 1000;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-top: 8px;
   }
   
   .options li {

@@ -13,6 +13,9 @@ export interface CreateSectionParams {
 interface SectionResponse {
   id: string
   title: string
+  scenarioId?: string
+  scriptId?: string
+  type?: string
 }
 export const createSection = async (
   params: CreateSectionParams
@@ -48,9 +51,15 @@ export const createSection = async (
         }
       }
     )
-
-    console.log('Section created successfully:', response.data.data)
-    return response.data.data as SectionResponse
+    if (response.data.success && response.data.data) {
+      return {
+        id: String(response.data.data.id),
+        title: response.data.data.title
+      }
+    } else {
+      console.error('Invalid response format:', response.data)
+      return null
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {

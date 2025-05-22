@@ -7,16 +7,26 @@ import { Scenario, Section } from '@/entities/section/ui/Section'
 export interface AddModeProps {
   onAddSection: (newSection: Section) => Promise<void>
   scenarios: Scenario[]
+  scriptId: string
+  scenarioId: string
 }
 
-const AddMode: React.FC<AddModeProps> = ({ onAddSection, scenarios }) => {
+const AddMode: React.FC<AddModeProps> = ({
+  onAddSection,
+  scenarios,
+  scriptId,
+  scenarioId
+}) => {
   const handleClick = () => {
     const newSection: Section = {
-      id: Date.now().toString(),
+      id: `temp-${Date.now()}`,
       title: 'Новый раздел',
-      scriptId: '',
-      scenarioId: '',
-      scenarios: scenarios
+      scriptId: scriptId,
+      script_id: scriptId,
+      scenario_id: scenarioId,
+      scenarioId: scenarioId,
+      scenarios: scenarios,
+      isNew: true
     }
     onAddSection(newSection)
   }

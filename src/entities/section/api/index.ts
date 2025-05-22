@@ -4,44 +4,68 @@ import axios from 'axios'
 
 import { instance } from '@/shared/api'
 
-export const getSections = async (scriptId: string, scenarioId: string) => {
+import { Section } from '../ui/Section'
+
+export const getSections = async (
+  scriptId: string,
+  scenarioId: string
+): Promise<Section[]> => {
   const token = Cookies.get('token')
 
-  if (!token) {
-    console.error('No authorization token found.')
-    return
-  }
-
   try {
-    const response = await instance.get(
-      `scripts/${scriptId}/scenarios/${scenarioId}/sections/`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    )
+    const response = await instance.get<{
+      success: boolean
+      data: Array<{
+        id: string
+        title: string
+        script_id: string
+        scenario_id: string
+        answers?: Array<{
+          id: string
+          title: string
+          content: string
+        }>
+      }>
+    }>(`scripts/${scriptId}/scenarios/${scenarioId}/sections/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
 
     if (response.data.success) {
-      const sections = response.data.data
-      console.log('Разделы успешно получены:', sections)
-      return sections
-    } else {
-      console.error('Ошибка при получении разделов:', response.data.message)
+      return response.data.data.map(section => ({
+        id: section.id,
+        title: section.title,
+        scriptId: section.script_id,
+        scenarioId: section.scenario_id,
+        nodes: section.answers
+          ? section.answers.map(answer => ({
+              id: answer.id,
+              title: answer.title,
+              content: answer.content,
+              sectionId: section.id,
+              type: 'answer'
+            }))
+          : [],
+        scenarios: [],
+        weight: null
+      }))
     }
+    return []
   } catch (error) {
-    console.error('Ошибка при выполнении запроса:', error)
+    console.error('Ошибка при получении разделов:', error)
+    return []
   }
 }
+
 export interface DeleteSectionResponse {
   success: boolean
   message?: string
 }
 
 export const deleteSection = async (
+  sectionId: string,
   scriptId: string,
-  scenarioId: string,
-  sectionId: string
+  scenarioId: string
 ): Promise<DeleteSectionResponse> => {
-  // Указываем правильный возвращаемый тип
   const token = Cookies.get('token')
 
   if (!token) {

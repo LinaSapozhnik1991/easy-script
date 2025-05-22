@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 
@@ -11,6 +10,8 @@ import {
   TextColor,
   Underline
 } from '@/shared/assets/icons'
+
+import { saveNodeData } from '../api'
 
 import styles from './TextEditor.module.scss'
 import CustomSelect from './CustomSelect'
@@ -37,11 +38,33 @@ const styleMap = {
   FONT_SIZE_48px: { fontSize: '48px' }
 }
 
-const TextEditor = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [colorPickerVisible, setColorPickerVisible] = useState(false)
-  const [currentFontSize, setCurrentFontSize] = useState('24px')
+export interface NodeData {
+  title: string
+  text: string
+  weight: number | null
+  is_target: boolean
+}
+interface TextEditorProps {
+  editorState: EditorState
+  onEditorStateChange: (state: EditorState) => void
+  scriptId: string | number
+  scenarioId: string | number
+  sectionId: string | number
+  nodeId: string
+  initialNodeData: NodeData
+}
 
+const TextEditor: React.FC<TextEditorProps> = ({
+  editorState,
+  onEditorStateChange,
+  scriptId,
+  scenarioId,
+  sectionId,
+  nodeId,
+  initialNodeData
+}) => {
+  const [colorPickerVisible, setColorPickerVisible] = useState(false)
+  const [currentFontSize, setCurrentFontSize] = useState('18px')
   const [currentTextColor, setCurrentTextColor] = useState('BLACK')
 
   const options = [
@@ -58,12 +81,13 @@ const TextEditor = () => {
   const handleKeyCommand = (command: string) => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
-      updateEditorState(newState)
+      onEditorStateChange(newState)
       return 'handled'
     }
     return 'not-handled'
   }
-  const updateEditorState = (newState: EditorState) => {
+
+  const setEditorState = (newState: EditorState) => {
     const currentInlineStyle = newState.getCurrentInlineStyle()
     if (currentInlineStyle.has(currentTextColor)) {
       newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
@@ -81,15 +105,14 @@ const TextEditor = () => {
     )
     newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
 
-    setEditorState(newState)
+    onEditorStateChange(newState)
   }
 
   const toggleInlineStyle = (style: string) => {
     if (['RED', 'GREEN', 'BLACK', 'GRAY'].includes(style)) {
       setCurrentTextColor(style)
     }
-
-    updateEditorState(RichUtils.toggleInlineStyle(editorState, style))
+    setEditorState(RichUtils.toggleInlineStyle(editorState, style))
   }
 
   const addLink = () => {
@@ -106,7 +129,6 @@ const TextEditor = () => {
       const newEditorState = EditorState.set(editorState, {
         currentContent: contentStateWithEntity
       })
-      console.log('Обновление состояния редактора:', newEditorState)
       setEditorState(
         RichUtils.toggleLink(
           newEditorState,
@@ -123,14 +145,28 @@ const TextEditor = () => {
   }
 
   const applyBackgroundColor = (colorKey: string) => {
-    updateEditorState(RichUtils.toggleInlineStyle(editorState, colorKey))
+    setEditorState(RichUtils.toggleInlineStyle(editorState, colorKey))
     closeColorPicker()
   }
+
   const closeColorPicker = () => {
     setColorPickerVisible(false)
   }
+
   const isStyleActive = (style: string) =>
     editorState.getCurrentInlineStyle().has(style)
+  const handleSave = async () => {
+    try {
+      await saveNodeData({
+        editorState,
+        initialNodeData,
+        scriptId,
+        scenarioId,
+        sectionId,
+        nodeId
+      })
+    } catch {}
+  }
 
   return (
     <div className={styles.editor}>
@@ -179,7 +215,9 @@ const TextEditor = () => {
               setEditorState(newEditorState)
             }}
           />
-          <button className={styles.saveAnswer}>Сохранить</button>
+          <button className={styles.saveAnswer} onClick={handleSave}>
+            Сохранить
+          </button>
         </div>
 
         {colorPickerVisible && (
@@ -242,7 +280,7 @@ const TextEditor = () => {
       <div className={styles.text}>
         <Editor
           editorState={editorState}
-          onChange={updateEditorState}
+          onChange={setEditorState}
           handleKeyCommand={handleKeyCommand}
           customStyleMap={styleMap}
         />

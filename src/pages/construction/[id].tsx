@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { EditorState, ContentState } from 'draft-js'
 
 import { Accordion } from '@/shared/ui/Accordion/Accordion'
 import { Down, PlusGreen, Preloader, Up } from '@/shared/assets/icons'
@@ -17,6 +18,7 @@ import useModalStore from '@/shared/Modal/model/useModalStore'
 import ScriptEditModalLayout from '@/app/ScriptEditModalLayout'
 import ExitConfirmationModal from '@/features/exit-modal/ExitConfirmationModal'
 import SectionComponent, {
+  AnswerNode,
   Scenario,
   Section
 } from '@/entities/section/ui/Section'
@@ -36,11 +38,13 @@ const Construction = () => {
   const [error, setError] = useState<string | null>(null)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
   const [sections, setSections] = useState<Section[]>([])
-  const [scenarioId, setScenarioId] = useState<string | null>(null)
-  const [scriptId, setScriptId] = useState<string | null>(null)
+  const [scenarioId, setScenarioId] = useState<string>('')
+  const [scriptId, setScriptId] = useState<string>('')
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [isSectionsLoading, setIsSectionsLoading] = useState(false)
   const [sectionsError, setSectionsError] = useState<string | null>(null)
+  const [selectedAnswer, setSelectedAnswer] = useState<AnswerNode | null>(null)
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   const fetchScript = async () => {
     if (!router.isReady || !router.query.id) return
@@ -69,18 +73,6 @@ const Construction = () => {
     }
   }
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const link = document.createElement('link')
-      link.href = '/path-to-your-styles.css'
-      link.rel = 'stylesheet'
-      document.head.appendChild(link)
-
-      return () => {
-        document.head.removeChild(link)
-      }
-    }
-  }, [])
   useEffect(() => {
     const fetchSections = async () => {
       if (!scriptId || !scenarioId) return
@@ -141,28 +133,30 @@ const Construction = () => {
   }
 
   const handleAddSection = async (newSection: Section) => {
-    if (!script || !scenarioId) {
-      console.error('Script or scenarioId not loaded yet')
-      return
-    }
+    try {
+      const createdSection = await createSection({
+        title: newSection.title,
+        scriptId: String(newSection.scriptId),
+        scenarioId: String(newSection.scenarioId)
+      })
 
-    const params = {
-      title: newSection.title,
-      scriptId: script.id,
-      scenarioId: scenarioId
-    }
-
-    const createdSection = await createSection(params)
-    if (createdSection) {
-      const sectionToAdd: Section = {
-        ...createdSection,
-        scriptId: script.id,
-        scenarioId: scenarioId,
-        scenarios: []
+      if (createdSection) {
+        setSections(prev => [
+          ...prev,
+          {
+            ...createdSection,
+            scriptId: newSection.scriptId,
+            scenarioId: newSection.scenarioId,
+            script_id: newSection.script_id,
+            scenario_id: newSection.scenario_id,
+            scenarios: []
+          }
+        ])
+      } else {
+        console.error('Не удалось создать раздел')
       }
-      setSections(prev => [...prev, sectionToAdd])
-    } else {
-      console.error('Failed to create section')
+    } catch (error) {
+      console.error('Error adding section:', error)
     }
   }
 
@@ -177,6 +171,11 @@ const Construction = () => {
   const saveScript = async () => {
     console.log('Скрипт сохранен с разделами:')
     alert('Скрипт сохранен')
+  }
+  const handleAnswerClick = (answer: AnswerNode) => {
+    setSelectedAnswer(answer)
+    const contentState = ContentState.createFromText(answer.content)
+    setEditorState(EditorState.createWithContent(contentState))
   }
 
   const handleExitClick = () => {
@@ -224,11 +223,20 @@ const Construction = () => {
     return sections.map(section => (
       <SectionComponent
         key={section.id}
-        section={section}
+        section={{
+          ...section,
+          scriptId: scriptId,
+          scenarioId: section.scenario_id || section.scenarioId
+        }}
         onUpdateTitle={handleUpdateTitle}
-        scenarioId={scenarioId!}
+        script_id={scriptId}
+        scenarioId={scenarioId}
         scenarios={scenarios}
         onSectionDeleted={handleSectionDeleted}
+        onAnswerClick={handleAnswerClick}
+        selectedAnswerId={selectedAnswer?.id || null}
+        scenario_Id={scenarioId}
+        scriptId={scriptId}
       />
     ))
   }
@@ -303,10 +311,14 @@ const Construction = () => {
             <div className={styles.sectionsEditor}>
               <div className={styles.leftSection}>
                 {renderSections()}
-                <AddMode
-                  onAddSection={handleAddSection}
-                  scenarios={scenarios}
-                />
+                {scriptId && scenarioId && (
+                  <AddMode
+                    onAddSection={handleAddSection}
+                    scenarios={scenarios}
+                    scriptId={scriptId || ''}
+                    scenarioId={scenarioId || ''}
+                  />
+                )}
                 <Button
                   scriptStyle
                   size="largeMode"
@@ -315,7 +327,26 @@ const Construction = () => {
                 </Button>
               </div>
               <div className={styles.centerSection}>
-                <TextEditor />
+                {selectedAnswer ? (
+                  <TextEditor
+                    editorState={editorState}
+                    onEditorStateChange={setEditorState}
+                    scriptId={scriptId || ''}
+                    scenarioId={scenarioId || ''}
+                    sectionId={selectedAnswer.sectionId || ''}
+                    nodeId={selectedAnswer.id || ''}
+                    initialNodeData={{
+                      title: selectedAnswer.title || 'Новый ответ',
+                      text: selectedAnswer.content || 'Новый ответ',
+                      weight: null,
+                      is_target: false
+                    }}
+                  />
+                ) : (
+                  <div className={styles.emptyEditor}>
+                    Выберите ответ для редактирования
+                  </div>
+                )}
               </div>
               <div className={styles.rightSection}></div>
             </div>

@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { CloseGreen, UpDown } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 
-import { addAnswer } from '../api/node'
+import { addAnswer, getSectionNodes } from '../api/node'
 import { deleteSection } from '../api'
 
 import styles from './SectionComponent.module.scss'
@@ -12,27 +12,32 @@ import styles from './SectionComponent.module.scss'
 export interface Section {
   id: string
   title: string
-  scriptId: string | number
-  scenarioId: string
-  scenarios: Scenario[]
+  scriptId?: string
+  script_id?: string
+  scenarioId?: string
+  scenario_id?: string
+  scenarios?: Scenario[]
   weight?: string | null
+  isNew?: boolean
 }
 
 export interface Scenario {
   id: string
   title: string
-  script_id?: string
+  scriptId?: string
   scenarioId: string
-  scriptId: string | number
   description?: string | null
   weight?: number
 }
 
-interface Node {
+export interface AnswerNode {
+  sectionId: string
+  title: string
   id: string
   content: string
   type: string
   isNew?: boolean
+  scenarioId?: string | null
 }
 
 export type Scenarios = Scenario
@@ -42,17 +47,51 @@ const SectionComponent: React.FC<{
   onUpdateTitle: (id: string, title: string) => void
   scenarios: Scenario[]
   scenarioId: string
+  scenario_Id: string
+  scriptId: string
+  script_id: string
   onSectionDeleted: (sectionId: string) => void
-}> = ({ section, onUpdateTitle, onSectionDeleted }) => {
+  onAnswerClick?: (answer: AnswerNode) => void
+  selectedAnswerId?: string | null
+  setSections?: React.Dispatch<React.SetStateAction<Section[]>>
+}> = ({
+  section,
+  onUpdateTitle,
+  onAnswerClick,
+  onSectionDeleted,
+  selectedAnswerId,
+  scriptId,
+
+  scenarioId
+}) => {
   const [title, setTitle] = useState(section.title)
-  const [nodes, setNodes] = useState<Node[]>([])
+  const [nodes, setNodes] = useState<AnswerNode[]>([])
   const [editingNodeId, setEditingNodeId] = useState<string | null>(null)
   const [editingNodeContent, setEditingNodeContent] = useState('')
   const [isAddingNewNode, setIsAddingNewNode] = useState(false)
   const newNodeInputRef = useRef<HTMLInputElement>(null)
   const [errorMessage, setErrorMessage] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [loadingNodes, setLoadingNodes] = useState(false)
+  //const { isDeleting } = useState(false)
+  useEffect(() => {
+    const loadNodes = async () => {
+      setLoadingNodes(true)
+      try {
+        const fetchedNodes = await getSectionNodes(
+          scriptId,
+          scenarioId,
+          section.id
+        )
+        setNodes(fetchedNodes)
+      } catch (error) {
+        console.error('Failed to load nodes:', error)
+      } finally {
+        setLoadingNodes(false)
+      }
+    }
 
+    loadNodes()
+  }, [scriptId, scenarioId, section.id])
   useEffect(() => {
     if (isAddingNewNode && newNodeInputRef.current) {
       newNodeInputRef.current.focus()
@@ -82,11 +121,14 @@ const SectionComponent: React.FC<{
     }
 
     const tempId = 'temp-' + Date.now()
-    const newNode = {
+    const newNode: AnswerNode = {
       id: tempId,
       content: editingNodeContent.trim(),
       type: 'answer',
-      isNew: true
+      isNew: true,
+      sectionId: section.id,
+      title: editingNodeContent.trim(),
+      scenarioId: section.scenarioId
     }
 
     setNodes(prev => [...prev, newNode])
@@ -101,7 +143,7 @@ const SectionComponent: React.FC<{
 
       const createdNode = await addAnswer(
         String(scriptId),
-        section.scenarioId,
+        section.scenarioId as string,
         section.id,
         editingNodeContent.trim(),
         editingNodeContent.trim(),
@@ -114,6 +156,7 @@ const SectionComponent: React.FC<{
           prev.map(n =>
             n.id === tempId
               ? {
+                  ...n,
                   id: String(createdNode.id),
                   content: createdNode.text || createdNode.title || '',
                   type: createdNode.type || 'answer',
@@ -133,7 +176,15 @@ const SectionComponent: React.FC<{
       setIsAddingNewNode(false)
     }
   }
-
+  const handleAnswerClick = (node: AnswerNode) => {
+    if (onAnswerClick) {
+      onAnswerClick({
+        ...node,
+        sectionId: section.id,
+        scenarioId: section.scenarioId
+      })
+    }
+  }
   const handleNodeContentBlur = async (nodeId: string) => {
     const nodeIndex = nodes.findIndex(n => n.id === nodeId)
     if (nodeIndex === -1) return
@@ -154,11 +205,11 @@ const SectionComponent: React.FC<{
     setEditingNodeContent('')
   }
 
-  const handleNodeEditClick = (node: Node) => {
+  /*const handleNodeEditClick = (node: Node) => {
     setEditingNodeId(node.id)
     setEditingNodeContent(node.content)
     setIsAddingNewNode(false)
-  }
+  }*/
 
   const handleNodeContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditingNodeContent(e.target.value)
@@ -187,36 +238,27 @@ const SectionComponent: React.FC<{
     }
   }
 
-  const handleDeleteSection = async () => {
-    if (!window.confirm('Вы уверены, что хотите удалить этот раздел?')) {
+  const handleDeleteSection = async (section: Section) => {
+    console.log('Deleting section:', section)
+    if (!section.scriptId || !section.scenarioId) {
+      console.error('Отсутствует scriptId или scenarioId')
       return
     }
 
-    setIsDeleting(true)
-    setErrorMessage('')
-
     try {
       const result = await deleteSection(
-        String(section.scriptId),
-        section.scenarioId,
-        section.id
+        section.id,
+        section.scriptId,
+        section.scenarioId
       )
-
       if (result.success) {
         onSectionDeleted(section.id)
-      } else {
-        setErrorMessage(result.message || 'Не удалось удалить раздел')
       }
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'Произошла неизвестная ошибка при удалении'
-      )
-    } finally {
-      setIsDeleting(false)
+      console.error('Ошибка удаления:', error)
     }
   }
+
   const handleAddNodeClick = () => {
     setIsAddingNewNode(true)
     setEditingNodeContent('')
@@ -241,40 +283,50 @@ const SectionComponent: React.FC<{
             className={styles.titleInput}
           />
 
-          <ul>
-            {isAddingNewNode && (
-              <li>
-                <input
-                  ref={newNodeInputRef}
-                  type="text"
-                  value={editingNodeContent}
-                  onChange={handleNodeContentChange}
-                  onBlur={handleSaveNewNode}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Введите заголовок ответа..."
-                  className={styles.titleInputAnswer}
-                  autoFocus
-                />
-              </li>
-            )}
-            {nodes.map(node => (
-              <li
-                key={node.id}
-                onClick={() => handleNodeEditClick(node)}
-                className={styles.liAnswer}>
-                <div className={styles.upDownIcon}>
-                  <UpDown />
-                </div>
-                {node.content}
-                <CloseGreen onClick={() => handleDeleteNode(node.id)} />
-              </li>
-            ))}
-          </ul>
+          {loadingNodes ? (
+            <div className={styles.loading}>Загрузка ответов...</div>
+          ) : (
+            <ul>
+              {isAddingNewNode && (
+                <li>
+                  <input
+                    ref={newNodeInputRef}
+                    type="text"
+                    value={editingNodeContent}
+                    onChange={handleNodeContentChange}
+                    onBlur={handleSaveNewNode}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Введите заголовок ответа..."
+                    className={styles.titleInputAnswer}
+                    autoFocus
+                  />
+                </li>
+              )}
+              {nodes.map(node => (
+                <li
+                  key={node.id}
+                  onClick={() => handleAnswerClick(node)}
+                  className={`${styles.liAnswer} ${
+                    selectedAnswerId === node.id ? styles.activeAnswer : ''
+                  }`}>
+                  <div className={styles.upDownIcon}>
+                    <UpDown />
+                  </div>
+                  {node.title}
+                  <CloseGreen onClick={() => handleDeleteNode(node.id)} />
+                </li>
+              ))}
+            </ul>
+          )}
           {errorMessage && <div className={styles.error}>{errorMessage}</div>}
         </div>
 
-        <div className={styles.clearIcon} onClick={handleDeleteSection}>
-          {isDeleting ? <span>...</span> : <CloseGreen />}
+        <div
+          className={styles.clearIcon}
+          onClick={() => {
+            handleDeleteSection(section).catch(console.error)
+          }}>
+          <CloseGreen />
         </div>
       </div>
 
