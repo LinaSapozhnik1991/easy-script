@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 import { instance } from '@/shared/api'
 
-interface CreateSectionParams {
+export interface CreateSectionParams {
   title: string
   scriptId: string
   scenarioId: string
@@ -13,7 +13,6 @@ interface CreateSectionParams {
 interface SectionResponse {
   id: string
   title: string
-  // Добавьте другие поля, которые возвращает ваш API
 }
 export const createSection = async (
   params: CreateSectionParams
@@ -51,7 +50,7 @@ export const createSection = async (
     )
 
     console.log('Section created successfully:', response.data.data)
-    return response.data.data as SectionResponse // Приведение типа
+    return response.data.data as SectionResponse
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {

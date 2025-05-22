@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import React, { useEffect, useState } from 'react'
@@ -24,9 +23,9 @@ import SectionComponent, {
 import { createSection } from '@/features/add-mode/api'
 import AddMode from '@/features/add-mode/ui/AddMode'
 import { getSections } from '@/entities/section/api'
+import { Routers } from '@/shared/routes'
 
 import styles from './Construction.module.scss'
-import { Routers } from '@/shared/routes'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()

@@ -69,7 +69,7 @@ const Operator = () => {
           setScript(fetchedScript)
         }
       } catch (error) {
-        console.error('Error fetching script:', error) // Логирование ошибок
+        console.error('Error fetching script:', error)
         setError('Ошибка при получении скрипта.')
       } finally {
         setLoading(false)
