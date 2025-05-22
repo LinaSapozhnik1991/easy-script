@@ -12,7 +12,7 @@ import styles from './SectionComponent.module.scss'
 export interface Section {
   id: string
   title: string
-  scriptId: string
+  scriptId: string | number
   scenarioId: string
   scenarios: Scenario[]
   weight?: string | null
@@ -23,7 +23,7 @@ export interface Scenario {
   title: string
   script_id?: string
   scenarioId: string
-  scriptId: string
+  scriptId: string | number
   description?: string | null
   weight?: number
 }
@@ -73,7 +73,7 @@ const SectionComponent: React.FC<{
     }
 
     const scenario = scenarios.find(s => s.scenarioId === scenarioId)
-    return scenario && scenario.scriptId ? scenario.scriptId : null
+    return scenario && scenario.scriptId ? scenario.scriptId.toString() : null
   }
 
   const handleSaveNewNode = async () => {
@@ -100,7 +100,7 @@ const SectionComponent: React.FC<{
       }
 
       const createdNode = await addAnswer(
-        scriptId,
+        String(scriptId),
         section.scenarioId,
         section.id,
         editingNodeContent.trim(),
@@ -197,7 +197,7 @@ const SectionComponent: React.FC<{
 
     try {
       const result = await deleteSection(
-        section.scriptId,
+        String(section.scriptId),
         section.scenarioId,
         section.id
       )
@@ -235,7 +235,7 @@ const SectionComponent: React.FC<{
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)} // Исправлено здесь
+            onChange={e => setTitle(e.target.value)}
             onBlur={handleAddTitle}
             placeholder="..."
             className={styles.titleInput}
@@ -274,7 +274,7 @@ const SectionComponent: React.FC<{
         </div>
 
         <div className={styles.clearIcon} onClick={handleDeleteSection}>
-          {isDeleting ? <span>Удаление...</span> : <CloseGreen />}
+          {isDeleting ? <span>...</span> : <CloseGreen />}
         </div>
       </div>
 

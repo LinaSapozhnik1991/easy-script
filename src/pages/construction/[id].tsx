@@ -198,7 +198,6 @@ const Construction = () => {
   }
 
   const handleSelectGoals = (selectedGoals: any) => {
-    // Логика обработки выбранных целей
     console.log('Selected goals:', selectedGoals)
   }
   const handleSectionDeleted = (deletedSectionId: string) => {
