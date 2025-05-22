@@ -2,8 +2,11 @@
 import { create } from 'zustand'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { CreateSectionParams, Section } from '../ui/Section'
+
 import { instance } from '@/shared/api'
+import { CreateSectionParams } from '@/features/add-mode/api'
+
+import { Section } from '../ui/Section'
 
 interface SectionState {
   sections: Section[]
