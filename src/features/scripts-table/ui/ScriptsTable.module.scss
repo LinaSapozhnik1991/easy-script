@@ -23,6 +23,7 @@
       align-items: center;
       height: 72px;
       padding-left: 25px;
+     
 
       .inputContainer {
         position: relative;
@@ -49,6 +50,9 @@
           pointer-events: none;
         }
       }
+    }
+    .thName:hover{
+        text-decoration: underline;
     }
     .thCompany {
       width: 23%;
@@ -77,7 +81,7 @@
           gap: 10px;
           justify-content: flex-end;
           padding-right: 35px;
-         
+
           .btn {
             background: transparent;
             border: none;
@@ -99,7 +103,12 @@
               outline: none;
             }
           }
+         
         }
+         &.clickableTitle:hover{
+            text-decoration: underline;
+            font-weight: 600;
+          }
       }
     }
   }

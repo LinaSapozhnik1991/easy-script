@@ -7,6 +7,8 @@ import PopupMenu from '@/features/popup-menu/ui/PopupMenu'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 
 import styles from './ScriptsTable.module.scss'
+import { useRouter } from 'next/navigation'
+import { Routers } from '@/shared/routes'
 
 type SortableKeys = keyof Script | 'company'
 
@@ -15,6 +17,7 @@ interface ScriptTableProps {
 }
 
 const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
+  const router = useRouter()
   const [filter, setFilter] = useState<string>('')
   const { deleteScript } = useScriptStore()
 
@@ -126,6 +129,9 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
       handleClosePopup()
     }
   }
+  const handleScriptClick = (scriptId: string) => {
+    router.push(`${Routers.Construction}/${scriptId}`)
+  }
   return (
     <>
       <table className={styles.table}>
@@ -167,7 +173,12 @@ const ScriptTable: React.FC<ScriptTableProps> = ({ scripts }) => {
           {sortedScripts.map((script, index) => (
             <tr key={script.id} className={styles.dataScripts}>
               <td>{index + 1}</td>
-              <td>{script.title}</td>
+              <td
+                onClick={() => handleScriptClick(script.id)}
+                style={{ cursor: 'pointer' }}
+                className={styles.clickableTitle}>
+                {script.title}
+              </td>
               <td>{script.company.name}</td>
               <td>{new Date(script.updated_at).toLocaleDateString()}</td>
               <td>

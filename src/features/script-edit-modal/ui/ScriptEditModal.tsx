@@ -110,7 +110,8 @@ const ScriptEditModal: React.FC<ScriptEditModalProps> = ({
           type: {
             id: '1',
             name: 'Default Type'
-          }
+          },
+          scenarios: editedScriptResponse.scenarios || []
         }
 
         setScript(editedScript)
