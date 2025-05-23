@@ -65,6 +65,7 @@
 }
     }
     .colorPicker {
+       left:40%;
       display: flex;
       background-color: $white;
       position: absolute;
@@ -88,6 +89,7 @@
         outline: none;
       }
       .colorContent {
+       
         margin: 10px 15px;
         display: flex;
         flex-direction: column;
@@ -96,7 +98,7 @@
 
         .colorText {
           display: flex;
-          gap: 32px;
+          gap: 15px;
 
           .redLetter {
             color: $textError;
