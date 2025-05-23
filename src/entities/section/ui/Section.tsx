@@ -34,8 +34,8 @@ export interface AnswerNode {
   sectionId: string
   title: string
   id: string
-  content: string
-  text?: string
+  content?: string
+  text: string
   type: string
   isNew?: boolean
   scenarioId?: string | null
@@ -85,15 +85,21 @@ const SectionComponent: React.FC<{
           scenarioId,
           section.id
         )
+
+        // Исправлено: используем fetchedNodes вместо fetNodes
         setNodes(
           fetchedNodes.map(node => ({
-            ...node,
-            content: node.content || node.text || node.title || '', // Учитываем все варианты
-            text: node.text || node.content || node.title || '' // Для обратной совместимости
+            id: String(node.id),
+            title: node.title,
+            text: node.text || '', // Гарантируем строку
+            content: node.text || '', // Дублируем
+            sectionId: String(node.sectionId),
+            type: node.type || 'answer',
+            scenarioId: section.scenarioId
           }))
         )
       } catch (error) {
-        console.error('Ошибка загрузки ответов:', error)
+        console.error('Ошибка загрузки:', error)
       } finally {
         setLoadingNodes(false)
       }
@@ -222,9 +228,9 @@ const SectionComponent: React.FC<{
     if (onAnswerClick) {
       onAnswerClick({
         ...node,
+        text: node.text || node.content || '',
         sectionId: section.id,
-        scenarioId: section.scenarioId as string,
-        content: node.content || node.title // Убедимся, что content всегда есть
+        scenarioId: section.scenarioId as string
       })
     }
   }
@@ -323,18 +329,13 @@ const SectionComponent: React.FC<{
                 <li
                   key={node.id}
                   onClick={() => handleNodeClick(node)}
-                  className={`${styles.liAnswer} ${
-                    selectedAnswerId === node.id ? styles.activeAnswer : ''
-                  }`}>
+                  className={`${styles.liAnswer} ${selectedAnswerId === node.id ? styles.activeAnswer : ''}`}>
                   <div className={styles.upDownIcon}>
                     <UpDown />
                   </div>
-                  {node.title}
-                  {node.content && node.content !== node.title && (
-                    <div className={styles.contentPreview}>
-                      {node.content.substring(0, 30)}...
-                    </div>
-                  )}
+                  <div className={styles.answerContent}>
+                    <div className={styles.answerTitle}>{node.title}</div>
+                  </div>
                   <CloseGreen onClick={() => handleDeleteNode(node.id)} />
                 </li>
               ))}

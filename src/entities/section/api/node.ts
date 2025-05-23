@@ -54,6 +54,7 @@ export const getSectionNodes = async (
       data: Array<{
         id: string
         title: string
+        text: string
         content: string
       }>
     }>(
@@ -67,7 +68,8 @@ export const getSectionNodes = async (
       return response.data.data.map(node => ({
         id: node.id,
         title: node.title,
-        content: node.content,
+        text: node.text,
+        content: node.text,
         sectionId: sectionId,
         type: 'answer'
       }))

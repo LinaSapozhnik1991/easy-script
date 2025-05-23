@@ -6,7 +6,7 @@ import { Company } from '@/entities/company'
 import styles from './UserProfileComponent.module.scss'
 
 export interface User {
-  id?: string
+  id: string
   name: string
   email: string
   phone: string

@@ -9,7 +9,7 @@ import { Down, PlusGreen, Preloader, Up } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { getScriptById } from '@/entities/user-script/api'
-import TextEditor, { NodeData } from '@/features/text-editor/ui/TextEditor'
+import TextEditor from '@/features/text-editor/ui/TextEditor'
 import Exit from '@/features/exit-designer/ui/ExitButton'
 import SaveScriprt from '@/features/save-script/ui/SaveScriprt'
 import OpenModalEditScript from '@/features/edit-script/ui/EditScript'
@@ -174,8 +174,11 @@ const Construction = () => {
     alert('Скрипт сохранен')
   }
   const handleAnswerClick = (answer: AnswerNode) => {
+    console.log('Answer clicked:', answer)
+
     setSelectedAnswer(answer)
-    const contentState = ContentState.createFromText(answer.content || '')
+    const content = answer.text || answer.content || ''
+    const contentState = ContentState.createFromText(content)
     setEditorState(EditorState.createWithContent(contentState))
   }
   const handleEditorChange = (newEditorState: EditorState) => {
@@ -195,34 +198,38 @@ const Construction = () => {
     try {
       const content = editorState.getCurrentContent().getPlainText()
 
-      // Явно обрабатываем все возможные случаи для weight
-      const weight =
-        selectedAnswer.weight !== undefined ? selectedAnswer.weight : null
-
-      // Создаем полный объект initialNodeData
-      const initialNodeData: NodeData = {
-        title: selectedAnswer.title,
-        text: content,
-        weight: weight, // теперь точно number | null
-        is_target: selectedAnswer.is_target ?? false // аналогично для boolean
-      }
-
-      await saveNodeData({
+      // 1. Отправляем данные на сервер
+      const response = await saveNodeData({
         scriptId,
         scenarioId,
         sectionId: selectedAnswer.sectionId,
         nodeId: selectedAnswer.id,
         editorState,
-        initialNodeData
+        initialNodeData: {
+          title: selectedAnswer.title,
+          text: content, // Отправляем текст
+          weight: selectedAnswer.weight ?? null,
+          is_target: selectedAnswer.is_target ?? false
+        }
       })
 
-      setSelectedAnswer({
-        ...selectedAnswer,
-        content
-      })
+      // 2. ОБНОВЛЯЕМ ЛОКАЛЬНОЕ СОСТОЯНИЕ
+      setNodes(prevNodes =>
+        prevNodes.map(node =>
+          node.id === selectedAnswer.id
+            ? { ...node, text: response.data.text, content: response.data.text }
+            : node
+        )
+      )
+
+      // 3. Обновляем выбранный ответ
+      setSelectedAnswer(prev => ({
+        ...prev!,
+        text: response.data.text,
+        content: response.data.text
+      }))
     } catch (error) {
-      console.error('Ошибка сохранения ответа:', error)
-      // Можно добавить обработку ошибки для пользователя
+      console.error('Ошибка сохранения:', error)
     }
   }
   const handleExitClick = () => {
@@ -378,7 +385,7 @@ const Construction = () => {
                   <TextEditor
                     key={selectedAnswer.id}
                     editorState={editorState}
-                    onEditorStateChange={handleEditorChange} // Добавляем обработчик изменений
+                    onEditorStateChange={handleEditorChange}
                     scriptId={scriptId || ''}
                     scenarioId={scenarioId || ''}
                     sectionId={selectedAnswer?.sectionId || ''}
@@ -389,7 +396,7 @@ const Construction = () => {
                       weight: null,
                       is_target: false
                     }}
-                    onSave={handleSaveAnswer} // Добавляем обработчик сохранения
+                    onSave={handleSaveAnswer}
                   />
                 ) : (
                   <div className={styles.emptyEditor}>

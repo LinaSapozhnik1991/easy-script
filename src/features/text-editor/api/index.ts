@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 // eslint-disable-next-line import/named
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
 import { EditorState } from 'draft-js'
 
@@ -9,6 +9,7 @@ import { instance } from '@/shared/api'
 interface NodeData {
   title: string
   text: string
+  content?: string
   weight: number | null
   is_target: boolean
 }
@@ -21,6 +22,11 @@ interface SaveNodeParams {
   editorState: EditorState
   initialNodeData: NodeData
 }
+export interface ApiNodeResponse {
+  success: boolean
+  message: string
+  data: NodeData
+}
 
 export const saveNodeData = async ({
   scriptId,
@@ -29,7 +35,7 @@ export const saveNodeData = async ({
   nodeId,
   editorState,
   initialNodeData
-}: SaveNodeParams): Promise<NodeData> => {
+}: SaveNodeParams): Promise<ApiNodeResponse> => {
   const token = Cookies.get('token')
   if (!token) {
     console.error('No authorization token found.')
@@ -47,7 +53,7 @@ export const saveNodeData = async ({
       is_target: initialNodeData.is_target
     }
 
-    const response: AxiosResponse<NodeData> = await instance.put(
+    const response = await instance.put<ApiNodeResponse>(
       `/scripts/${Number(scriptId)}/scenarios/${Number(scenarioId)}/sections/${Number(sectionId)}/nodes/${Number(nodeId)}`,
       updatedNode,
       {
