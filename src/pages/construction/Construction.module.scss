@@ -92,6 +92,9 @@ width: 100%;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
+        .Comment{
+            margin-bottom: 32px;
+        }
  
     }
     .leftSection, .rightSection, .centerSection{

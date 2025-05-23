@@ -54,8 +54,8 @@ export const getSectionNodes = async (
       data: Array<{
         id: string
         title: string
-        text: string
         content: string
+        text: string
       }>
     }>(
       `/scripts/${scriptId}/scenarios/${scenarioId}/sections/${sectionId}/nodes`,
@@ -66,11 +66,11 @@ export const getSectionNodes = async (
 
     if (response.data.success) {
       return response.data.data.map(node => ({
-        id: node.id,
+        id: String(node.id),
         title: node.title,
         text: node.text,
         content: node.text,
-        sectionId: sectionId,
+        sectionId: String(sectionId),
         type: 'answer'
       }))
     }

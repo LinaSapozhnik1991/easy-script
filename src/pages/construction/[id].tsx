@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { EditorState, ContentState } from 'draft-js'
@@ -28,8 +27,11 @@ import { getSections } from '@/entities/section/api'
 import { Routers } from '@/shared/routes'
 import UserLayout from '@/app/UserLayout/UserLayout'
 import { saveNodeData } from '@/features/text-editor/api'
+import { useNodesStore } from '@/entities/section/lib/useNodeStore'
 
+import { getSectionNodes } from '@/entities/section/api/node'
 import styles from './Construction.module.scss'
+import AddComments from '@/features/add- comments/ui/AddComments'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
@@ -46,6 +48,7 @@ const Construction = () => {
   const [sectionsError, setSectionsError] = useState<string | null>(null)
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerNode | null>(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const { updateNode, setNodesForSection } = useNodesStore()
 
   const fetchScript = async () => {
     if (!router.isReady || !router.query.id) return
@@ -75,7 +78,7 @@ const Construction = () => {
   }
 
   useEffect(() => {
-    const fetchSections = async () => {
+    const fetchSectionsWithNodes = async () => {
       if (!scriptId || !scenarioId) return
 
       setIsSectionsLoading(true)
@@ -84,6 +87,16 @@ const Construction = () => {
       try {
         const fetchedSections = await getSections(scriptId, scenarioId)
         setSections(fetchedSections)
+        await Promise.all(
+          fetchedSections.map(async section => {
+            const nodes = await getSectionNodes(
+              section.id,
+              scriptId,
+              scenarioId
+            )
+            setNodesForSection(section.id, nodes)
+          })
+        )
       } catch (error) {
         console.error('Не удалось загрузить разделы:', error)
         setSectionsError('Ошибка при загрузке разделов')
@@ -92,8 +105,8 @@ const Construction = () => {
       }
     }
 
-    fetchSections()
-  }, [scriptId, scenarioId])
+    fetchSectionsWithNodes()
+  }, [scriptId, scenarioId, setNodesForSection])
 
   useEffect(() => {
     fetchScript()
@@ -149,10 +162,10 @@ const Construction = () => {
             scriptId: newSection.scriptId,
             scenarioId: newSection.scenarioId,
             script_id: newSection.script_id,
-            scenario_id: newSection.scenario_id,
-            scenarios: []
+            scenario_id: newSection.scenario_id
           }
         ])
+        setNodesForSection(createdSection.id, [])
       } else {
         console.error('Не удалось создать раздел')
       }
@@ -173,21 +186,27 @@ const Construction = () => {
     console.log('Скрипт сохранен с разделами:')
     alert('Скрипт сохранен')
   }
+
   const handleAnswerClick = (answer: AnswerNode) => {
     console.log('Answer clicked:', answer)
-
     setSelectedAnswer(answer)
     const content = answer.text || answer.content || ''
     const contentState = ContentState.createFromText(content)
     setEditorState(EditorState.createWithContent(contentState))
   }
+
   const handleEditorChange = (newEditorState: EditorState) => {
     setEditorState(newEditorState)
     if (selectedAnswer) {
       const content = newEditorState.getCurrentContent().getPlainText()
-      setSelectedAnswer({
-        ...selectedAnswer,
-        content
+      setSelectedAnswer(prev => ({
+        ...prev!,
+        text: content,
+        content: content
+      }))
+      updateNode(selectedAnswer.sectionId, selectedAnswer.id, {
+        text: content,
+        content: content
       })
     }
   }
@@ -198,8 +217,12 @@ const Construction = () => {
     try {
       const content = editorState.getCurrentContent().getPlainText()
 
-      // 1. Отправляем данные на сервер
-      const response = await saveNodeData({
+      updateNode(selectedAnswer.sectionId, selectedAnswer.id, {
+        text: content,
+        content
+      })
+
+      await saveNodeData({
         scriptId,
         scenarioId,
         sectionId: selectedAnswer.sectionId,
@@ -207,31 +230,21 @@ const Construction = () => {
         editorState,
         initialNodeData: {
           title: selectedAnswer.title,
-          text: content, // Отправляем текст
+          text: content,
           weight: selectedAnswer.weight ?? null,
           is_target: selectedAnswer.is_target ?? false
         }
       })
-
-      // 2. ОБНОВЛЯЕМ ЛОКАЛЬНОЕ СОСТОЯНИЕ
-      setNodes(prevNodes =>
-        prevNodes.map(node =>
-          node.id === selectedAnswer.id
-            ? { ...node, text: response.data.text, content: response.data.text }
-            : node
-        )
-      )
-
-      // 3. Обновляем выбранный ответ
       setSelectedAnswer(prev => ({
         ...prev!,
-        text: response.data.text,
-        content: response.data.text
+        text: content,
+        content
       }))
     } catch (error) {
       console.error('Ошибка сохранения:', error)
     }
   }
+
   const handleExitClick = () => {
     setIsExitModalOpen(true)
   }
@@ -248,9 +261,11 @@ const Construction = () => {
     await saveScript()
     router.push('/')
   }
+
   const handleRouteConstructor = () => {
     router.push(`${Routers.Construction}/${scriptId}`)
   }
+
   const handleRouteOperator = () => {
     if (!scriptId) {
       console.error('Script ID is missing!')
@@ -258,9 +273,11 @@ const Construction = () => {
     }
     router.push(`${Routers.Operator}/${scriptId}`)
   }
+
   const handleSectionDeleted = (deletedSectionId: string) => {
     setSections(prev => prev.filter(s => s.id !== deletedSectionId))
   }
+
   const renderSections = () => {
     if (isSectionsLoading) {
       return <div>Загрузка разделов...</div>
@@ -295,13 +312,17 @@ const Construction = () => {
     ))
   }
 
-  if (loading)
+  if (loading) {
     return (
       <div>
         <Preloader />
       </div>
     )
-  if (error) return <div>Ошибка: {error}</div>
+  }
+
+  if (error) {
+    return <div>Ошибка: {error}</div>
+  }
 
   return (
     <>
@@ -403,6 +424,9 @@ const Construction = () => {
                     Выберите ответ для редактирования
                   </div>
                 )}
+                <div className={styles.Comment}>
+                  <AddComments />
+                </div>
               </div>
               <div className={styles.rightSection}></div>
             </div>

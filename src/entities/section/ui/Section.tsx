@@ -81,21 +81,16 @@ const SectionComponent: React.FC<{
       setLoadingNodes(true)
       try {
         const fetchedNodes = await getSectionNodes(
-          scriptId,
-          scenarioId,
-          section.id
+          String(scriptId), // Явное приведение
+          String(scenarioId),
+          String(section.id)
         )
-
-        // Исправлено: используем fetchedNodes вместо fetNodes
         setNodes(
           fetchedNodes.map(node => ({
-            id: String(node.id),
-            title: node.title,
-            text: node.text || '', // Гарантируем строку
-            content: node.text || '', // Дублируем
-            sectionId: String(node.sectionId),
-            type: node.type || 'answer',
+            ...node,
             scenarioId: section.scenarioId
+              ? String(section.scenarioId)
+              : undefined
           }))
         )
       } catch (error) {
