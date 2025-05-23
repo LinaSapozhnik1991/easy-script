@@ -425,7 +425,14 @@ const Construction = () => {
                   </div>
                 )}
                 <div className={styles.Comment}>
-                  <AddComments />
+                  {selectedAnswer && (
+                    <AddComments
+                      scriptId={scriptId}
+                      scenarioId={scenarioId}
+                      sectionId={selectedAnswer.sectionId}
+                      node_id={selectedAnswer.id}
+                    />
+                  )}
                 </div>
               </div>
               <div className={styles.rightSection}></div>
