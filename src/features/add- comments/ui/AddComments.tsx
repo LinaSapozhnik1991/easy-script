@@ -51,18 +51,15 @@ const AddComments: React.FC<AddCommentsProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Функция для преобразования данных API в наш формат
-  // Функция для преобразования данных API в наш формат
   const normalizeComment = (data: ApiCommentResponse): AppComment => ({
     id: data.id,
-    node_id: data.node_id || '', // Значение по умолчанию
-    comment: data.comment || data.text || '', // Значение по умолчанию
-    created_at: data.created_at || new Date().toISOString(), // Значение по умолчанию
-    updated_at: data.updated_at || new Date().toISOString(), // Значение по умолчанию
-    user_name: data.user_name || 'Аноним' // Значение по умолчанию
+    node_id: data.node_id || '',
+    comment: data.comment || data.text || '',
+    created_at: data.created_at || new Date().toISOString(),
+    updated_at: data.updated_at || new Date().toISOString(),
+    user_name: data.user_name || 'Аноним'
   })
 
-  // Загрузка комментариев при монтировании компонента
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -73,9 +70,8 @@ const AddComments: React.FC<AddCommentsProps> = ({
           node_id
         )
 
-        // Нормализуем данные
         const normalizedComments = response.map(normalizeComment)
-        setComments(normalizedComments) // Устанавливаем состояние с нормализованными комментариями
+        setComments(normalizedComments)
       } catch (err) {
         console.error('Ошибка загрузки:', err)
         setError('Не удалось загрузить комментарии')

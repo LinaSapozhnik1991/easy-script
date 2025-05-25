@@ -1,6 +1,13 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react'
-import { Editor, EditorState, RichUtils } from 'draft-js'
+import React, { useEffect, useState } from 'react'
+import {
+  convertFromRaw,
+  convertToRaw,
+  Editor,
+  EditorState,
+  RichUtils,
+  SelectionState
+} from 'draft-js'
 
 import 'draft-js/dist/Draft.css'
 import {
@@ -11,12 +18,15 @@ import {
   TextColor,
   Underline
 } from '@/shared/assets/icons'
+import { getSections } from '@/entities/section/api'
+import NodeModalLink from '@/features/node-modal-link/ui/NodeModalLink'
 
 import { saveNodeData } from '../api'
 
-import styles from './TextEditor.module.scss'
 import CustomSelect from './CustomSelect'
+import styles from './TextEditor.module.scss'
 
+// Стили для редактора
 const styleMap = {
   RED: { color: 'rgba(186, 26, 26, 1)' },
   GREEN: { color: 'rgba(0, 105, 110, 1)' },
@@ -36,15 +46,18 @@ const styleMap = {
   FONT_SIZE_20px: { fontSize: '20px' },
   FONT_SIZE_24px: { fontSize: '24px' },
   FONT_SIZE_32px: { fontSize: '32px' },
-  FONT_SIZE_48px: { fontSize: '48px' }
+  FONT_SIZE_48px: { fontSize: '48px' },
+  LINK: { color: 'blue', textDecoration: 'underline' }
 }
 
-export interface NodeData {
+interface NodeData {
   title: string
   text: string
   weight: number | null
   is_target: boolean
+  raw_content?: string
 }
+
 interface TextEditorProps {
   editorState: EditorState
   onEditorStateChange: (state: EditorState) => void
@@ -54,6 +67,7 @@ interface TextEditorProps {
   nodeId: string
   initialNodeData: NodeData
   onSave?: () => Promise<void>
+  onNodeLinkClick?: (nodeId: string) => void
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -63,13 +77,18 @@ const TextEditor: React.FC<TextEditorProps> = ({
   scenarioId,
   sectionId,
   nodeId,
-  initialNodeData
+  initialNodeData,
+  onNodeLinkClick
 }) => {
   const [colorPickerVisible, setColorPickerVisible] = useState(false)
   const [currentFontSize, setCurrentFontSize] = useState('18px')
   const [currentTextColor, setCurrentTextColor] = useState('BLACK')
+  const [showNodeModal, setShowNodeModal] = useState(false)
+  const [availableNodes, setAvailableNodes] = useState<
+    Array<{ id: string; title: string }>
+  >([])
 
-  const options = [
+  const fontSizeOptions = [
     { value: '12px', label: '12' },
     { value: '14px', label: '14' },
     { value: '16px', label: '16' },
@@ -80,6 +99,36 @@ const TextEditor: React.FC<TextEditorProps> = ({
     { value: '48px', label: '48' }
   ]
 
+  useEffect(() => {
+    const fetchAvailableNodeLinks = async () => {
+      try {
+        const nodes = await getSections(String(scriptId), String(scenarioId))
+        setAvailableNodes(nodes)
+      } catch (error) {
+        console.error('Ошибка загрузки доступных нод:', error)
+      }
+    }
+
+    fetchAvailableNodeLinks()
+  }, [scriptId, scenarioId, sectionId, nodeId])
+
+  // Инициализация редактора с сохраненным форматированием
+  useEffect(() => {
+    if (initialNodeData.raw_content) {
+      try {
+        const rawContent = JSON.parse(initialNodeData.raw_content)
+        const contentState = convertFromRaw(rawContent)
+        onEditorStateChange(EditorState.createWithContent(contentState))
+      } catch (error) {
+        console.error('Ошибка загрузки форматированного текста:', error)
+      }
+    }
+  }, [initialNodeData.raw_content, onEditorStateChange])
+
+  const handleAddLink = () => {
+    setShowNodeModal(true)
+  }
+
   const handleKeyCommand = (command: string) => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
@@ -89,7 +138,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     return 'not-handled'
   }
 
-  const setEditorState = (newState: EditorState) => {
+  const updateEditorState = (newState: EditorState) => {
     const currentInlineStyle = newState.getCurrentInlineStyle()
     if (currentInlineStyle.has(currentTextColor)) {
       newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
@@ -114,52 +163,94 @@ const TextEditor: React.FC<TextEditorProps> = ({
     if (['RED', 'GREEN', 'BLACK', 'GRAY'].includes(style)) {
       setCurrentTextColor(style)
     }
-    setEditorState(RichUtils.toggleInlineStyle(editorState, style))
+    updateEditorState(RichUtils.toggleInlineStyle(editorState, style))
   }
 
-  const addLink = () => {
-    const url = prompt('Введите URL ссылки:', 'http://')
-    if (url) {
-      const contentState = editorState.getCurrentContent()
-      const contentStateWithEntity = contentState.createEntity(
-        'LINK',
-        'MUTABLE',
-        { url }
-      )
-      const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
+  const addNodeLink = async (selectedNodeIds: string[]) => {
+    if (!selectedNodeIds.length) return
 
-      const newEditorState = EditorState.set(editorState, {
-        currentContent: contentStateWithEntity
+    const selection = editorState.getSelection()
+    let newSelection = selection
+
+    if (selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent()
+      const block = contentState.getBlockForKey(selection.getStartKey())
+      const text = block.getText()
+      let start = selection.getStartOffset()
+      let end = selection.getEndOffset()
+
+      while (start > 0 && !/\s/.test(text[start - 1])) start--
+      while (end < text.length && !/\s/.test(text[end])) end++
+
+      newSelection = selection.merge({
+        anchorOffset: start,
+        focusOffset: end
+      }) as SelectionState
+    }
+
+    let contentState = editorState.getCurrentContent()
+    let newEditorState = editorState
+
+    selectedNodeIds.forEach(nodeId => {
+      contentState = contentState.createEntity('NODE_LINK', 'MUTABLE', {
+        nodeId
       })
-      setEditorState(
-        RichUtils.toggleLink(
-          newEditorState,
-          newEditorState.getSelection(),
-          entityKey
-        )
+      const entityKey = contentState.getLastCreatedEntityKey()
+
+      newEditorState = RichUtils.toggleLink(
+        EditorState.push(newEditorState, contentState, 'apply-entity'),
+        newSelection,
+        entityKey
       )
+
+      newEditorState = RichUtils.toggleInlineStyle(newEditorState, 'LINK')
+      contentState = newEditorState.getCurrentContent()
+    })
+
+    onEditorStateChange(newEditorState)
+    setShowNodeModal(false)
+  }
+
+  const handleEditorClick = (e: React.MouseEvent) => {
+    const editor = e.currentTarget as HTMLElement
+    const selection = window.getSelection()
+
+    if (editor && selection && selection.rangeCount === 0) {
+      const contentState = editorState.getCurrentContent()
+      const selectionState = editorState.getSelection()
+      const block = contentState.getBlockForKey(selectionState.getStartKey())
+      const entityKey = block.getEntityAt(selectionState.getStartOffset())
+
+      if (entityKey) {
+        const entity = contentState.getEntity(entityKey)
+        if (entity.getType() === 'NODE_LINK' && onNodeLinkClick) {
+          const { nodeId: linkedNodeId } = entity.getData()
+          onNodeLinkClick(linkedNodeId)
+          e.preventDefault()
+        }
+      }
     }
   }
 
   const applyTextColor = (colorKey: string) => {
     toggleInlineStyle(colorKey)
-    closeColorPicker()
-  }
-
-  const applyBackgroundColor = (colorKey: string) => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, colorKey))
-    closeColorPicker()
-  }
-
-  const closeColorPicker = () => {
     setColorPickerVisible(false)
   }
 
-  const isStyleActive = (style: string) =>
-    editorState.getCurrentInlineStyle().has(style)
+  const applyBackgroundColor = (colorKey: string) => {
+    updateEditorState(RichUtils.toggleInlineStyle(editorState, colorKey))
+    setColorPickerVisible(false)
+  }
+
+  const isStyleActive = (style: string) => {
+    return editorState.getCurrentInlineStyle().has(style)
+  }
+
   const handleSave = async () => {
     try {
-      const content = editorState.getCurrentContent().getPlainText()
+      const contentState = editorState.getCurrentContent()
+      const rawContent = convertToRaw(contentState)
+
       await saveNodeData({
         scriptId,
         scenarioId,
@@ -168,7 +259,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
         editorState,
         initialNodeData: {
           ...initialNodeData,
-          text: content
+          text: contentState.getPlainText(),
+          raw_content: JSON.stringify(rawContent)
         }
       })
     } catch (error) {
@@ -177,9 +269,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
   }
 
   return (
-    <div className={styles.editor}>
+    <div className={styles.editor} onClick={handleEditorClick}>
       <div className={styles.editorPanel}>
-        <div className={styles.editorButton}>
+        <div className={styles.editorButtons}>
           <button
             onMouseDown={e => {
               e.preventDefault()
@@ -204,15 +296,20 @@ const TextEditor: React.FC<TextEditorProps> = ({
             className={isStyleActive('UNDERLINE') ? styles.active : ''}>
             <Underline />
           </button>
+
+          {/* Кнопка цвета текста */}
           <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>
             <TextColor />
           </button>
-          <button onClick={addLink}>
+
+          {/* Кнопка добавления ссылки */}
+          <button onClick={handleAddLink}>
             <Link />
           </button>
 
+          {/* Выбор размера шрифта */}
           <CustomSelect
-            options={options}
+            options={fontSizeOptions}
             value={currentFontSize}
             onChange={(newSize: string) => {
               setCurrentFontSize(newSize)
@@ -220,14 +317,17 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 editorState,
                 `FONT_SIZE_${newSize}`
               )
-              setEditorState(newEditorState)
+              updateEditorState(newEditorState)
             }}
           />
+
+          {/* Кнопка сохранения */}
           <button className={styles.saveAnswer} onClick={handleSave}>
             Сохранить
           </button>
         </div>
 
+        {/* Палитра цветов */}
         {colorPickerVisible && (
           <div className={styles.colorPicker}>
             <div className={styles.colorContent}>
@@ -278,21 +378,37 @@ const TextEditor: React.FC<TextEditorProps> = ({
               </div>
             </div>
 
-            <button className={styles.closeButton} onClick={closeColorPicker}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setColorPickerVisible(false)}>
               <Close />
             </button>
           </div>
         )}
       </div>
-      <hr />
-      <div className={styles.text}>
+
+      <hr className={styles.divider} />
+
+      {/* Редактор */}
+      <div className={styles.editorContent}>
         <Editor
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={updateEditorState}
           handleKeyCommand={handleKeyCommand}
           customStyleMap={styleMap}
         />
       </div>
+      {showNodeModal && (
+        <NodeModalLink
+          sections={availableNodes}
+          onSelectNodes={addNodeLink}
+          onClose={() => setShowNodeModal(false)}
+          scriptId={scriptId}
+          scenarioId={scenarioId}
+          sectionId={sectionId}
+          nodeId={nodeId}
+        />
+      )}
     </div>
   )
 }

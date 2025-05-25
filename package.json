@@ -33,6 +33,7 @@
     "react-draggable": "^4.4.6",
     "react-hook-form": "^7.55.0",
     "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.5",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.6",
     "zod": "^3.24.2",

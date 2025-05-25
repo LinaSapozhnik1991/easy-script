@@ -10,7 +10,19 @@ interface ModalProps {
   onClose: () => void
   children?: React.ReactNode
 }
+// types/modalTypes.ts
+export type ModalId = 'script-edit' | 'target-select' | 'confirmation'
 
+export interface ModalContent {
+  isOpen: boolean
+  content: React.ReactNode | null
+}
+
+export interface ModalState {
+  modals: Record<ModalId, ModalContent>
+  openModal: (modalId: ModalId, content: React.ReactNode) => void
+  closeModal: (modalId: ModalId) => void
+}
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const modalRef = useRef<HTMLDivElement>(null)
   const portalRoot = usePortal('modal-root')

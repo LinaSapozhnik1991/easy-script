@@ -11,7 +11,7 @@ export interface AddModeProps {
   scenarioId: string
 }
 
-const AddMode: React.FC<AddModeProps> = ({
+const AddSection: React.FC<AddModeProps> = ({
   onAddSection,
   scenarios,
   scriptId,
@@ -38,4 +38,4 @@ const AddMode: React.FC<AddModeProps> = ({
   )
 }
 
-export default AddMode
+export default AddSection

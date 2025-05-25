@@ -3,8 +3,10 @@
   .editorPanel {
     padding: 16px;
     height: 72px;
+    display: flex;
+    justify-content: center;
 
-    .editorButton {
+    .editorButtons {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -54,7 +56,7 @@
         font: $fontSmall;
         font-weight: 500;
         color: $emerald;
-        border: 1px solid $borderInputProfile;
+        border: 2px solid $borderInputProfile;
         width: 86px;
         height:36px;
         border-radius: $RadiusM;

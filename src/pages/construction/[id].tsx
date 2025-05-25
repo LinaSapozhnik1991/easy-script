@@ -10,7 +10,7 @@ import useScriptStore from '@/entities/user-script/lib/useScriptStore'
 import { getScriptById } from '@/entities/user-script/api'
 import TextEditor from '@/features/text-editor/ui/TextEditor'
 import Exit from '@/features/exit-designer/ui/ExitButton'
-import SaveScriprt from '@/features/save-script/ui/SaveScriprt'
+import { SaveScript } from '@/features/save-script/ui/SaveScriprt'
 import OpenModalEditScript from '@/features/edit-script/ui/EditScript'
 import ScriptEditModal from '@/features/script-edit-modal/ui/ScriptEditModal'
 import useModalStore from '@/shared/Modal/model/useModalStore'
@@ -22,16 +22,18 @@ import SectionComponent, {
   Section
 } from '@/entities/section/ui/Section'
 import { createSection } from '@/features/add-mode/api'
-import AddMode from '@/features/add-mode/ui/AddMode'
 import { getSections } from '@/entities/section/api'
 import { Routers } from '@/shared/routes'
 import UserLayout from '@/app/UserLayout/UserLayout'
 import { saveNodeData } from '@/features/text-editor/api'
 import { useNodesStore } from '@/entities/section/lib/useNodeStore'
-
 import { getSectionNodes } from '@/entities/section/api/node'
-import styles from './Construction.module.scss'
 import AddComments from '@/features/add- comments/ui/AddComments'
+import TargetSelectionModal from '@/features/target-modal/ui/TargetModal'
+import OpenModalTarget from '@/features/open0modal-target/ui/OpenModalTarget'
+import AddSection from '@/features/add-mode/ui/AddSection'
+
+import styles from './Construction.module.scss'
 
 const Construction = () => {
   const { setScript, script } = useScriptStore()
@@ -48,7 +50,8 @@ const Construction = () => {
   const [sectionsError, setSectionsError] = useState<string | null>(null)
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerNode | null>(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const { updateNode, setNodesForSection } = useNodesStore()
+  const { setNodesForSection, updateNode } = useNodesStore()
+  const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
 
   const fetchScript = async () => {
     if (!router.isReady || !router.query.id) return
@@ -90,9 +93,9 @@ const Construction = () => {
         await Promise.all(
           fetchedSections.map(async section => {
             const nodes = await getSectionNodes(
-              section.id,
               scriptId,
-              scenarioId
+              scenarioId,
+              section.id
             )
             setNodesForSection(section.id, nodes)
           })
@@ -123,8 +126,9 @@ const Construction = () => {
       const validScenarios: Scenario[] = script.scenarios.map(scenario => ({
         id: String(scenario.id),
         title: scenario.title,
-        scenarioId: String(scenario.scenarioId),
         scriptId: String(scenario.script_id),
+        scenarioId: String(scenario.scenarioId),
+
         description: scenario.description || null,
         weight: scenario.weight || undefined
       }))
@@ -323,6 +327,25 @@ const Construction = () => {
   if (error) {
     return <div>Ошибка: {error}</div>
   }
+  const handleSelectTargets = async (targetIds: string[]) => {
+    try {
+      await Promise.all(
+        sections.map(async section => {
+          const nodes = await getSectionNodes(scriptId, scenarioId, section.id)
+          nodes.forEach(async node => {
+            if (targetIds.includes(node.id)) {
+              updateNode(section.id, node.id, {
+                ...node,
+                is_target: true
+              })
+            }
+          })
+        })
+      )
+    } catch (error) {
+      console.error('Ошибка при обновлении целей:', error)
+    }
+  }
 
   return (
     <>
@@ -331,7 +354,19 @@ const Construction = () => {
           <div className={styles.designer}>
             <div className={styles.designerActions}>
               <div className={styles.designerActionsLeft}>
-                <SaveScriprt onSaveScript={saveScript} />
+                <SaveScript
+                  scriptId={scriptId}
+                  scenarioId={scenarioId}
+                  selectedAnswer={selectedAnswer}
+                  editorState={editorState}
+                  getSectionNodes={getSectionNodes}
+                  onSuccess={data => {
+                    console.log('Скрипт сохранен:', data)
+                  }}
+                  onError={error => {
+                    console.error('Ошибка сохранения:', error)
+                  }}
+                />
                 <div className={styles.modeButton}>
                   <Button
                     borderMedium
@@ -387,19 +422,16 @@ const Construction = () => {
               <div className={styles.leftSection}>
                 {renderSections()}
                 {scriptId && scenarioId && (
-                  <AddMode
+                  <AddSection
                     onAddSection={handleAddSection}
                     scenarios={scenarios}
                     scriptId={scriptId || ''}
                     scenarioId={scenarioId || ''}
                   />
                 )}
-                <Button
-                  scriptStyle
-                  size="largeMode"
-                  onClick={() => console.log('')}>
+                <OpenModalTarget openPopup={() => setIsTargetModalOpen(true)}>
                   Добавить цель
-                </Button>
+                </OpenModalTarget>
               </div>
               <div className={styles.centerSection}>
                 {selectedAnswer ? (
@@ -445,6 +477,16 @@ const Construction = () => {
               onExitWithoutSaving={handleExitWithoutSaving}
               onStayInEditor={handleStayInEditor}
               onSaveAndExit={handleSaveAndExit}
+            />
+          )}
+          {isTargetModalOpen && selectedAnswer && (
+            <TargetSelectionModal
+              sectionId={selectedAnswer.sectionId}
+              sections={sections}
+              onSelectTargets={handleSelectTargets}
+              onClose={() => setIsTargetModalOpen(false)}
+              scriptId={scriptId}
+              scenarioId={scenarioId}
             />
           )}
         </ScriptEditModalLayout>

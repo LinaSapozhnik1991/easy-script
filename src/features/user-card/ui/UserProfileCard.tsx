@@ -119,14 +119,6 @@ const handlePhoneChange = (
   const formattedValue = formatPhoneNumber(rawValue)
   field.onChange(formattedValue)
 }
-const handlePaste = (
-  event: React.ClipboardEvent<HTMLInputElement>,
-  field: FieldValues
-) => {
-  const pastedData = event.clipboardData.getData('text')
-  const formattedValue = formatPhoneNumber(pastedData.replace(/\D/g, ''))
-  field.onChange(formattedValue)
-}
 
 const UserProfileCard: React.FC<{
   user: User | null
@@ -146,7 +138,6 @@ const UserProfileCard: React.FC<{
   } = useForm<User>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      id: '',
       name: '',
       phone: '',
       email: '',
@@ -309,10 +300,15 @@ const UserProfileCard: React.FC<{
                   name="whatsapp"
                   onKeyDown={handleKeyDown}
                   onChange={(e, field) => {
-                    handlePhoneChange(e, field)
+                    const rawValue = e.target.value
+                    field.onChange(rawValue)
                     trigger('whatsapp')
                   }}
-                  onPaste={(e, field) => handlePaste(e, field)}
+                  onPaste={(e, field) => {
+                    const pastedValue = e.clipboardData.getData('Text')
+                    field.onChange(pastedValue)
+                    trigger('whatsapp')
+                  }}
                   errorMessage={errors.whatsapp?.message}
                 />
               </tbody>

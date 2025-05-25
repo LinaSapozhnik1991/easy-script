@@ -18,6 +18,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'medium'
     | 'mediumScript'
     | 'mediumConstructor'
+    | 'mediumModalTarget'
     | 'large'
     | 'largeScript'
     | 'mediumXL'
@@ -60,6 +61,7 @@ export const Button: React.FC<ButtonProps> = ({
       [styles.mediumXL]: size === 'mediumXL',
       [styles.mediumConstructor]: size === 'mediumConstructor',
       [styles.mediumXXL]: size === 'mediumXXL',
+      [styles.mediumModalTarget]: size === 'mediumModalTarget',
       [styles.smallXL]: size === 'smallXL',
       [styles.mediumScript]: size === 'mediumScript',
       [styles.largeScript]: size === 'largeScript',

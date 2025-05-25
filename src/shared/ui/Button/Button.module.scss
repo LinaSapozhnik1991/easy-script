@@ -124,6 +124,11 @@
   -o-border-radius: $RadiusM ;
  
 }
+&.mediumModalTarget{
+  width: 308px;
+  height: 56px;;
+  font: $fontBody;
+}
 &.largeScript{
   min-width: 280px;
   min-height: 56px;

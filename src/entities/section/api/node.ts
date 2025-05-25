@@ -40,7 +40,6 @@ export const addAnswer = async (
   }
 }
 
-// В файле api.ts
 export const getSectionNodes = async (
   scriptId: string,
   scenarioId: string,
@@ -78,5 +77,29 @@ export const getSectionNodes = async (
   } catch (error) {
     console.error('Ошибка при получении узлов раздела:', error)
     return []
+  }
+}
+export const deleteNode = async (
+  scriptId: string,
+  scenarioId: string,
+  sectionId: string,
+  nodeId: string
+): Promise<{ success: boolean }> => {
+  const token = Cookies.get('token')
+
+  try {
+    const response = await instance.delete(
+      `/scripts/${Number(scriptId)}/scenarios/${Number(scenarioId)}/sections/${Number(sectionId)}/nodes/${nodeId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    return response.data
+  } catch (error) {
+    console.error('Ошибка при удалении ноды:', error)
+    throw error
   }
 }

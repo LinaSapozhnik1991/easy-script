@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-// eslint-disable-next-line import/named
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import Cookies from 'js-cookie'
-import { EditorState } from 'draft-js'
+import { EditorState, convertToRaw } from 'draft-js'
 
 import { instance } from '@/shared/api'
 
@@ -12,6 +11,7 @@ interface NodeData {
   content?: string
   weight: number | null
   is_target: boolean
+  raw_content?: string // Добавляем это поле в основной интерфейс
 }
 
 interface SaveNodeParams {
@@ -22,6 +22,7 @@ interface SaveNodeParams {
   editorState: EditorState
   initialNodeData: NodeData
 }
+
 export interface ApiNodeResponse {
   success: boolean
   message: string
@@ -35,27 +36,24 @@ export const saveNodeData = async ({
   nodeId,
   editorState,
   initialNodeData
-}: SaveNodeParams): Promise<ApiNodeResponse> => {
+}: SaveNodeParams): Promise<void> => {
   const token = Cookies.get('token')
   if (!token) {
-    console.error('No authorization token found.')
-    throw new Error('No authorization token')
+    throw new Error('Токен авторизации не найден')
   }
 
   try {
-    const content = editorState.getCurrentContent().getPlainText()
-
-    const updatedNode: NodeData = {
-      ...initialNodeData,
-      text: content,
-      title: initialNodeData.title,
-      weight: initialNodeData.weight,
-      is_target: initialNodeData.is_target
-    }
+    const contentState = editorState.getCurrentContent()
+    const rawContent = convertToRaw(contentState)
 
     const response = await instance.put<ApiNodeResponse>(
-      `/scripts/${Number(scriptId)}/scenarios/${Number(scenarioId)}/sections/${Number(sectionId)}/nodes/${Number(nodeId)}`,
-      updatedNode,
+      `/scripts/${scriptId}/scenarios/${scenarioId}/sections/${sectionId}/nodes/${nodeId}`,
+      {
+        ...initialNodeData,
+        raw_content: JSON.stringify(rawContent),
+        text: contentState.getPlainText(),
+        content: contentState.getPlainText() // Дублируем для совместимости
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,17 +62,20 @@ export const saveNodeData = async ({
       }
     )
 
-    console.log('Node saved successfully:', response.data)
-    return response.data
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Ошибка сохранения данных')
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<{ message?: string }>
-      console.error('Error saving node:', axiosError.response?.data)
+      console.error('Ошибка сохранения:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      })
       throw new Error(
-        axiosError.response?.data?.message || 'Failed to save node'
+        error.response?.data?.message || 'Ошибка сохранения данных'
       )
     }
-    console.error('Unexpected error:', error)
-    throw new Error('An unexpected error occurred')
+    throw error
   }
 }

@@ -4,7 +4,7 @@ import { create } from 'zustand'
 import { AnswerNode } from '../ui/Section'
 
 interface NodesState {
-  nodes: Record<string, AnswerNode[]> // Все ключи - строки
+  nodes: Record<string, AnswerNode[]>
   getNodesBySection: (sectionId: string) => AnswerNode[]
   addNode: (sectionId: string, node: AnswerNode) => void
   updateNode: (

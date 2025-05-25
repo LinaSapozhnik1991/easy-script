@@ -1,19 +1,50 @@
 import React from 'react'
-import { Button } from '@/shared/ui/Button'
-import styles from './SaveScript.module.scss'
 
-interface SaveScriptProps {
-  onSaveScript: () => void // Добавление типа для пропса
+import { Button } from '@/shared/ui/Button'
+import { AnswerNode } from '@/entities/section/ui/Section'
+
+import { SaveScriptParams } from '../types'
+import { useSaveScript } from '../hook/useSaveScript'
+
+interface SaveScriptProps extends SaveScriptParams {
+  getSectionNodes: (
+    sectionId: string,
+    scriptId: string,
+    scenarioId: string
+  ) => Promise<AnswerNode[]>
+  onSuccess?: (data?: unknown) => void
+  onError?: (error: string) => void
 }
 
-const SaveScript: React.FC<SaveScriptProps> = ({ onSaveScript }) => {
+export const SaveScript: React.FC<SaveScriptProps> = ({
+  scriptId,
+  scenarioId,
+  selectedAnswer,
+  editorState,
+  getSectionNodes,
+  onSuccess,
+  onError
+}) => {
+  const { saveScript } = useSaveScript({
+    scriptId,
+    scenarioId,
+    selectedAnswer,
+    editorState,
+    getSectionNodes
+  })
+
+  const handleClick = async () => {
+    const result = await saveScript()
+    if (result.success) {
+      onSuccess?.(result.data)
+    } else {
+      onError?.(result.error || 'Неизвестная ошибка')
+    }
+  }
+
   return (
-    <div className={styles.saveButton}>
-      <Button primary size="mediumScript" onClick={onSaveScript}>
-        Сохранить скрипт
-      </Button>
-    </div>
+    <Button borderMedium primary size="medium" onClick={handleClick}>
+      Сохранить скрипт
+    </Button>
   )
 }
-
-export default SaveScript

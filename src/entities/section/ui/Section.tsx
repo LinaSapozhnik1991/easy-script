@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react'
 
-import { CloseGreen, UpDown } from '@/shared/assets/icons'
+import { CloseGreen, Flag, UpDown } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 
-import { addAnswer, getSectionNodes } from '../api/node'
+import { addAnswer, deleteNode, getSectionNodes } from '../api/node'
 import { deleteSection } from '../api'
+import { useNodesStore } from '../lib/useNodeStore'
 
 import styles from './SectionComponent.module.scss'
 
@@ -57,6 +58,7 @@ const SectionComponent: React.FC<{
   onAnswerClick?: (answer: AnswerNode) => void
   selectedAnswerId?: string | null
   setSections?: React.Dispatch<React.SetStateAction<Section[]>>
+  children?: React.ReactNode
 }> = ({
   section,
   onUpdateTitle,
@@ -64,35 +66,37 @@ const SectionComponent: React.FC<{
   onSectionDeleted,
   selectedAnswerId,
   scriptId,
-
-  scenarioId
+  scenarioId,
+  children
 }) => {
   const [title, setTitle] = useState(section.title)
-  const [nodes, setNodes] = useState<AnswerNode[]>([])
   const [editingNodeId, setEditingNodeId] = useState<string | null>(null)
   const [editingNodeContent, setEditingNodeContent] = useState('')
   const [isAddingNewNode, setIsAddingNewNode] = useState(false)
   const newNodeInputRef = useRef<HTMLInputElement>(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [loadingNodes, setLoadingNodes] = useState(false)
-  //const { isDeleting } = useState(false)
+
+  const {
+    getNodesBySection,
+    setNodesForSection,
+    addNode,
+    updateNode,
+    removeNode
+  } = useNodesStore()
+
+  const nodes = getNodesBySection(section.id) || []
+
   useEffect(() => {
     const loadNodes = async () => {
       setLoadingNodes(true)
       try {
         const fetchedNodes = await getSectionNodes(
-          String(scriptId), // Явное приведение
+          String(scriptId),
           String(scenarioId),
           String(section.id)
         )
-        setNodes(
-          fetchedNodes.map(node => ({
-            ...node,
-            scenarioId: section.scenarioId
-              ? String(section.scenarioId)
-              : undefined
-          }))
-        )
+        setNodesForSection(section.id, fetchedNodes)
       } catch (error) {
         console.error('Ошибка загрузки:', error)
       } finally {
@@ -101,29 +105,13 @@ const SectionComponent: React.FC<{
     }
 
     loadNodes()
-  }, [scriptId, scenarioId, section.id])
+  }, [scriptId, scenarioId, section.id, setNodesForSection])
+
   useEffect(() => {
     if (isAddingNewNode && newNodeInputRef.current) {
       newNodeInputRef.current.focus()
     }
   }, [isAddingNewNode])
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getScriptIdByScenarioId = (
-    scenarios: Scenario[],
-    scenarioId: string
-  ): string | null => {
-    if (!Array.isArray(scenarios)) {
-      console.error(
-        'Expected scenarios to be an array but received:',
-        scenarios
-      )
-      return null
-    }
-
-    const scenario = scenarios.find(s => s.scenarioId === scenarioId)
-    return scenario && scenario.scriptId ? scenario.scriptId.toString() : null
-  }
 
   const handleSaveNewNode = async () => {
     if (!editingNodeContent.trim()) return
@@ -140,7 +128,7 @@ const SectionComponent: React.FC<{
       scenarioId: section.scenarioId
     }
 
-    setNodes(prev => [...prev, newNode])
+    addNode(section.id, newNode)
     setEditingNodeId(tempId)
     setEditingNodeContent('')
 
@@ -161,64 +149,42 @@ const SectionComponent: React.FC<{
       )
 
       if (createdNode && createdNode.id) {
-        setNodes(prev =>
-          prev.map(n =>
-            n.id === tempId
-              ? {
-                  ...n,
-                  id: String(createdNode.id),
-                  content: createdNode.text || createdNode.title || '',
-                  type: createdNode.type || 'answer',
-                  isNew: false
-                }
-              : n
-          )
-        )
+        updateNode(section.id, tempId, {
+          id: String(createdNode.id),
+          content: createdNode.text || createdNode.title || '',
+          type: createdNode.type || 'answer',
+          isNew: false
+        })
       } else {
         throw new Error('Пустой ответ от сервера')
       }
     } catch (error) {
       console.error('Ошибка при добавлении ответа:', error)
-      setErrorMessage('Ошибка при добавлении ответа')
-      setNodes(prev => prev.filter(n => n.id !== tempId))
+      setErrorMessage('Ошибка при добавления ответа')
+      removeNode(section.id, tempId)
     } finally {
       setIsAddingNewNode(false)
     }
   }
-  /* const handleAnswerClick = (node: AnswerNode) => {
-    if (onAnswerClick) {
-      onAnswerClick({
-        ...node,
-        sectionId: section.id,
-        scenarioId: section.scenarioId
-      })
-    }
-  }*/
-  const handleNodeContentBlur = async (nodeId: string) => {
-    const nodeIndex = nodes.findIndex(n => n.id === nodeId)
-    if (nodeIndex === -1) return
 
-    if (nodes[nodeIndex].isNew) {
+  const handleNodeContentBlur = async (nodeId: string) => {
+    const node = nodes.find(n => n.id === nodeId)
+    if (!node) return
+
+    if (node.isNew) {
       if (!editingNodeContent.trim()) {
-        setNodes(prev => prev.filter(n => n.id !== nodeId))
+        removeNode(section.id, nodeId)
       } else {
         await handleSaveNewNode()
       }
     } else {
-      const newNodes = [...nodes]
-      newNodes[nodeIndex] = { ...nodes[nodeIndex], content: editingNodeContent }
-      setNodes(newNodes)
+      updateNode(section.id, nodeId, { content: editingNodeContent })
     }
 
     setEditingNodeId(null)
     setEditingNodeContent('')
   }
 
-  /*const handleNodeEditClick = (node: Node) => {
-    setEditingNodeId(node.id)
-    setEditingNodeContent(node.content)
-    setIsAddingNewNode(false)
-  }*/
   const handleNodeClick = (node: AnswerNode) => {
     if (onAnswerClick) {
       onAnswerClick({
@@ -229,6 +195,7 @@ const SectionComponent: React.FC<{
       })
     }
   }
+
   const handleNodeContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditingNodeContent(e.target.value)
   }
@@ -257,7 +224,6 @@ const SectionComponent: React.FC<{
   }
 
   const handleDeleteSection = async (section: Section) => {
-    console.log('Deleting section:', section)
     if (!section.scriptId || !section.scenarioId) {
       console.error('Отсутствует scriptId или scenarioId')
       return
@@ -281,9 +247,33 @@ const SectionComponent: React.FC<{
     setIsAddingNewNode(true)
     setEditingNodeContent('')
   }
-  const handleDeleteNode = (nodeId: string) => {
-    setNodes(prev => prev.filter(node => node.id !== nodeId))
+
+  const handleDeleteNode = async (nodeId: string) => {
+    const node = nodes.find(n => n.id === nodeId)
+    if (!node) return
+
+    if (!section.scriptId || !section.scenarioId) {
+      console.error('Отсутствует scriptId или scenarioId')
+      return
+    }
+
+    try {
+      const result = await deleteNode(
+        section.scriptId,
+        section.scenarioId,
+        section.id,
+        nodeId
+      )
+      if (result.success) {
+        removeNode(section.id, nodeId)
+      } else {
+        console.error('Не удалось удалить ноду')
+      }
+    } catch (error) {
+      console.error('Ошибка удаления ноды:', error)
+    }
   }
+
   return (
     <section className={styles.section}>
       <div className={styles.topRow}>
@@ -330,6 +320,7 @@ const SectionComponent: React.FC<{
                   </div>
                   <div className={styles.answerContent}>
                     <div className={styles.answerTitle}>{node.title}</div>
+                    {node.is_target && <Flag className={styles.flagIcon} />}
                   </div>
                   <CloseGreen onClick={() => handleDeleteNode(node.id)} />
                 </li>
@@ -347,6 +338,9 @@ const SectionComponent: React.FC<{
           <CloseGreen />
         </div>
       </div>
+      {children && (
+        <div className={styles.targetSelectionContent}>{children}</div>
+      )}
 
       <div className={styles.btn}>
         <Button scriptStyle size="largeMode" onClick={handleAddNodeClick}>

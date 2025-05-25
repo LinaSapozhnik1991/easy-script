@@ -1,2 +1,2 @@
-import SaveScriprt from './ui/SaveScriprt'
-export default SaveScriprt
+import { SaveScript } from './ui/SaveScriprt'
+export default SaveScript

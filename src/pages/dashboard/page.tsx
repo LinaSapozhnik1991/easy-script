@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
     <>
       <div className={styles.dashboard}>
         <div className={styles.dashboardAnalyst}>
-          <p>Здесь обязательно будет аналитика</p>
+          <h2>Здесь обязательно будет аналитика</h2>
         </div>
       </div>
     </>

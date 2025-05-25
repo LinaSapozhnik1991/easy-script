@@ -1,15 +1,12 @@
-.dashboard{ 
-   width: 100%;
-   //padding-right: 118px;
-     display: flex;
+.instruction{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 45px;
-
+    width: 100%;
  
-
-.dashboardAnalyst{
-     display: flex;
+    .instructionContent{
+        display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid $emerald ;
@@ -22,4 +19,5 @@
         -ms-border-radius: $RadiusM;
         -o-border-radius: $RadiusM;
 }
+   
 }
