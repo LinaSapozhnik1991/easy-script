@@ -15,10 +15,10 @@ interface NodeModalLinkProps {
   }>
   onSelectNodes: (nodeIds: string[]) => void
   onClose: () => void
-  scriptId: string | number // Добавлено
-  scenarioId: string | number // Добавлено
-  sectionId: string | number // Добавлено
-  nodeId: string // Добавлено
+  scriptId: string | number
+  scenarioId: string | number
+  sectionId: string | number
+  nodeId: string
 }
 
 const NodeModalLink: React.FC<NodeModalLinkProps> = ({
@@ -30,22 +30,19 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
   sectionId,
   nodeId
 }) => {
-  const [selectedNodes, setSelectedNodes] = useState<string[]>([])
+  const [selectedNode, setSelectedNode] = useState<string | null>(null) // Изменяем на строку или null
   const { getNodesBySection } = useNodesStore()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleNodeSelect = (nodeId: string) => {
-    setSelectedNodes(prev =>
-      prev.includes(nodeId)
-        ? prev.filter(id => id !== nodeId)
-        : [...prev, nodeId]
-    )
+    // Устанавливаем только один выбранный узел
+    setSelectedNode(prev => (prev === nodeId ? null : nodeId))
   }
 
   const handleSubmit = async () => {
-    if (selectedNodes.length === 0) {
-      setError('Выберите хотя бы одну ноду для ссылки')
+    if (!selectedNode) {
+      setError('Выберите одну ноду для ссылки')
       return
     }
 
@@ -59,9 +56,9 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
         scenarioId,
         sectionId,
         nodeId,
-        selectedNodes
+        [selectedNode] // Передаем массив с единственным выбранным узлом
       )
-      onSelectNodes(selectedNodes) // Вызов функции для обновления выбранных узлов
+      onSelectNodes([selectedNode]) // Вызов функции для обновления выбранного узла
       onClose()
     } catch (err) {
       setError(
@@ -88,7 +85,7 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
                     <input
                       type="checkbox"
                       id={`target-${node.id}`}
-                      checked={selectedNodes.includes(node.id)}
+                      checked={selectedNode === node.id} // Проверяем, выбран ли узел
                       onChange={() => handleNodeSelect(node.id)}
                       disabled={isLoading}
                     />
@@ -97,7 +94,7 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
                       htmlFor={`target-${node.id}`}>
                       {node.title}
                     </label>
-                    {selectedNodes.includes(node.id) && (
+                    {selectedNode === node.id && (
                       <Check className={styles.flagIcon} />
                     )}
                   </div>
