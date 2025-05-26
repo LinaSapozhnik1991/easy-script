@@ -35,7 +35,7 @@ const TargetSelectionModal = ({
 
   const handleSubmit = async () => {
     if (selectedTargets.length === 0) {
-      setError('Выберите хотя бы одну цель')
+      setError('цель не выбрана')
       return
     }
 

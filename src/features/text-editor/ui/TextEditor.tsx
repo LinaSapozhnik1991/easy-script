@@ -5,6 +5,7 @@ import { Editor, EditorState, RichUtils, SelectionState } from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import {
   Bold,
+  Check,
   Close,
   Cursive,
   Link,
@@ -334,7 +335,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
           <button className={styles.saveAnswer} onClick={handleSave}>
             Сохранить
           </button>
-          <div className={styles.saveMessage}>Сохранено!</div>
+          <div className={styles.saveMessage}>
+            <Check />
+          </div>
         </div>
 
         {/* Палитра цветов */}

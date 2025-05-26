@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-// utils/editorSerialization.ts
 import {
   convertFromRaw,
   convertToRaw,
@@ -7,9 +6,15 @@ import {
   RawDraftContentState
 } from 'draft-js'
 
-export const serializeEditorState = (editorState: EditorState): string => {
+export const serializeEditorState = (
+  editorState: EditorState,
+  styles: { fontSize: string; color: string }
+) => {
   const rawContent = convertToRaw(editorState.getCurrentContent())
-  return JSON.stringify(rawContent) // Просто сохраняем rawContent без дополнительной обработки
+  return JSON.stringify({
+    content: rawContent,
+    styles // Добавляем стили в сериализованные данные
+  })
 }
 
 export const deserializeToEditorState = (serialized: string): EditorState => {
@@ -18,6 +23,6 @@ export const deserializeToEditorState = (serialized: string): EditorState => {
     return EditorState.createWithContent(convertFromRaw(rawContent))
   } catch (error) {
     console.error('Failed to deserialize editor content:', error)
-    return EditorState.createEmpty() // Возвращаем пустой редактор при ошибке
+    return EditorState.createEmpty()
   }
 }
