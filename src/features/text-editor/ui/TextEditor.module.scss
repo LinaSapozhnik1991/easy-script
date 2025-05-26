@@ -49,25 +49,25 @@
         }
       }
       select:focus {
-        outline: none; 
+        outline: none;
       }
-      .saveAnswer{
-        margin-left:10px;
+      .saveAnswer {
+        margin-left: 10px;
         font: $fontSmall;
         font-weight: 500;
         color: $emerald;
         border: 2px solid $borderInputProfile;
         width: 86px;
-        height:36px;
+        height: 36px;
         border-radius: $RadiusM;
         -webkit-border-radius: $RadiusM;
         -moz-border-radius: $RadiusM;
         -ms-border-radius: $RadiusM;
         -o-border-radius: $RadiusM;
-}
+      }
     }
     .colorPicker {
-       left:40%;
+      left: 40%;
       display: flex;
       background-color: $white;
       position: absolute;
@@ -91,7 +91,6 @@
         outline: none;
       }
       .colorContent {
-       
         margin: 10px 15px;
         display: flex;
         flex-direction: column;
@@ -159,5 +158,54 @@
   .text {
     width: 100%;
     padding: 40px;
+  }
+  .saveAnswer {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &.save-animation {
+      background-color: $emerald-100;
+      color: $emerald-600;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba($emerald-600, 0.1);
+        animation: pulse 2s ease-out;
+      }
+    }
+  }
+
+  .saveMessage {
+    display: none;
+    margin-left: 10px;
+    color: $emerald-600;
+    font-size: 14px;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }

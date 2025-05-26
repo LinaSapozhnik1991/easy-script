@@ -247,6 +247,12 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const handleSave = async () => {
     try {
       const serializedContent = serializeEditorState(editorState)
+      const saveButton = document.querySelector(`.${styles.saveAnswer}`)
+      const saveMessage = document.querySelector(`.${styles.saveMessage}`)
+
+      // Показываем сообщение и запускаем анимацию
+      saveButton?.classList.add(styles.saveAnimation)
+      saveMessage?.setAttribute('style', 'display: block')
 
       await saveNodeData({
         scriptId,
@@ -260,6 +266,12 @@ const TextEditor: React.FC<TextEditorProps> = ({
           raw_content: serializedContent
         }
       })
+
+      // Убираем анимацию через 2 секунды
+      setTimeout(() => {
+        saveButton?.classList.remove(styles.saveAnimation)
+        saveMessage?.setAttribute('style', 'display: none')
+      }, 2000)
     } catch (error) {
       console.error('Ошибка сохранения:', error)
     }
@@ -322,6 +334,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           <button className={styles.saveAnswer} onClick={handleSave}>
             Сохранить
           </button>
+          <div className={styles.saveMessage}>Сохранено!</div>
         </div>
 
         {/* Палитра цветов */}
