@@ -33,7 +33,10 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
           <Button
             primaryBorder
             borderMedium
-            onClick={onStayInEditor}
+            onClick={() => {
+              onStayInEditor()
+              onClose()
+            }}
             disabled={isLoading}>
             Остаться в редакторе
           </Button>
