@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import axios from 'axios'
 import Cookies from 'js-cookie'
+
 import { instance } from '@/shared/api'
 import { SaveScriptApiParams } from '@/features/save-script/types'
 
@@ -13,7 +15,9 @@ export const saveScriptApi = async (
     })
     return response.data
   } catch (error) {
+    console.error('Ошибка при сохранении скрипта:', error) // Логирование ошибки
     if (axios.isAxiosError(error)) {
+      console.error('Ответ сервера:', error.response?.data) // Логирование ответа сервера
       return {
         success: false,
         message: error.response?.data?.message || 'Ошибка сохранения'

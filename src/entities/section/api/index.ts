@@ -6,6 +6,10 @@ import { instance } from '@/shared/api'
 
 import { Section } from '../ui/Section'
 
+export interface UpdateSectionTitleResponse {
+  success: boolean
+  message?: string
+}
 export const getSections = async (
   scriptId: string,
   scenarioId: string
@@ -92,6 +96,49 @@ export const deleteSection = async (
       return {
         success: false,
         message: error.response?.data?.message || 'Ошибка при удалении раздела'
+      }
+    }
+    return {
+      success: false,
+      message: 'Неизвестная ошибка'
+    }
+  }
+}
+
+export const updateSectionTitle = async (
+  scriptId: string,
+  scenarioId: string,
+  sectionId: string,
+  title: string
+): Promise<UpdateSectionTitleResponse> => {
+  const token = Cookies.get('token')
+
+  if (!token) {
+    return {
+      success: false,
+      message: 'Токен авторизации не найден'
+    }
+  }
+
+  try {
+    const response = await instance.put<UpdateSectionTitleResponse>(
+      `/scripts/${scriptId}/scenarios/${scenarioId}/sections/${sectionId}`,
+      { title },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || 'Ошибка при обновлении заголовка'
       }
     }
     return {

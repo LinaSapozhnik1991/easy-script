@@ -1,4 +1,4 @@
-import { EditorState } from 'draft-js'
+import { ContentState, EditorState, RawDraftContentState } from 'draft-js'
 
 import { AnswerNode } from '@/entities/section/ui/Section'
 
@@ -10,6 +10,7 @@ export interface Node {
 export interface SaveScriptParams {
   scriptId: string
   scenarioId: string
+  sectionId: string
   selectedAnswer: AnswerNode | null
   editorState: EditorState
 }
@@ -22,5 +23,8 @@ export interface SaveScriptResult {
 
 export interface SaveScriptApiParams {
   id: string
-  content: string
+  content: string // Простой текст
+  rawContent?: RawDraftContentState // Используем правильный тип для сырых данных
+  selectedAnswer?: AnswerNode | null
+  contentState?: ContentState
 }

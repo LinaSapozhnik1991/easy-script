@@ -1,13 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
-import {
-  convertFromRaw,
-  convertToRaw,
-  Editor,
-  EditorState,
-  RichUtils,
-  SelectionState
-} from 'draft-js'
+import { Editor, EditorState, RichUtils, SelectionState } from 'draft-js'
 
 import 'draft-js/dist/Draft.css'
 import {
@@ -22,6 +15,10 @@ import { getSections } from '@/entities/section/api'
 import NodeModalLink from '@/features/node-modal-link/ui/NodeModalLink'
 
 import { saveNodeData } from '../api'
+import {
+  deserializeToEditorState,
+  serializeEditorState
+} from '../utils/editorSerialization'
 
 import CustomSelect from './CustomSelect'
 import styles from './TextEditor.module.scss'
@@ -116,9 +113,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
   useEffect(() => {
     if (initialNodeData.raw_content) {
       try {
-        const rawContent = JSON.parse(initialNodeData.raw_content)
-        const contentState = convertFromRaw(rawContent)
-        onEditorStateChange(EditorState.createWithContent(contentState))
+        const editorStateFromSerialized = deserializeToEditorState(
+          initialNodeData.raw_content
+        )
+        onEditorStateChange(editorStateFromSerialized)
       } catch (error) {
         console.error('Ошибка загрузки форматированного текста:', error)
       }
@@ -248,8 +246,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   const handleSave = async () => {
     try {
-      const contentState = editorState.getCurrentContent()
-      const rawContent = convertToRaw(contentState)
+      const serializedContent = serializeEditorState(editorState)
 
       await saveNodeData({
         scriptId,
@@ -259,8 +256,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
         editorState,
         initialNodeData: {
           ...initialNodeData,
-          text: contentState.getPlainText(),
-          raw_content: JSON.stringify(rawContent)
+          text: editorState.getCurrentContent().getPlainText(),
+          raw_content: serializedContent
         }
       })
     } catch (error) {

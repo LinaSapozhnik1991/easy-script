@@ -5,7 +5,7 @@ import { CloseGreen, Flag, UpDown } from '@/shared/assets/icons'
 import { Button } from '@/shared/ui/Button'
 
 import { addAnswer, deleteNode, getSectionNodes } from '../api/node'
-import { deleteSection } from '../api'
+import { deleteSection, updateSectionTitle } from '../api'
 import { useNodesStore } from '../lib/useNodeStore'
 
 import styles from './SectionComponent.module.scss'
@@ -200,11 +200,30 @@ const SectionComponent: React.FC<{
     setEditingNodeContent(e.target.value)
   }
 
-  const handleAddTitle = () => {
-    if (title.trim()) {
-      onUpdateTitle(section.id, title)
-    } else {
+  const handleAddTitle = async () => {
+    if (!title.trim()) {
       alert('Заголовок не может быть пустым')
+      return
+    }
+
+    try {
+      const result = await updateSectionTitle(
+        String(section.scriptId),
+        String(section.scenarioId),
+        section.id,
+        title.trim()
+      )
+
+      if (result.success) {
+        onUpdateTitle(section.id, title.trim()) // Вызываем колбэк для обновления в родительском компоненте
+      } else {
+        setTitle(section.title) // Возвращаем предыдущее значение при ошибке
+        alert(result.message || 'Ошибка при сохранении заголовка')
+      }
+    } catch (error) {
+      setTitle(section.title) // Возвращаем предыдущее значение при ошибке
+      console.error('Ошибка при сохранении заголовка:', error)
+      alert('Ошибка при сохранении заголовка')
     }
   }
 

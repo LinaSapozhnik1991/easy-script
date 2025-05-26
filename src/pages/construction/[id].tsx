@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { EditorState, ContentState } from 'draft-js'
 
@@ -52,7 +52,9 @@ const Construction = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const { setNodesForSection, updateNode } = useNodesStore()
   const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
-
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [isExitLoading, setIsExitLoading] = useState(false)
+  const initialContentRef = useRef<ContentState | null>(null)
   const fetchScript = async () => {
     if (!router.isReady || !router.query.id) return
 
@@ -136,6 +138,41 @@ const Construction = () => {
     }
   }, [script])
 
+  // Отслеживаем изменения в редакторе
+  /* useEffect(() => {
+    const subscription = editorState.onChange(() => {
+      setHasUnsavedChanges(true)
+    })
+    return () => subscription.unsubscribe()
+  }, [editorState])*/
+  const handleExitClick = () => {
+    if (hasUnsavedChanges) {
+      setIsExitModalOpen(true)
+    } else {
+      setIsExitModalOpen(true)
+    }
+  }
+
+  const handleExitWithoutSaving = () => {
+    router.push(Routers.MyScripts)
+  }
+
+  const handleStayInEditor = () => {
+    setIsExitModalOpen(false)
+  }
+
+  const handleSaveAndExit = async () => {
+    setIsExitLoading(true)
+    try {
+      await saveScript()
+      setHasUnsavedChanges(false)
+      router.push(Routers.MyScripts)
+    } catch (error) {
+      console.error('Ошибка сохранения:', error)
+    } finally {
+      setIsExitLoading(false)
+    }
+  }
   const handleOpenModal = () => {
     if (script?.title) {
       openModal(
@@ -196,11 +233,18 @@ const Construction = () => {
     setSelectedAnswer(answer)
     const content = answer.text || answer.content || ''
     const contentState = ContentState.createFromText(content)
+    initialContentRef.current = contentState
     setEditorState(EditorState.createWithContent(contentState))
+    setHasUnsavedChanges(false)
   }
 
   const handleEditorChange = (newEditorState: EditorState) => {
+    if (initialContentRef.current) {
+      const currentContent = newEditorState.getCurrentContent()
+      setHasUnsavedChanges(!currentContent.equals(initialContentRef.current))
+    }
     setEditorState(newEditorState)
+
     if (selectedAnswer) {
       const content = newEditorState.getCurrentContent().getPlainText()
       setSelectedAnswer(prev => ({
@@ -247,23 +291,6 @@ const Construction = () => {
     } catch (error) {
       console.error('Ошибка сохранения:', error)
     }
-  }
-
-  const handleExitClick = () => {
-    setIsExitModalOpen(true)
-  }
-
-  const handleExitWithoutSaving = () => {
-    router.push('/')
-  }
-
-  const handleStayInEditor = () => {
-    setIsExitModalOpen(false)
-  }
-
-  const handleSaveAndExit = async () => {
-    await saveScript()
-    router.push('/')
   }
 
   const handleRouteConstructor = () => {
@@ -357,6 +384,7 @@ const Construction = () => {
                 <SaveScript
                   scriptId={scriptId}
                   scenarioId={scenarioId}
+                  sectionId={selectedAnswer?.sectionId || ''}
                   selectedAnswer={selectedAnswer}
                   editorState={editorState}
                   getSectionNodes={getSectionNodes}
@@ -385,7 +413,10 @@ const Construction = () => {
                 </div>
               </div>
               <div className={styles.designerActionsRigth}>
-                <Exit onClick={handleExitClick} />
+                <Exit
+                  onClick={handleExitClick}
+                  hasUnsavedChanges={hasUnsavedChanges}
+                />
               </div>
             </div>
             <div className={styles.designerInfoScript}>
@@ -477,6 +508,7 @@ const Construction = () => {
               onExitWithoutSaving={handleExitWithoutSaving}
               onStayInEditor={handleStayInEditor}
               onSaveAndExit={handleSaveAndExit}
+              isLoading={isExitLoading}
             />
           )}
           {isTargetModalOpen && selectedAnswer && (

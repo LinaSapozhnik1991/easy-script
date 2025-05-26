@@ -52,7 +52,7 @@ export const saveNodeData = async ({
         ...initialNodeData,
         raw_content: JSON.stringify(rawContent),
         text: contentState.getPlainText(),
-        content: contentState.getPlainText() // Дублируем для совместимости
+        content: contentState.getPlainText()
       },
       {
         headers: {

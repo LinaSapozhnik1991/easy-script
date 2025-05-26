@@ -6,7 +6,8 @@ import { CloseWhite } from '@/shared/assets/icons'
 import styles from './ExitButton.module.scss'
 
 interface ExitProps {
-  onClick: () => void // Добавляем интерфейс для пропсов
+  onClick: () => void
+  hasUnsavedChanges?: boolean
 }
 const Exit: React.FC<ExitProps> = ({ onClick }) => {
   return (
