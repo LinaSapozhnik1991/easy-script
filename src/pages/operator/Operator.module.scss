@@ -56,7 +56,13 @@ width: 100%;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
- 
+ .selectSection{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid $borderInputProfile;
+ }
     }
   
     .leftSection, .rightSection, .centerSection{

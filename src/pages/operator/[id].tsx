@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-// pages/scripts/operator.[id].tsx
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -16,12 +15,14 @@ import styles from './Operator.module.scss'
 
 import ClientSegmentedControl from '@/widgets/client-segment-control/ui/ClientSegmentControl'
 import { Routers } from '@/shared/routes'
+import { getSectionNodes } from '@/entities/section/api/node'
+import SectionComponent, {
+  AnswerNode,
+  Section
+} from '@/entities/section/ui/Section'
+import { getSections } from '@/entities/section/api'
+import { useNodesStore } from '@/entities/section/lib/useNodeStore'
 
-interface Operator {
-  createdScript?: {
-    id: string
-  }
-}
 const Operator = () => {
   const router = useRouter()
   const { id } = router.query
@@ -38,6 +39,18 @@ const Operator = () => {
   )
 
   const [clientNote, setClientNote] = useState('')
+  const [sections, setSections] = useState<Section[]>([])
+  const [sectionsLoading, setSectionsLoading] = useState(false)
+  const [sectionsError, setSectionsError] = useState<string | null>(null)
+  const [scenarioId, setScenarioId] = useState<string>('')
+  const [scriptId, setScriptId] = useState<string>('')
+  const { setNodesForSection } = useNodesStore()
+  const [selectedAnswer, setSelectedAnswer] = useState<AnswerNode | null>(null)
+
+  // Новое состояние для выбранной секции
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
+    null
+  )
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -54,39 +67,62 @@ const Operator = () => {
   }, [isTimerRunning])
 
   useEffect(() => {
-    console.log(`Fetching script for ID: ${id}`)
+    if (scriptId && scenarioId) {
+      fetchSections()
+    }
+  }, [scriptId, scenarioId])
+
+  useEffect(() => {
+    if (!id) return
     const fetchScript = async () => {
-      if (!id) return
-
       const scriptId = Array.isArray(id) ? id[0] : id
-
       try {
         const fetchedScript = await getScriptById(scriptId)
-        console.log('Fetched script:', fetchedScript)
         if ('error' in fetchedScript) {
           setError(fetchedScript.error)
         } else {
           setScript(fetchedScript)
+          setScriptId(fetchedScript.id)
+          if (fetchedScript.scenarios?.length) {
+            setScenarioId(String(fetchedScript.scenarios[0].id))
+          }
         }
-      } catch (error) {
-        console.error('Error fetching script:', error)
+      } catch {
         setError('Ошибка при получении скрипта.')
       } finally {
         setLoading(false)
       }
     }
-
     fetchScript()
   }, [id])
 
-  if (loading) return <div>Загрузка...</div>
-  if (error) return <div>Ошибка: {error}</div>
+  const fetchSections = async () => {
+    if (!scriptId || !scenarioId) return
 
-  const handleCallButtonClick = () => {
-    if (isTimerRunning) {
-      setIsModalOpen(true)
-    } else {
-      setIsTimerRunning(true)
+    setSectionsLoading(true)
+    setSectionsError(null)
+
+    try {
+      const fetchedSections = await getSections(scriptId, scenarioId)
+      setSections(fetchedSections)
+
+      // Устанавливаем выбранную секцию первой по умолчанию, если еще не выбрана
+      if (fetchedSections.length && !selectedSectionId) {
+        setSelectedSectionId(fetchedSections[0].id)
+      }
+
+      // Загрузка узлов для каждой секции
+      await Promise.all(
+        fetchedSections.map(async section => {
+          const nodes = await getSectionNodes(scriptId, scenarioId, section.id)
+          setNodesForSection(section.id, nodes)
+        })
+      )
+    } catch (error) {
+      console.error('Ошибка загрузки секций:', error)
+      setSectionsError('Ошибка при загрузке секций')
+    } finally {
+      setSectionsLoading(false)
     }
   }
 
@@ -100,19 +136,45 @@ const Operator = () => {
   const cancelEndCall = () => {
     setIsModalOpen(false)
   }
+
   const handleResult = (result: string) => {
     console.log('Результат разговора:', result)
     setIsResultModalOpen(false)
   }
+
   const formatTime = (time: number) => {
     const hours = String(Math.floor(time / 3600)).padStart(2, '0')
     const minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0')
     const seconds = String(time % 60).padStart(2, '0')
     return `${hours}:${minutes}:${seconds}`
   }
+
   const handleRouteConstructor = () => {
     router.push(`${Routers.Construction}/${id}`)
   }
+
+  const handleAnswerClick = (answer: AnswerNode) => {
+    setSelectedAnswer(answer)
+  }
+
+  const handleUpdateTitle = (id: string, newTitle: string) => {
+    setSections(prev =>
+      prev.map(section =>
+        section.id === id ? { ...section, title: newTitle } : section
+      )
+    )
+  }
+
+  const handleSectionDeleted = (id: string) => {
+    setSections(prev => prev.filter(section => section.id !== id))
+    if (selectedAnswer?.sectionId === id) {
+      setSelectedAnswer(null)
+    }
+    if (selectedSectionId === id) {
+      setSelectedSectionId(null)
+    }
+  }
+
   const handleRouteOperator = () => {
     if (!script) {
       console.error('Script ID is missing!')
@@ -120,6 +182,15 @@ const Operator = () => {
     }
     router.push(`${Routers.Operator}/${id}`)
   }
+
+  // Находим выбранную секцию по id
+  const selectedSection = sections.find(
+    section => section.id === selectedSectionId
+  )
+
+  if (loading) return <div>Загрузка...</div>
+  if (error) return <div>Ошибка: {error}</div>
+
   return (
     <UserLayout>
       <div className={styles.operatorMode}>
@@ -155,7 +226,13 @@ const Operator = () => {
           </div>
           <Button
             borderMedium
-            onClick={handleCallButtonClick}
+            onClick={() => {
+              if (isTimerRunning) {
+                setIsModalOpen(true)
+              } else {
+                setIsTimerRunning(true)
+              }
+            }}
             primary={!isTimerRunning}
             exitStyle={isTimerRunning}>
             {isTimerRunning ? 'Завершить звонок' : 'Начать звонок'}
@@ -165,17 +242,58 @@ const Operator = () => {
         <div className={styles.sectionsEditor}>
           <div className={styles.leftSection}>
             <h2>Разделы скрипта</h2>
-            <div className={styles.sections}>
-              {script?.sections?.map(section => (
-                <div key={section.id} className={styles.section}>
-                  {section.title}
-                </div>
-              ))}
+            {sectionsLoading && <div>Загрузка разделов...</div>}
+            {sectionsError && <div>Ошибка: {sectionsError}</div>}
+            {!sectionsLoading && !sectionsError && sections.length === 0 && (
+              <div>Разделы не найдены</div>
+            )}
+            {!sectionsLoading && !sectionsError && sections.length > 0 && (
+              <div>
+                {sections.map(section => (
+                  <div
+                    key={section.id}
+                    onClick={() => setSelectedSectionId(section.id)}
+                    style={{
+                      cursor: 'pointer',
+                      padding: '8px',
+                      backgroundColor:
+                        section.id === selectedSectionId
+                          ? '#d0e6ff'
+                          : 'transparent',
+                      borderRadius: '4px',
+                      marginBottom: '4px'
+                    }}>
+                    <SectionComponent
+                      section={{
+                        ...section,
+                        scriptId: scriptId,
+                        scenarioId:
+                          section.scenario_id ||
+                          section.scenarioId ||
+                          scenarioId
+                      }}
+                      onUpdateTitle={handleUpdateTitle}
+                      scriptId={scriptId}
+                      scenarioId={scenarioId}
+                      scenarios={script?.scenarios || []}
+                      onSectionDeleted={handleSectionDeleted}
+                      onAnswerClick={handleAnswerClick}
+                      selectedAnswerId={selectedAnswer?.id}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.centerSection}>
+            <div className={styles.selectSection}>
+            <h1 className={styles.selectedSection}>
+              {selectedSection?.title || 'Неизвестный заголовок'}
+            </h1>
             </div>
           </div>
-          <div className={styles.centerSection}>
-            <h1>{script?.title || 'Неизвестный заголовок'}</h1>
-          </div>
+
           <div className={styles.rightSection}>
             <div className={styles.segmentedControl}>
               <ClientSegmentedControl
@@ -194,6 +312,7 @@ const Operator = () => {
           </div>
         </div>
       </div>
+
       <EndTheCall
         isOpen={isModalOpen}
         onConfirm={confirmEndCall}
