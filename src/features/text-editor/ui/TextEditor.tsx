@@ -24,7 +24,6 @@ import {
 import CustomSelect from './CustomSelect'
 import styles from './TextEditor.module.scss'
 
-// Стили для редактора
 const styleMap = {
   RED: { color: 'rgba(186, 26, 26, 1)' },
   GREEN: { color: 'rgba(0, 105, 110, 1)' },
@@ -109,24 +108,29 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
     fetchAvailableNodeLinks()
   }, [scriptId, scenarioId, sectionId, nodeId])
-
-  // Инициализация редактора с сохраненным форматированием
   useEffect(() => {
     if (initialNodeData.raw_content) {
       try {
+        const { currentStyles } = JSON.parse(initialNodeData.raw_content)
         const editorStateFromSerialized = deserializeToEditorState(
           initialNodeData.raw_content
         )
+
+        if (currentStyles) {
+          if (currentStyles.fontSize) {
+            setCurrentFontSize(currentStyles.fontSize.replace('FONT_SIZE_', ''))
+          }
+          if (currentStyles.textColor) {
+            setCurrentTextColor(currentStyles.textColor)
+          }
+        }
+
         onEditorStateChange(editorStateFromSerialized)
       } catch (error) {
         console.error('Ошибка загрузки форматированного текста:', error)
       }
     }
   }, [initialNodeData.raw_content, onEditorStateChange])
-
-  const handleAddLink = () => {
-    setShowNodeModal(true)
-  }
 
   const handleKeyCommand = (command: string) => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
@@ -138,24 +142,33 @@ const TextEditor: React.FC<TextEditorProps> = ({
   }
 
   const updateEditorState = (newState: EditorState) => {
-    const currentInlineStyle = newState.getCurrentInlineStyle()
-    if (currentInlineStyle.has(currentTextColor)) {
-      newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
-    }
-    const oldFontSize = currentFontSize
-    if (currentInlineStyle.has(`FONT_SIZE_${oldFontSize}`)) {
-      newState = RichUtils.toggleInlineStyle(
-        newState,
-        `FONT_SIZE_${oldFontSize}`
-      )
-    }
-    newState = RichUtils.toggleInlineStyle(
-      newState,
+    const currentStyles = newState.getCurrentInlineStyle()
+    const stylesArray = currentStyles.toArray()
+
+    const fontSizeStyles = stylesArray.filter(style =>
+      style.startsWith('FONT_SIZE_')
+    )
+
+    let updatedState = newState
+    fontSizeStyles.forEach(style => {
+      updatedState = RichUtils.toggleInlineStyle(updatedState, style)
+    })
+
+    const colorStyles = stylesArray.filter(style =>
+      ['RED', 'GREEN', 'BLACK', 'GRAY'].includes(style)
+    )
+
+    colorStyles.forEach(style => {
+      updatedState = RichUtils.toggleInlineStyle(updatedState, style)
+    })
+
+    updatedState = RichUtils.toggleInlineStyle(
+      updatedState,
       `FONT_SIZE_${currentFontSize}`
     )
-    newState = RichUtils.toggleInlineStyle(newState, currentTextColor)
+    updatedState = RichUtils.toggleInlineStyle(updatedState, currentTextColor)
 
-    onEditorStateChange(newState)
+    onEditorStateChange(updatedState)
   }
 
   const toggleInlineStyle = (style: string) => {
@@ -244,14 +257,14 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const isStyleActive = (style: string) => {
     return editorState.getCurrentInlineStyle().has(style)
   }
-
+  const handleAddLink = () => {
+    setShowNodeModal(true)
+  }
   const handleSave = async () => {
     try {
       const serializedContent = serializeEditorState(editorState)
       const saveButton = document.querySelector(`.${styles.saveAnswer}`)
       const saveMessage = document.querySelector(`.${styles.saveMessage}`)
-
-      // Показываем сообщение и запускаем анимацию
       saveButton?.classList.add(styles.saveAnimation)
       saveMessage?.setAttribute('style', 'display: block')
 
@@ -268,7 +281,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
         }
       })
 
-      // Убираем анимацию через 2 секунды
       setTimeout(() => {
         saveButton?.classList.remove(styles.saveAnimation)
         saveMessage?.setAttribute('style', 'display: none')

@@ -100,8 +100,6 @@ const Construction = () => {
 
     try {
       const fetchedSections = await getSections(scriptId, scenarioId)
-
-      // Разделяем секции между панелями (можно добавить свою логику разделения)
       const half = Math.ceil(fetchedSections.length / 2)
       const sectionsForSide =
         side === 'left'
@@ -570,9 +568,6 @@ const Construction = () => {
                     scenarioId={scenarioId || ''}
                   />
                 )}
-                <OpenModalTarget openPopup={() => setIsTargetModalOpen(true)}>
-                  Добавить цель
-                </OpenModalTarget>
               </div>
             </div>
           </div>
