@@ -264,6 +264,8 @@ const Operator = () => {
                       marginBottom: '4px'
                     }}>
                     <SectionComponent
+                      scenario_Id={scenarioId}
+                      script_id={scriptId}
                       section={{
                         ...section,
                         scriptId: scriptId,
@@ -275,7 +277,12 @@ const Operator = () => {
                       onUpdateTitle={handleUpdateTitle}
                       scriptId={scriptId}
                       scenarioId={scenarioId}
-                      scenarios={script?.scenarios || []}
+                      scenarios={
+                        script?.scenarios?.map(scenario => ({
+                          ...scenario,
+                          id: String(scenario.id) // гарантируем строку
+                        })) || []
+                      }
                       onSectionDeleted={handleSectionDeleted}
                       onAnswerClick={handleAnswerClick}
                       selectedAnswerId={selectedAnswer?.id}
@@ -288,9 +295,9 @@ const Operator = () => {
 
           <div className={styles.centerSection}>
             <div className={styles.selectSection}>
-            <h1 className={styles.selectedSection}>
-              {selectedSection?.title || 'Неизвестный заголовок'}
-            </h1>
+              <h1 className={styles.selectedSection}>
+                {selectedSection?.title || 'Неизвестный заголовок'}
+              </h1>
             </div>
           </div>
 
