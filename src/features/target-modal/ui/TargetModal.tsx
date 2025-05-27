@@ -4,19 +4,19 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/shared/ui/Button'
 import { useNodesStore } from '@/entities/section/lib/useNodeStore'
 import { AnswerNode, Section } from '@/entities/section/ui/Section'
+import { Flag } from '@/shared/assets/icons'
 
 import { updateNodeTarget } from '../api'
 
 import styles from './TargetModal.module.scss'
-import { Flag } from '@/shared/assets/icons'
 
 interface TargetModalProps {
-  sections: Section[] // Массив секций
-  onSelectTargets: (targetIds: string[]) => void // Функция обратного вызова для выбора целей
-  onClose: () => void // Функция для закрытия модального окна
-  scriptId: string // ID скрипта
-  scenarioId: string // ID сценария
-  sectionId: string // ID секции
+  sections: Section[]
+  onSelectTargets: (targetIds: string[]) => void
+  onClose: () => void
+  scriptId: string
+  scenarioId: string
+  sectionId: string
 }
 const TargetSelectionModal = ({
   sections,
@@ -31,7 +31,7 @@ const TargetSelectionModal = ({
   const [error, setError] = useState<string | null>(null)
   const { getNodesBySection } = useNodesStore()
 
-  const modalRef = useRef<HTMLDivElement>(null) // Создаем реф для модального окна
+  const modalRef = useRef<HTMLDivElement>(null)
 
   const handleSubmit = async () => {
     if (selectedTargets.length === 0) {
@@ -73,7 +73,6 @@ const TargetSelectionModal = ({
     setError(null)
   }
 
-  // Обработчик клика вне модального окна
   const handleOutsideClick = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       onClose()
@@ -81,10 +80,8 @@ const TargetSelectionModal = ({
   }
 
   useEffect(() => {
-    // Добавляем обработчик события клика
     document.addEventListener('mousedown', handleOutsideClick)
     return () => {
-      // Удаляем обработчик при размонтировании компонента
       document.removeEventListener('mousedown', handleOutsideClick)
     }
   }, [])

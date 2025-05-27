@@ -42,19 +42,29 @@ const Construction = () => {
   const { openModal, closeModal } = useModalStore()
   const [error, setError] = useState<string | null>(null)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
-  const [sections, setSections] = useState<Section[]>([])
+  const [leftSections, setLeftSections] = useState<Section[]>([])
+  const [rightSections, setRightSections] = useState<Section[]>([])
   const [scenarioId, setScenarioId] = useState<string>('')
   const [scriptId, setScriptId] = useState<string>('')
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [isSectionsLoading, setIsSectionsLoading] = useState(false)
   const [sectionsError, setSectionsError] = useState<string | null>(null)
-  const [selectedAnswer, setSelectedAnswer] = useState<AnswerNode | null>(null)
+  const [leftSelectedAnswer, setLeftSelectedAnswer] =
+    useState<AnswerNode | null>(null)
+  const [rightSelectedAnswer, setRightSelectedAnswer] =
+    useState<AnswerNode | null>(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const { setNodesForSection, updateNode } = useNodesStore()
   const [isTargetModalOpen, setIsTargetModalOpen] = useState(false)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [isExitLoading, setIsExitLoading] = useState(false)
   const initialContentRef = useRef<ContentState | null>(null)
+  const [activeSide, setActiveSide] = useState<'left' | 'right'>('left')
+
+  const selectedAnswer =
+    activeSide === 'left' ? leftSelectedAnswer : rightSelectedAnswer
+  const allSections = [...leftSections, ...rightSections]
+
   const fetchScript = async () => {
     if (!router.isReady || !router.query.id) return
 
@@ -82,35 +92,47 @@ const Construction = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchSectionsWithNodes = async () => {
-      if (!scriptId || !scenarioId) return
+  const fetchSectionsForSide = async (side: 'left' | 'right') => {
+    if (!scriptId || !scenarioId) return
 
-      setIsSectionsLoading(true)
-      setSectionsError(null)
+    setIsSectionsLoading(true)
+    setSectionsError(null)
 
-      try {
-        const fetchedSections = await getSections(scriptId, scenarioId)
-        setSections(fetchedSections)
-        await Promise.all(
-          fetchedSections.map(async section => {
-            const nodes = await getSectionNodes(
-              scriptId,
-              scenarioId,
-              section.id
-            )
-            setNodesForSection(section.id, nodes)
-          })
-        )
-      } catch (error) {
-        console.error('Не удалось загрузить разделы:', error)
-        setSectionsError('Ошибка при загрузке разделов')
-      } finally {
-        setIsSectionsLoading(false)
+    try {
+      const fetchedSections = await getSections(scriptId, scenarioId)
+
+      // Разделяем секции между панелями (можно добавить свою логику разделения)
+      const half = Math.ceil(fetchedSections.length / 2)
+      const sectionsForSide =
+        side === 'left'
+          ? fetchedSections.slice(0, half)
+          : fetchedSections.slice(half)
+
+      if (side === 'left') {
+        setLeftSections(sectionsForSide)
+      } else {
+        setRightSections(sectionsForSide)
       }
-    }
 
-    fetchSectionsWithNodes()
+      await Promise.all(
+        sectionsForSide.map(async section => {
+          const nodes = await getSectionNodes(scriptId, scenarioId, section.id)
+          setNodesForSection(section.id, nodes)
+        })
+      )
+    } catch (error) {
+      console.error('Не удалось загрузить разделы:', error)
+      setSectionsError('Ошибка при загрузке разделов')
+    } finally {
+      setIsSectionsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (scriptId && scenarioId) {
+      fetchSectionsForSide('left')
+      fetchSectionsForSide('right')
+    }
   }, [scriptId, scenarioId, setNodesForSection])
 
   useEffect(() => {
@@ -130,7 +152,6 @@ const Construction = () => {
         title: scenario.title,
         scriptId: String(scenario.script_id),
         scenarioId: String(scenario.scenarioId),
-
         description: scenario.description || null,
         weight: scenario.weight || undefined
       }))
@@ -138,13 +159,6 @@ const Construction = () => {
     }
   }, [script])
 
-  // Отслеживаем изменения в редакторе
-  /* useEffect(() => {
-    const subscription = editorState.onChange(() => {
-      setHasUnsavedChanges(true)
-    })
-    return () => subscription.unsubscribe()
-  }, [editorState])*/
   const handleExitClick = () => {
     if (hasUnsavedChanges) {
       setIsExitModalOpen(true)
@@ -173,6 +187,7 @@ const Construction = () => {
       setIsExitLoading(false)
     }
   }
+
   const handleOpenModal = () => {
     if (script?.title) {
       openModal(
@@ -187,7 +202,10 @@ const Construction = () => {
     }
   }
 
-  const handleAddSection = async (newSection: Section) => {
+  const handleAddSection = async (
+    newSection: Section,
+    side: 'left' | 'right'
+  ) => {
     try {
       const createdSection = await createSection({
         title: newSection.title,
@@ -196,31 +214,46 @@ const Construction = () => {
       })
 
       if (createdSection) {
-        setSections(prev => [
-          ...prev,
-          {
-            ...createdSection,
-            scriptId: newSection.scriptId,
-            scenarioId: newSection.scenarioId,
-            script_id: newSection.script_id,
-            scenario_id: newSection.scenario_id
-          }
-        ])
+        if (side === 'left') {
+          setLeftSections(prev => [
+            ...prev,
+            {
+              ...createdSection,
+              scriptId: newSection.scriptId,
+              scenarioId: newSection.scenarioId
+            }
+          ])
+        } else {
+          setRightSections(prev => [
+            ...prev,
+            {
+              ...createdSection,
+              scriptId: newSection.scriptId,
+              scenarioId: newSection.scenarioId
+            }
+          ])
+        }
         setNodesForSection(createdSection.id, [])
-      } else {
-        console.error('Не удалось создать раздел')
       }
     } catch (error) {
       console.error('Error adding section:', error)
     }
   }
 
-  const handleUpdateTitle = (id: string, newTitle: string) => {
-    setSections(prevSections =>
-      prevSections.map(section =>
-        section.id === id ? { ...section, title: newTitle } : section
+  const handleUpdateTitle = (
+    id: string,
+    newTitle: string,
+    side: 'left' | 'right'
+  ) => {
+    if (side === 'left') {
+      setLeftSections(prev =>
+        prev.map(s => (s.id === id ? { ...s, title: newTitle } : s))
       )
-    )
+    } else {
+      setRightSections(prev =>
+        prev.map(s => (s.id === id ? { ...s, title: newTitle } : s))
+      )
+    }
   }
 
   const saveScript = async () => {
@@ -228,9 +261,14 @@ const Construction = () => {
     alert('Скрипт сохранен')
   }
 
-  const handleAnswerClick = (answer: AnswerNode) => {
-    console.log('Answer clicked:', answer)
-    setSelectedAnswer(answer)
+  const handleAnswerClick = (answer: AnswerNode, side: 'left' | 'right') => {
+    setActiveSide(side)
+    if (side === 'left') {
+      setLeftSelectedAnswer(answer)
+    } else {
+      setRightSelectedAnswer(answer)
+    }
+
     const content = answer.text || answer.content || ''
     const contentState = ContentState.createFromText(content)
     initialContentRef.current = contentState
@@ -247,14 +285,18 @@ const Construction = () => {
 
     if (selectedAnswer) {
       const content = newEditorState.getCurrentContent().getPlainText()
-      setSelectedAnswer(prev => ({
-        ...prev!,
-        text: content,
-        content: content
-      }))
+      if (activeSide === 'left') {
+        setLeftSelectedAnswer(prev =>
+          prev ? { ...prev, text: content, content } : null
+        )
+      } else {
+        setRightSelectedAnswer(prev =>
+          prev ? { ...prev, text: content, content } : null
+        )
+      }
       updateNode(selectedAnswer.sectionId, selectedAnswer.id, {
         text: content,
-        content: content
+        content
       })
     }
   }
@@ -264,7 +306,6 @@ const Construction = () => {
 
     try {
       const content = editorState.getCurrentContent().getPlainText()
-
       updateNode(selectedAnswer.sectionId, selectedAnswer.id, {
         text: content,
         content
@@ -283,11 +324,16 @@ const Construction = () => {
           is_target: selectedAnswer.is_target ?? false
         }
       })
-      setSelectedAnswer(prev => ({
-        ...prev!,
-        text: content,
-        content
-      }))
+
+      if (activeSide === 'left') {
+        setLeftSelectedAnswer(prev =>
+          prev ? { ...prev, text: content, content } : null
+        )
+      } else {
+        setRightSelectedAnswer(prev =>
+          prev ? { ...prev, text: content, content } : null
+        )
+      }
     } catch (error) {
       console.error('Ошибка сохранения:', error)
     }
@@ -305,11 +351,24 @@ const Construction = () => {
     router.push(`${Routers.Operator}/${scriptId}`)
   }
 
-  const handleSectionDeleted = (deletedSectionId: string) => {
-    setSections(prev => prev.filter(s => s.id !== deletedSectionId))
+  const handleSectionDeleted = (
+    deletedSectionId: string,
+    side: 'left' | 'right'
+  ) => {
+    if (side === 'left') {
+      setLeftSections(prev => prev.filter(s => s.id !== deletedSectionId))
+      if (leftSelectedAnswer?.sectionId === deletedSectionId) {
+        setLeftSelectedAnswer(null)
+      }
+    } else {
+      setRightSections(prev => prev.filter(s => s.id !== deletedSectionId))
+      if (rightSelectedAnswer?.sectionId === deletedSectionId) {
+        setRightSelectedAnswer(null)
+      }
+    }
   }
 
-  const renderSections = () => {
+  const renderSections = (sections: Section[], side: 'left' | 'right') => {
     if (isSectionsLoading) {
       return <div>Загрузка разделов...</div>
     }
@@ -324,19 +383,21 @@ const Construction = () => {
 
     return sections.map(section => (
       <SectionComponent
-        key={section.id}
+        key={`${side}-${section.id}`}
         section={{
           ...section,
           scriptId: scriptId,
           scenarioId: section.scenario_id || section.scenarioId
         }}
-        onUpdateTitle={handleUpdateTitle}
+        onUpdateTitle={(id, title) => handleUpdateTitle(id, title, side)}
         script_id={scriptId}
         scenarioId={scenarioId}
         scenarios={scenarios}
-        onSectionDeleted={handleSectionDeleted}
-        onAnswerClick={handleAnswerClick}
-        selectedAnswerId={selectedAnswer?.id || null}
+        onSectionDeleted={id => handleSectionDeleted(id, side)}
+        onAnswerClick={answer => handleAnswerClick(answer, side)}
+        selectedAnswerId={
+          side === 'left' ? leftSelectedAnswer?.id : rightSelectedAnswer?.id
+        }
         scenario_Id={scenarioId}
         scriptId={scriptId}
       />
@@ -354,10 +415,11 @@ const Construction = () => {
   if (error) {
     return <div>Ошибка: {error}</div>
   }
+
   const handleSelectTargets = async (targetIds: string[]) => {
     try {
       await Promise.all(
-        sections.map(async section => {
+        allSections.map(async section => {
           const nodes = await getSectionNodes(scriptId, scenarioId, section.id)
           nodes.forEach(async node => {
             if (targetIds.includes(node.id)) {
@@ -451,10 +513,10 @@ const Construction = () => {
             </div>
             <div className={styles.sectionsEditor}>
               <div className={styles.leftSection}>
-                {renderSections()}
+                {renderSections(leftSections, 'left')}
                 {scriptId && scenarioId && (
                   <AddSection
-                    onAddSection={handleAddSection}
+                    onAddSection={section => handleAddSection(section, 'left')}
                     scenarios={scenarios}
                     scriptId={scriptId || ''}
                     scenarioId={scenarioId || ''}
@@ -467,7 +529,7 @@ const Construction = () => {
               <div className={styles.centerSection}>
                 {selectedAnswer ? (
                   <TextEditor
-                    key={selectedAnswer.id}
+                    key={`${activeSide}-${selectedAnswer.id}`}
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange}
                     scriptId={scriptId || ''}
@@ -498,7 +560,20 @@ const Construction = () => {
                   )}
                 </div>
               </div>
-              <div className={styles.rightSection}></div>
+              <div className={styles.rightSection}>
+                {renderSections(rightSections, 'right')}
+                {scriptId && scenarioId && (
+                  <AddSection
+                    onAddSection={section => handleAddSection(section, 'right')}
+                    scenarios={scenarios}
+                    scriptId={scriptId || ''}
+                    scenarioId={scenarioId || ''}
+                  />
+                )}
+                <OpenModalTarget openPopup={() => setIsTargetModalOpen(true)}>
+                  Добавить цель
+                </OpenModalTarget>
+              </div>
             </div>
           </div>
 
@@ -514,7 +589,7 @@ const Construction = () => {
           {isTargetModalOpen && selectedAnswer && (
             <TargetSelectionModal
               sectionId={selectedAnswer.sectionId}
-              sections={sections}
+              sections={allSections}
               onSelectTargets={handleSelectTargets}
               onClose={() => setIsTargetModalOpen(false)}
               scriptId={scriptId}

@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+
 import { Button } from '@/shared/ui/Button'
 import { useNodesStore } from '@/entities/section/lib/useNodeStore'
 import { AnswerNode } from '@/entities/section/ui/Section'
 import { Check } from '@/shared/assets/icons'
 
-import styles from './NodeModalLink.module.scss'
 import { saveNodeLinks } from '../api/saveNodeLinks'
+
+import styles from './NodeModalLink.module.scss'
 
 interface NodeModalLinkProps {
   sections: Array<{
@@ -30,13 +32,13 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
   sectionId,
   nodeId
 }) => {
-  const [selectedNode, setSelectedNode] = useState<string | null>(null) // Изменяем на строку или null
+  const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const { getNodesBySection } = useNodesStore()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const modalRef = useRef<HTMLDivElement | null>(null)
 
   const handleNodeSelect = (nodeId: string) => {
-    // Устанавливаем только один выбранный узел
     setSelectedNode(prev => (prev === nodeId ? null : nodeId))
   }
 
@@ -50,15 +52,10 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
     setError(null)
 
     try {
-      // Отправка запроса на сохранение ссылок
-      await saveNodeLinks(
-        scriptId,
-        scenarioId,
-        sectionId,
-        nodeId,
-        [selectedNode] // Передаем массив с единственным выбранным узлом
-      )
-      onSelectNodes([selectedNode]) // Вызов функции для обновления выбранного узла
+      await saveNodeLinks(scriptId, scenarioId, sectionId, nodeId, [
+        selectedNode
+      ])
+      onSelectNodes([selectedNode])
       onClose()
     } catch (err) {
       setError(
@@ -68,10 +65,15 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
       setIsLoading(false)
     }
   }
+  const handleOverlayClick = (event: React.MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose()
+    }
+  }
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.nodeModal}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+      <div className={styles.nodeModal} ref={modalRef}>
         <h3>Создание ссылки</h3>
         {error && <div className={styles.error}>{error}</div>}
         <div className={styles.nodeList}>
@@ -85,7 +87,7 @@ const NodeModalLink: React.FC<NodeModalLinkProps> = ({
                     <input
                       type="checkbox"
                       id={`target-${node.id}`}
-                      checked={selectedNode === node.id} // Проверяем, выбран ли узел
+                      checked={selectedNode === node.id}
                       onChange={() => handleNodeSelect(node.id)}
                       disabled={isLoading}
                     />

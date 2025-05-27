@@ -215,13 +215,13 @@ const SectionComponent: React.FC<{
       )
 
       if (result.success) {
-        onUpdateTitle(section.id, title.trim()) // Вызываем колбэк для обновления в родительском компоненте
+        onUpdateTitle(section.id, title.trim())
       } else {
-        setTitle(section.title) // Возвращаем предыдущее значение при ошибке
+        setTitle(section.title)
         alert(result.message || 'Ошибка при сохранении заголовка')
       }
     } catch (error) {
-      setTitle(section.title) // Возвращаем предыдущее значение при ошибке
+      setTitle(section.title)
       console.error('Ошибка при сохранении заголовка:', error)
       alert('Ошибка при сохранении заголовка')
     }

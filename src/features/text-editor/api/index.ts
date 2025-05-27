@@ -5,13 +5,13 @@ import { EditorState, convertToRaw } from 'draft-js'
 
 import { instance } from '@/shared/api'
 
-interface NodeData {
+export interface NodeData {
   title: string
   text: string
   content?: string
   weight: number | null
   is_target: boolean
-  raw_content?: string // Добавляем это поле в основной интерфейс
+  raw_content?: string
 }
 
 interface SaveNodeParams {

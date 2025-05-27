@@ -83,6 +83,9 @@ ul{
  min-width: 244px;
   margin-bottom: 8px;
 }
+.flagIcon{
+  margin-left: auto;
+}
 .liAnswer{
   background-color: $white;
   min-width: 244px;
@@ -95,6 +98,11 @@ ul{
   -moz-border-radius: $RadiusSm;
   -ms-border-radius: $RadiusSm;
   -o-border-radius: $RadiusSm;
+}
+.answerContent{
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
 }
 }
 
